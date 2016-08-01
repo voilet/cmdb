@@ -1,0 +1,142 @@
+{% load pagination_tags %}
+{% load business_tag %}
+<table id="host_info" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="text-center"><input type="checkbox" id="select_all" onclick="check_all('asset_form')"></th>
+            <th class="text-center"> IP </th>
+            <th class="text-center"> 主机名 </th>
+            <th class="text-center"> IDC </th>
+            <th class="text-center"> 品牌 </th>
+            <th class="text-center"> 资产编号 </th>
+            <th class="text-center"> 配置 </th>
+            <th class="text-center"> 项目 </th>
+            <th class="text-center"> 服务 </th>
+            <th class="text-center"> 状态 </th>
+            <th class="text-center"> 操作 </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for i in contacts.object_list %}
+            <tr class="gradeX">
+                <td class="text-center"><input type="checkbox" name="selected" value="{{ i.uuid }}"></td>
+                {% if i.eth1 %}
+                    <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                {% elif i.eth2 %}
+                    <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth2 }} </a></td>
+                {% else %}
+                    <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                {% endif %}
+                <td class="text-center"> {{ i.node_name }} </td>
+                <td class="text-center"> {{ i.idc.name }} </td>
+                <td class="text-center"> {{ i.brand }} </td>
+                <td class="text-center"> {{ i.number }} </td>
+                <td class="text-center"> {{ i.cpu }} <span class="text-success">|</span> {{ i.memory }} <span class="text-success">|</span> {{ i.hard_disk }}</td>
+                <td class="text-center">
+                    {% for s in i.uuid|business_list %}
+                         <a href="/assets/server/server_type/?service_name={{ s }}" class="btn btn-info btn-xs">{{ s }}</a>
+                    {% endfor %}
+                </td>
+                <td class="text-center">
+                    {{ i.service.all|group_str2 }}
+                </td>
+                <td class="text-center">
+                    <div class="btn-group tooltip-demo" data-toggle="buttons">
+                        {% if i.status == 0 %}
+                            <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                        {% elif i.status == 1 %}
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                        {% elif i.status == 3 %}
+                            <span class="fa fa-trash-o text-danger"  type="button" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="报废"></span>
+                        {% else %}
+                        <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                        {% endif %}
+                    </div>
+                </td>
+                <td class="text-center">
+                    <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="bottom" title="详情">详情</a>
+                    <a href="/assets/host_edit/?uuid={{ i.uuid }}" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="bottom" title="修改">修改</a>
+                    <a href="/assets/host_del/?uuid={{ i.uuid }}" class="btn btn-xs btn-danger node-edit" data-toggle="tooltip" data-placement="bottom" title="删除">删除</a>
+                    <a href="/assets/host_update/?uuid={{ i.uuid }}" class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息">更新</a>
+                    <a href="/assets/zabbix_host/?uuid={{ i.uuid }}" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" title="监控信息">监控</a>
+                    <a href="/assets/server/restart/{{ i.uuid }}/" class="btn btn-xs btn-warning voilet_restart" data-toggle="tooltip" data-placement="bottom" title="重装系统">装机</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="row">
+     <div class="col-sm-6">
+        <div id="host_list">
+            <button type="button" class="btn btn-danger" id="host_del">批量删除</button>
+            <a value="/assets/host_edit_batch/" type="button" class="btn btn-warning iframe" id="host_edit">批量修改</a>
+            <a href="/assets/host_add/" type="button" class="btn btn-info">添加主机</a>
+        </div>
+    </div>
+    {% include 'assets/paginator_search.html' %}
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#host_del').click(function () {
+            var ids = getids();
+            if (ids == ''){
+                alert("请至少选择一行!");
+                return false;
+            }
+            if (confirm("确定删除")) {
+                $.ajax({
+                    type: "post",
+                    data: {ids: ids},
+                    url: "/assets/host_del_batch/",
+                    success: function () {
+                        window.open("/assets/host_list/", "_self");
+                    }
+                });
+            }
+        });
+
+
+        $(".iframe").on('click', function(){
+            var ids = getids();
+            if (ids == ''){
+                alert("请至少选择一行!");
+                return false;
+            }
+            var url= $(this).attr("value") + '?uuid=' + ids;
+                index = $.layer({
+                    type: 2,
+                    title: '风行网自动化运维平台-批量修改主机',
+                    maxmin: true,
+                    shift: 'top',
+                    border: [2, 0.3, '#1AB394'],
+                    shade: [0.5, '#000000'],
+                    shadeClose: true,
+                    area : ['800px' , '600px'],
+                    iframe: {src: url},
+                    close: function(){
+                        location.replace(location.href);
+                    }
+                });
+        });
+    });
+
+    $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+            change_info()
+            }
+    })
+
+    function change_info(){
+        $.ajax({
+            type: "GET",
+            url: "/assets/change_info_ajax/",
+            data: $("#asset_form").serialize(),
+            success: function (data) {
+                $("#replace").html(data);
+            }
+        });
+    }
+</script>

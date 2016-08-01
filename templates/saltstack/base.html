@@ -1,0 +1,68 @@
+{% extends 'default/base.html' %}
+{% block left %}
+    <div class="panel-group" id="panel-349889"><!--  panel panel-primary -->
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                 <h3 class="panel-title glyphicon glyphicon-pushpin"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-290449">主机列表</a></h3>
+            </div>
+            <div id="panel-element-290449" class="panel-collapse collapse in">
+
+                <div class="panel-body">
+                    <p><a href="/salt/status/" >上报资产</a></p>
+                    <p><a href="/salt/node_list/" >主机列表</a></p>
+                    <p><a href="/salt/commands/">cmd</a></p>
+                    <p><a href="/salt/help/">salt帮助文件</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                 <a class="panel-title " data-toggle="collapse" data-parent="" href="#panel-element-50499">salt-key管理</a>
+            </div>
+            <div id="panel-element-50499" class="panel-collapse collapse ">
+                <div class="panel-body">
+                    <p><a href="/salt/key_list/" style="cursor:pointer" id="btn_cmd">所有key列表</a></p>
+                </div>
+            </div>
+        </div>
+{#        <div class="panel panel-default">#}
+{#            <div class="panel-heading">#}
+{#                 <a class="panel-title " data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-50499">业务部署</a>#}
+{#            </div>#}
+{#             {% if "/salt/check_install/" ==  request.path  %}#}
+{#             <div id="panel-element-50499" class="panel-collapse collapse in">#}
+{#             {% elif "/salt/node_server/" ==  request.path %}#}
+{#             <div id="panel-element-50499" class="panel-collapse collapse in">#}
+{#             {% else %}#}
+{#            <div id="panel-element-50499" class="panel-collapse collapse">#}
+{#            {% endif %}#}
+{#                <div class="panel-body">#}
+{#                    <p><a href="/salt/check_install/" >系统初始化</a></p>#}
+{#                    <p><a href="/salt/node_server/" >业务部署</a></p>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-45621859">日志记录</a>
+            </div>
+            {% if "/salt/logs/" ==  request.path  %}
+             <div id="panel-element-45621859" class="panel-collapse collapse in">
+            {% else %}
+            <div id="panel-element-45621859" class="panel-collapse collapse">
+            {% endif %}
+                <div class="panel-body">
+{#                    <p><a href="/salt/check_install/" >系统初始化</a></p>#}
+                    <p><a href="/salt/logs/" >日志记录</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+

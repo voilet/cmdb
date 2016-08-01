@@ -1,0 +1,39 @@
+{% include "link_css.html" %}
+{% include "script.html" %}
+{% load bootstrap %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <form class="form-horizontal" id="jquery_post_from" method="post"  role="form">{% csrf_token %}
+                     {{ data| bootstrap_horizontal }}
+                    <div class="form-group">
+                       <div class="col-sm-4 col-sm-offset-5">
+                           <button class="btn btn-white" type="submit"> 重置 </button>
+                           <a href="/auth/cmdb/group_auth_edit/{{ uuid }}/" class="btn btn-primary" onclick="return false"> 提交 </a>
+                       </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+          $('.btn-primary').click(function(){
+            jQuery.ajax({
+              url: $(this).attr('href'),                  // 提交的页面
+              data: $('#jquery_post_from').serialize(), // 从表单中获取数据
+              type: "POST",                       // 设置请求类型为"POST"，默认为"GET"
+              dataType:'text',
+              success: function(msg){
+                  var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+                              parent.layer.close(index); //执行关闭
+              }
+            });
+          });
+          return false;
+    });
+ </script>
+
+{#{% endblock content %}#}

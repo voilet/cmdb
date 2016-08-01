@@ -1,0 +1,90 @@
+{% include 'op_header.html' %}
+<script src="/static/js/highcharts/jquery.min.js"></script>
+<script src="/static/js/highcharts/highcharts.js"></script>
+<style type="text/css">
+     body {margin: 0; padding: 0;}
+    </style>
+       <!--引入jquery插件-->
+       <!--引入highchart主题-->
+       <!--调用数据，生成chart-->
+        <script type="text/javascript">
+           var chart;
+            $(document).ready(function () {
+                chart = new Highcharts.Chart({
+                    chart: {  //整体控制
+                        renderTo: 'container', //图表容器的DIVbar:横向条形图
+                        defaultSeriesType: 'pie', //可选，默认为line【line:折线;spline:平滑的线;area:区域图;bar:曲线图;pie:饼图;scatter:点状图等等;
+                        marginRight: 130, //外边距控制 (上下左右空隙)
+                        marginBottom: 25 //外边距控制
+                    },
+                    title: {
+                        text: '攻击比例报表', //主标题
+                        x: -20           //标题相对位置  默认居中
+                    },
+                    subtitle: {
+                    text: '趋势图',//副标题
+                    x: 60          //标题相对位置
+                    },
+                    //配置链接及名称选项
+                    credits: {
+                        enabled : true,
+                        href : "",
+                        text : "总攻击数:{{ naxsi_count }}次 " + " SQL:{{ sql_count }} {{ rfi_count }} {{ upload_count }} {{ EVADE_count }} {{ TRAVERSAL_count }} {{ sql_count }} {{ xss_count }} ",
+                        position: {
+                            align: 'center'
+                        }
+                    },
+
+                    tooltip: {        //数据点的提示框
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' + this.point.name + ': ' + this.y;
+                        } //formatter需要一个回调函数，可以通过this关键字打点得到当前一些图表信息
+                    },
+
+                    plotOptions: {
+      pie: {  //饼图
+       allowPointSelect: true,
+       cursor: 'pointer',
+       dataLabels: {
+        enabled: true, //false 不显示指示线
+        color: '#000000',
+        connectorColor: '#000000',
+        formatter: function() {
+         return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
+        }
+       }
+      }
+     },
+        series: [{
+      type: 'pie',
+      name: 'Browser share',
+      data: [                         //数据为数组也行，对象也行
+       {
+        name: 'sql',
+        y: {{ sql_count }},
+        sliced: true,     //分离
+        selected: true   //选中为真
+       },
+{#       ['sql', {{ sql_count }}],     //这里不用写%，45.0==45%   number#}
+       ['xss',  {{ xss_count }}],
+{#       {#}
+{#        name: 'Chrome',#}
+{#        y: 12.8,#}
+{#        sliced: true,     //分离#}
+{#        selected: true   //选中为真#}
+{#       },#}
+       ['rfi',{{ rfi_count }}],
+       ['upload',{{ upload_count }}],
+       ['EVADE',{{ EVADE_count }}],
+	   ['TRAVERSAL',{{ TRAVERSAL_count }}]
+      ]
+     }]
+                });
+
+            });
+        </script>
+
+       <!-- 装载图表的容器 -->
+        <div id="container" style="width: 100%; height: 600px">
+        </div>
+{% include 'op_bottom.html' %}

@@ -1,0 +1,59 @@
+<script>
+$(function() {
+    $('.btn-success').unbind('click').bind('click',function(){
+        var url = $(this).attr("href");
+        $.ajax({
+            type: "GET",
+            url: url
+        }).done(function (data) {
+            window.location.reload();
+        });
+        return false;
+    });
+
+    $('.voilet_restart').unbind('click').bind('click',function(){
+        var url = $(this).attr("href");
+        $.ajax({
+            type: "GET",
+            url: url
+        }).done(function (data) {
+            window.location.reload();
+        });
+        return false;
+    });
+
+    $('.click_post').unbind('click').bind('click',function(){
+        $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#form_data').serialize(), // 从表单中获取数据
+             dataType:'text',
+             success: function(msg){
+                 $("#result").html(msg);
+             }
+         });
+        return false;
+    });
+
+
+
+    // $('.select_node').unbind('click').bind('click',function(event){
+    //     var height = $(window).height(), index = $.layer({
+    //         type: 2,
+    //         shade: [0.5, '#000', true],
+    //         shadeClose: true,
+    //         maxmin: true,
+    //         // border : [!0],
+    //         moveOut: true,
+    //         shift: 'top',
+    //         border: [10, 0.3, '#000'],
+    //         title: "服务器详细信息",
+    //         area: ['800px', (height - 50) + 'px'],
+    //         //area : ['80%', (height - 50)+'px'],
+    //         iframe: {src: $(this).attr('href')}
+    //     });
+    //     event.preventDefault();
+    // });
+
+});
+</script>

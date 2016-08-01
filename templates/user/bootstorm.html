@@ -1,0 +1,43 @@
+{% include 'script.html' %}
+{% include 'link_css.html' %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+
+
+</head>
+
+<body class="gray-bg">
+
+<div class="lock-word animated fadeInDown">
+    <span class="first-word">PASSW</span><span>ORD</span>
+</div>
+    <div class="middle-box text-center lockscreen animated fadeInDown">
+        <div>
+
+
+            <h3>{% if data.first_name %}{{ data.first_name }}{% else %}{{ data.username }}{% endif %}</h3>
+            <p></p>
+
+            <form class="m-t" role="form" method="post" action=""> {% csrf_token %}
+                <div class="form-group">
+                    <input type="password" class="form-control" id="id_newpassword" maxlength="128" name="newpassword" placeholder="新密码" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="id_renewpassword" maxlength="128" name="renewpassword" placeholder="确认密码" required="">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width">提交</button>
+                {% if uf.errors or not status %}
+                <h5><span class="label label-danger">密码必须为英文数字特殊符号组成</span></h5>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
+

@@ -1,0 +1,92 @@
+{% extends 'default/base.html' %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>用户列表 | CustomUser Host.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+                <div class="panel-options">
+                    <ul class="nav nav-tabs">
+                        <li class="user_list"><a href="/accounts/user_list/" class="text-center"><i class="fa fa-laptop"></i> 在职人员 </a></li>
+                        <li class="old"><a href="/accounts/old/" class="text-center"><i class="fa fa-eye"></i> 离职人员 </a></li>
+                        <li class="user_static"><a href="/accounts/user_static/" class="text-center"><i class="fa fa-bar-chart-o"></i> 禁用帐号</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix visible-xs-block"></div>
+
+            <div class="ibox-content">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>姓名</th>
+                            <th>部门</th>
+                            <th>用户id</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    {% for i in uf %}
+                        <tbody>
+                            <tr>
+                                <td>{{ i.username }}</td>
+                                <td>{{ i.first_name }}</td>
+                                <td>
+                                    {% if i.department %}
+                                    {{ i.department }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ i.id| add:30000 }}</td>
+                                <td>
+                                    {% if i.is_active  and i.is_staff%}
+                                        <i class="fa fa-check-circle-o" style="color:#279048">正常</i>
+                                    {% elif not i.is_staff and i.is_active%}
+                                        <i class="fa fa-ban">禁用</i>
+                                    {% else %}
+                                        <i class="fa fa-ban">离职</i>
+                                    {% endif %}</td>
+                                <td>
+                                    {% if request.user.is_superuser or request.session.fun_auth.edit_user %}
+                                    <a href="/accounts/user_edit/{{ i.id }}/" class="btn btn-xs btn-info">修改</a>
+                                    {% if not i.is_staff and i.is_active %}
+                                        <a href="/accounts/status/{{ i.id }}/" class="btn btn-success btn-xs status"></i>恢复</a>
+                                    {% else %}
+                                         <a href="/accounts/status/{{ i.id }}/" class="btn btn-xs btn-warning status"></i>禁用</a>
+                                        {% endif %}
+                                    <a href="/accounts/delete/{{ i.id }}/" class="btn btn-xs btn-danger status">删除</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(function() {
+    $(document).on("click", ".status", function (e) {
+        e.preventDefault();
+        var url = $(this).attr("href");
+        $.ajax({
+            type: "GET",
+            url: url
+        }).done(function (data) {
+            window.location.reload();
+        });
+        return false;
+    });
+})
+</script>
+    <script type="text/javascript">
+    var two = document.location.pathname.split("/")[2];
+    $("." + two).addClass('active');
+</script>
+{% endblock content %}

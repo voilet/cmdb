@@ -1,0 +1,29 @@
+{% load my_tag %}
+<div class="col-lg-3">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content mailbox-content">
+            <div class="file-manager">
+                <a class="btn btn-block btn-primary compose-mail" href="/incident/add/">报障</a>
+                <div class="space-25"></div>
+                <h5>Folders</h5>
+                <ul class="folder-list m-b-md" style="padding: 0">
+                    <li><a href="/incident/nodone/"> <i class="fa fa-inbox "></i> 待处理故障 <span class="label label-warning pull-right">{{ request.user.username|NoDone }}</span> </a></li>
+                    <li><a href="/incident/my/"> <i class="fa fa-envelope-o"></i> 我的故障<span class="label label-danger pull-right">{{  request.user.first_name|myIncident }}</span></a></li>
+                    <li><a href="/incident/classical/"> <i class="fa fa-certificate"></i> 精典案例<span class="label label-info pull-right">{{ request.user.first_name|myClassical }}</span></a></li>
+                    <li><a href="/incident/done/"> <i class="fa fa-file-text-o"></i> 已处理故障<span class="label label-info pull-right">{{ request.user.first_name|Done }}</span></a></li>
+                </ul>
+                <h5>分类</h5>
+                <ul class="category-list" style="padding: 0">
+                    <li><a href="/incident/source/?name=0"> <i class="fa fa-circle text-navy"></i> zabbix </a></li>
+                    <li><a href="/incident/source/?name=1"> <i class="fa fa-circle text-danger"></i> nagios</a></li>
+                    <li><a href="/incident/source/?name=2"> <i class="fa fa-circle text-info"></i> cacti</a></li>
+                    <li><a href="/incident/source/?name=3"> <i class="fa fa-circle text-warning"></i> smokeping</a></li>
+                    <li><a href="/incident/source/?name=4"> <i class="fa fa-circle text-primary"></i> 监控脚本</a></li>
+                    <li><a href="/incident/source/?name=5"> <i class="fa fa-circle text-warning"></i> 监控宝</a></li>
+                    <li><a href="/incident/source/?name=6"> <i class="fa fa-circle text-success"></i> 其它</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

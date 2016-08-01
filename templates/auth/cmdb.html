@@ -1,0 +1,51 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load bootstrap %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>添加权限 | Add CustomUser auth.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="ibox-content" class="ibox-title">
+                <h5> 分配权限 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">未启用 1</a>
+                        </li>
+                        <li><a href="#">未启用 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content">
+                <form class="form-horizontal" method="post" action="/auth/cmdb/add/" role="form">{% csrf_token %}
+                     {{ data| bootstrap_horizontal }}
+                    <div class="form-group">
+                       <div class="col-sm-4 col-sm-offset-5">
+                           <button class="btn btn-white" type="submit"> 重置 </button>
+                           <button class="btn btn-primary" type="submit"> 提交 </button>
+                       </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends 'config/base.html' %}
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate log_list 10 %}
+<style>
+.setup_return{margin-top:8px;}
+</style>
+    <pre>审批你需要通过的项目</pre>
+    <table class="table table-striped table-bordered">
+        <thead>
+			<tr>
+				<th width="200"> 标题 </th>
+				<th>  操作记录 </th>
+{#                <th width="200"> 邮件列表 </th>#}
+                <th width="200"> 记录时间 </th>
+                <th width="100"> 操作人 </th>
+                <th width="100"> 邮件状态 </th>
+			</tr>
+		</thead>
+        {% for i in log_list %}
+            <tr class="">
+                <td>{{ i.mail_title }}</td>
+{#                <td>{{ i.content|safe|linebreaksbr|truncatechars:100 }}</td>#}
+                <td>{{ i.content|safe|linebreaksbr}}</td>
+{#                <td >{{ i.mail_list }}</td>#}
+                <td >{{ i.date_created }}</td>
+                <td>{{ i.user }}</td>
+                {% if i.mail_status %}
+                    <td ><button type="button" class="btn btn-xs btn-success" disabled="disabled">发送成功</button></td>
+                {% else %}
+                    <td ><div id="mail_return"><a id="/conf/log_mail_restart/{{ i.id }}/" class="btn btn-warning btn-xs" onClick="showDetail(this)">重新发送</a></div></td>
+{#                    <td ><div id="mail_return"><a href="{% url "mail_restart" i.id  %}" class="btn btn-warning btn-xs" onClick="showDetail(this)">重新发送</a></div></td>#}
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+    <div  class="oilet_page">
+		{% paginate %}
+	</div>
+<script>
+function showDetail(obj){
+  var id= obj.attributes["id"].nodeValue;
+    $.ajax({
+   type: "GET",
+   url: id })  .done(function( data ) {
+    $("#mail_return").html(data);
+  });
+}
+
+</script>
+{% endblock content %}

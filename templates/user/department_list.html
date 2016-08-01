@@ -1,0 +1,64 @@
+{% extends 'user/base.html' %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>部门列表 | Department Host.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> 部门详细信息列表 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">未启用 1</a>
+                        </li>
+                        <li><a href="#">未启用 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>部门</th>
+							<th style="text-align:center">人员</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for k,v in content.items %}
+						<tr>
+							<td width="200">{{ k }}</td>
+							<td>
+								{% for t in v.user_list %}
+									{{ t }}
+								{% endfor %}
+							</td>
+							<td width="100"><a href="/accounts/department/edit/{{ v.department_id }}/" class="btn btn-xs btn-primary node-edit" >修改</a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

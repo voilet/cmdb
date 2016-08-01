@@ -1,0 +1,101 @@
+{% extends "default/base.html" %}
+{% load business_tag %}
+{% block content %}
+    <style>
+    .voilet{margin-top:2px;}
+    </style>
+<link rel="stylesheet" href="/static/css/markdown/editormd.css" />
+<script src="/static/js/markdown/zepto.min.js"></script>
+<script src="/static/js/markdown/editormd.js"></script>
+<div class="wrapper wrapper-content">
+        <div class="row">
+            {% include "ztree/ztree_js.html" %}
+            <div class="col-lg-9 animated fadeInRight">
+            {% if content_status %}
+            <div class="mail-box-header">
+
+                <div class="row wrapper border-bottom white-bg page-heading">
+                        <div class="col-lg-10">
+                            <h2>{{ bus_data }}</h2>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <a href="/">首页</a>
+                                </li>
+                                <li>
+                                    <a>{{ bus_data }}</a>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="col-lg-2">
+
+                        </div>
+                    </div>
+                    <div class="ibox float-e-margins ibox-content">
+                            {% include "ztree/active.html" %}
+                            <br/>
+                            <div id="result">
+                                <div id="layout">
+
+                                    <form action="{% url 'MarkDown_edit' data.uuid %}?next={{ request.get_full_path|safe }}" method="post">{% csrf_token %}
+
+                                        <div class="editormd" id="test-editormd">
+                                            <textarea name="description"> </textarea>
+                                        </div>
+                                        <br/><input type="submit" name="submit" value="Submit" class="btn" style="margin-left: 5%;" />
+                                    </form>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+                <div class="mail-box"></div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-dismissable alert-danger">
+             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4>
+                Alert!
+            </h4> <strong>Warning!</strong> 走错地方了吧，或许你的URL不应该是你有权限访问的哦
+        </div>
+        {% endif %}
+        </div>
+<div id="edit_result">
+
+</div>
+<script type="text/javascript">
+			var testEditor;
+			var jQuery = Zepto;  // 为了避免修改 flowChart.js 和 sequence-diagram.js 的源码，所以想支持 flowChart / sequenceDiagram 就得加上这一句
+
+
+            $(function() {
+                $.get("{% url 'MarkDown_content' data.uuid %}", function(md){
+					testEditor = editormd("test-editormd", {
+						width  : "90%",
+						height : 720,
+						path   : '/static/lib/',
+						markdown : md,
+                        codeFold : true,
+                        searchReplace : true,
+                        saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
+                        watch : true,
+                        htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+                        emoji : true,
+                        taskList : true,
+                        tocm            : true,         // Using [TOCM]
+                        tex : true,                     // 开启科学公式 TeX 语言支持，默认关闭
+                        //previewCodeHighlight : false,  // 关闭预览窗口的代码高亮，默认开启
+                        flowChart : true,
+                        sequenceDiagram : true,         // 同上
+						onload : function() {
+							testEditor.previewing();
+						}
+					});
+
+				});
+            });
+
+</script>
+{% include "ztree/edit_node.html" %}
+{% endblock %}

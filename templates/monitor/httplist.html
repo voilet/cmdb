@@ -1,0 +1,107 @@
+{% extends 'assets/base.html' %}
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate data 30 %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>HTTP 监控列表 | List http monitor.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> 监控列表 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user"></ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">监控名称</th>
+                            <th class="text-center">url</th>
+                            <th class="text-center">类型</th>
+                            <th class="text-center">邮件联系人</th>
+                            <th class="text-center">微信联系人</th>
+                            <th class="text-center">状态</th>
+                            <th class="text-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in data %}
+                            <tr id="{{ i.uuid }}">
+                                <td class="text-center"><a href="{% url 'HttpMonitorPage' i.uuid %}"> {{ i.title }}</a></td>
+                                <td class="text-left" width="100">
+                                    <p>{{ i.url  | linebreaksbr | truncatechars:120}}</p>
+                                </td>
+                                <td class="text-center">{% if i.monitor_type %} GET {% else %} POST {% endif %}</td>
+                                <td class="text-center">{{ i.mail | truncatechars:50 }}</td>
+                                <td class="text-center">{{ i.weixin | truncatechars:50}}</td>
+                                <td class="text-center">
+                                    {% if i.status %}
+                                    <a href="{% url 'HttpMonitorstatus' i.uuid %}?status=0" class="btn btn-xs btn-info monitor_status " data-toggle="modal">正常</a>
+                                    {% else %}
+                                    <a href="{% url 'HttpMonitorstatus' i.uuid %}?status=1" class="btn btn-xs btn-success monitor_status" data-toggle="modal">禁用</a>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" data-toggle="buttons">
+                                      <a href="{% url 'HttpMonitorEdit' i.uuid %}" class="btn btn-xs btn-warning " data-toggle="modal">日志</a>
+                                      <a href="{% url 'HttpMonitorEdit' i.uuid %}" class="btn btn-xs btn-success " data-toggle="modal">修改</a>
+                                      <a href="{% url 'HttpMonitorDel' i.uuid %}" uuid="{{ i.uuid }}" class="btn btn-xs btn-danger delete_monitor" data-toggle="modal" onclick="return false">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% paginate %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.monitor_status').unbind('click').bind('click',function(){
+         $.ajax({
+             type: "GET",
+             url: $(this).attr("href"),                  // 提交的页面
+             success: function(msg){
+                 window.location.reload();
+             }
+         });
+      });
+    $('.delete_monitor').unbind('click').bind('click', function () {
+        var uuid = $(this).attr("uuid");
+        $.ajax({
+             type: "GET",
+             url: $(this).attr("href"),                  // 提交的页面
+             uuid: $(this).attr("uuid"),
+             success: function(msg){
+
+             }
+         });
+        $("#" + uuid).remove();
+        return false;
+    });
+</script>
+{% endblock content %}
+
+
+
+
+

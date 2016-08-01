@@ -1,0 +1,69 @@
+{% include "default/header.html" %}
+{% include "default/index_left.html" %}
+<div class="col-md-10 column" id="salt_cmd">
+{% if cmd_Advanced %}
+<div class="alert alert-dismissable alert-info">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <strong>请注意：</strong><br><br>
+    输入需要初始化的主机名，可使用正则匹配，如search-nginx*的方式
+</div>
+<div class="tabbable" id="tabs-241140">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="#panel-123456" data-toggle="tab">添加初始化主机</a>
+		</li>
+        <li>
+			<a href="#panel-804441" data-toggle="tab">添加主机模板</a>
+		</li>
+		<li>
+			<a href="#panel-742703" data-toggle="tab">执行初始化</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+        <div class="tab-pane active" id="panel-123456">
+            <p></p>
+			<p>
+				<input class="form-control" id="salt_node" name="salt_node" value="/etc/salt/roster" type="text" maxlength="100" size="100" />
+			</p>
+        <form method="POST" id="reasonform_node"   role="search" onsubmit="return false" >
+                {% csrf_token %}
+                <pre><textarea style='width:100%;' rows=15 onpropertychange='this.style.posHeight=this.scrollHeight' id=textarea onfocus='textarea.style.posHeight=this.scrollHeight' id="salt_content_node" name="salt_content_node" >{{ node }}</textarea></pre>
+            </p><button type="submit" id="button_node" class="btn btn-default">保存</button>
+        </form>
+        <br><p id="button_node_lr">
+		</div>
+
+		<div class="tab-pane" id="panel-804441">
+            <p></p>
+			<p>
+				<input class="form-control" id="salt_node" name="salt_node" value="/srv/salt/check_install/hostname.jinja" type="text" maxlength="100" size="100" />
+			</p>
+        <form method="POST" id="reasonform_jinja"   role="search" onsubmit="return false" >
+                {% csrf_token %}
+                <pre><textarea style='width:100%;' rows=15 onpropertychange='this.style.posHeight=this.scrollHeight' id=textarea onfocus='textarea.style.posHeight=this.scrollHeight' id="salt_content_jinja" name="salt_content_jinja" >{{ server }}</textarea></pre>
+            </p><button type="submit" id="button_jinja" class="btn btn-default">保存</button>
+        </form>
+        <br><p id="jinja_add">
+		</div>
+		<div class="tab-pane" id="panel-742703">
+			<p>
+				<form class="form-inline" id="salt_node_add" role="form">{% csrf_token %}
+                    <div class="form-group">
+                        <input class="form-control" id="salt_shell_node" name="salt_shell_node"  maxlength="100" size="100" type="text"  />
+                    </div>
+                    <button type="submit" id="salt_node_post" class="btn btn-default" >执行</button>
+                </form>
+			</p>
+            <br><pre id="salt_node_lr">输入主机id点执行</pre>
+		</div>
+	</div>
+</div>
+{% else %}
+    11111111111111111111
+{% endif %}
+</div>
+{% include "default/footer.html" %}
+{% include "default/jquery.html" %}
+
+
+

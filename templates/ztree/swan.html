@@ -1,0 +1,257 @@
+{% extends "default/base.html" %}
+{% load business_tag %}
+{% block content %}
+    <style>
+    .voilet{margin-top:2px;}
+    </style>
+<div class="wrapper wrapper-content">
+        <div class="row">
+            {% include "ztree/ztree_js.html" %}
+            <div class="col-lg-9 animated fadeInRight">
+            {% if content_status %}
+            <div class="mail-box-header">
+
+                <div class="row wrapper border-bottom white-bg page-heading">
+                        <div class="col-lg-10">
+                            <h2>{{ bus_data }}</h2>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <a href="/">首页</a>
+                                </li>
+                                <li>
+                                    <a>{{ bus_data }}</a>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="col-lg-2">
+
+                        </div>
+                    </div>
+                    <div class="ibox float-e-margins ibox-content">
+                            {% include "ztree/active.html" %}
+                            <br/>
+                            <div id="result">
+                            <form class="form-inline" id="swan_form" >
+                            {% csrf_token %}
+                                <input type="text" name="project_name" hidden="hidden" value="{{ business_name }}"/>
+                                <div class="row">
+                                    <div class="col-lg-12 voilet-left">
+                                        <div class="input-group voilet-left voilet-margin">
+                                            <select id="swan_name" class="form-control parameters" name="project_all_tag">
+                                                <option value="" selected="selected">选择发布功能</option>
+                                                {% for k,v in rst_data.items %}
+                                                    <option value="{{ k }}">{{ v }}</option>
+                                                {% endfor %}
+                                            </select>
+                                         </div>
+                                        <div class="input-group voilet-margin">
+                                            <div id="result_Parameters">
+                                                <select id="tgt_name" class="form-control" name="tgt_name">
+                                                    <option value="" selected="selected">选择发布分支或参数</option>
+                                                </select>
+                                             </div>
+                                         </div>
+                                        <div class="input-group voilet-left voilet-margin">
+                                            <select id="id-arg" class="form-control" name="arg">
+{#                                                <option value="" selected="selected">请选择发布方式</option>#}
+                                                <option value="all">all</option>
+                                                <option value="Single">Single</option>
+                                            </select>
+                                         </div>
+
+                                        <div class="input-group voilet">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control m-b" id="id_reset_code" name="reset_code" placeholder="回退版本号">
+{#                                                <input type="text" style="display: none">#}
+                                                <div class="input-group-btn">
+                                                    <span class="input-group-btn">
+                                                       <a class="btn btn-primary swan_push_button monitor" href="/swan/release/" onclick="return false">发布</a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- /input-group -->
+                                </div><p></p>
+                            <div id="update_log" hidden>
+                            <div class="form-group" >
+                                <label class="control-label  " for="id_tgt">更新内容</label>
+                                    <div class=" ">
+                                        <textarea class=" form-control" cols="40" id="id_update_log" name="update_log" rows="10"></textarea>
+
+                                    </div>
+                            </div>
+                            </div>
+                                <p></p>
+                            <div id="swan_info">
+{#                                <div class="alert alert-dismissable alert-info"><button type="button" class="close" data-dismiss="alert" aria-hidden="true"> ×</button><h4>all功能</h4> <strong>提示: </strong>所有主机同时发布,可快速部署下发代码,速度最快</div>#}
+                            </div>
+                            {% if request.user.is_superuser or request.session.fun_auth.select_host or status %}
+                            <div id="websocket_rest"></div>
+                            <div id="host_rest">
+                                <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select_all" /></th>
+                                        <th> eth1 </th>
+                                        <th> 机柜 </th>
+                                        <th> 业务 </th>
+                                        <th> 状态 </th>
+                                        <th> 操作 </th>
+                                    </tr>
+                                </thead>
+
+                                {% for i in server_list %}
+                                    <tbody>
+                                        <tr >
+                                            <td width="40"><input type="checkbox" name="node_name" value="{{i.node_name}}"/></td>
+                                            <td width="120"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                            <td width="100">{% if i.room_number %}{{ i.room_number }} {% endif %}{% if i.cabinet %}- {{ i.cabinet }} - {% endif %}{% if i.server_cabinet_id %}{{ i.server_cabinet_id }}{% endif %}</td>
+                    {#                                <td width="200">  {% if i.business %}<a href="/assets/server/server_type/{{ i.business.id }}/ ">{{ i.business }}</a>{% endif %}  </td>#}
+                                            <td width="100">
+                                            {% for s in i.uuid|business_list %}
+                                            <a href="/assets/server/server_type/?service_name={{ s }}" class="btn btn-info btn-xs">{{ s }}</a>
+                                            {% endfor %}
+                                            </td>
+                                            <td width="50">
+                                            <div class="btn-group tooltip-demo" data-toggle="buttons">
+                                                {% if i.status == 0 %}
+                                                    <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                                                {% elif i.status == 1 %}
+                                                <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                                                {% else %}
+                                                <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                                                {% endif %}
+                                            </div></td>
+                                            <td width="160">
+                                                <div class="tooltip-demo">
+                                                {% if request.user.is_superuser or request.session.fun_auth.edit_host %}
+                                                <a href="{% url 'host_edit' %}?uuid={{ i.uuid }}" class="btn btn-xs btn-primary node-edit" data-toggle="tooltip" data-placement="bottom" title="修改"><i class="fa fa-edit"></i></a>
+                                                {% endif %}
+                                                {% if request.user.is_superuser or request.session.fun_auth.delete_host %}
+                                                <a href="{% url 'host_del' %}?uuid={{ i.uuid }}" class="btn btn-xs btn-danger node-edit" data-toggle="tooltip" data-placement="bottom" title="删除"><i class="fa fa-trash-o"></i></a>
+                                                {% endif %}
+                                                {% if request.user.is_superuser or request.session.fun_auth.setup_system %}
+                                                    <a href="{% url 'install_system' i.uuid %}" class="btn btn-xs btn-danger voilet_restart" data-toggle="tooltip" data-placement="bottom" title="重装系统"><i class="fa fa-desktop">装机</i></a>
+                                                {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                          </form><br/>
+                          {% else %}
+                          <div class="alert alert-dismissable alert-danger">
+                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4>
+                                    Alert!
+                                </h4> <strong>Warning!</strong> 走错地方了吧，或许你的URL不应该是你有权限访问的哦
+                            </div>
+                          {% endif %}
+
+                    </div>
+                </div>
+            </div>
+                <div class="mail-box"></div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-dismissable alert-danger">
+             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4>
+                Alert!
+            </h4> <strong>Warning!</strong> 走错地方了吧，或许你的URL不应该是你有权限访问的哦
+        </div>
+        {% endif %}
+        </div>
+<div id="edit_result">
+
+</div>
+<script>
+// 查询项目参数
+    $(function(){
+        $.urlParam = function(name){
+            var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                return results[1] || 0;
+            };
+        $(document).ready(function(){
+            $('#swan_name').change(function() {
+                var url= '/swan/swan_select_tgt/?project=' + $.urlParam('uuid') + "&tgt=" + $(this).val();
+                    $.ajax({
+                     type: "GET",
+                     url: url }).done(function( data ) {
+                      $("#result_Parameters").html(data);
+                });
+                $.ajax({
+                     type: "GET",
+                     url: '/swan/swan_select_botton/?project=' +  $.urlParam('uuid') + "&swan_name=" + $(this).val() }).done(function( data ) {
+                     $("#host_rest").html(data);
+                });
+                return false;
+            });
+            $('#id-arg').change(function() {
+               var arg=$(this).val();
+                if(arg == "all"){
+                    $("#swan_info").html("<div class=\"alert alert-dismissable alert-info\"><h4>all功能</h4><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>提示: </strong>所有主机同时发布,可快速部署下发代码,速度最快</div>").show().delay(10000).hide(0);
+                     return false;
+                }
+                if(arg == "Single"){
+                    $("#swan_info").html("<div class=\"alert alert-dismissable alert-warning\"><h4>Single功能</h4> <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>提示: </strong>循环单台发布,有接口检测或平滑发布时建意使用,代码发布速度较慢</div>").show().delay(10000).hide(0);
+                     return false;
+                }
+           });
+        });
+
+    });
+    $('.swan_push_button').unbind('click').bind('click',function(){
+           var project_name=$("#project_name").val();
+           var project_name_all=$("#swan_name").val();
+           var tgt_name=$("#tgt_name").val();
+           if(project_name_all == ""){
+               $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>发布功能必选</div>").show().delay(10000).hide(0);
+                return false;
+           }
+           if(tgt_name == ""){
+               $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-warning\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>分支或参数必选</div>").show().delay(10000).hide(0);
+                return false;
+           }
+
+           else {
+               $("#update_log").hide();
+               $.ajax({
+               type: "POST",
+               url: $(this).attr("href"),                  // 提交的页面
+               data: $('#swan_form').serialize(), // 从表单中获取数据
+               dataType: "json",
+               success: function(data, textStatus, jqXHR){
+                    var uid = '/swan/websocket/?jid=' + data["uid"];
+                     $.layer({
+                          type : 2,
+                          shade : [0.5 , '#000' , true],
+                          shadeClose : true,
+                          maxmin: true,
+                          moveOut: true,
+                          shift: 'top',
+                          border: [10, 0.3, '#000'],
+                          title : "发布系统详细信息",
+                          area : ['800px' , '600px'],
+                          iframe : {src : uid }
+                      });
+                      event.preventDefault();
+               },
+               error:function(XmlHttpRequest,textStatus, errorThrown) {
+                   $("#websocket_rest").html(XmlHttpRequest.responseText);
+                   return false;
+                }
+
+            });
+           }
+       });
+
+
+
+
+</script>
+{% include "ztree/edit_node.html" %}
+{% endblock %}

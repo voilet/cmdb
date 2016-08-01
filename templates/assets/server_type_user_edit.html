@@ -1,0 +1,81 @@
+
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;padding-left:0}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+    }
+    .mail-box-header{height:1900px;}
+    .float-e-margins{height:1800px;}
+</style>
+    <h3>当前项目管理人员</h3>
+        <table class="table table-striped table-bordered" id="user_list">
+        <tr>
+            <td>用户</td>
+            <td>所属部门</td>
+            <td>邮箱</td>
+            <td>联系电话</td>
+            <td>权限</td>
+            <td>操作</td>
+        </tr>
+        {% for one in form_user %}
+        <tr>
+            <td>{{ one.user.first_name }}</td>
+            <td>{{ one.user.department }}</td>
+            <td>{{ one.user.email }}</td>
+            <td>{{ one.user.mobile }}</td>
+            <td>{% if one.env %}{{ one.env }}{% endif %}</td>
+            <td>
+                <button href="/assets/server/type/edit/{{business_item.uuid}}/user/edit/?user_id={{ one.user.id  }}" class="btn btn-xs btn-info click_add" onclick="return false">修改</button>
+                <button href="/assets/server/type/edit/{{business_item.uuid}}/user/delete/?user_id={{ one.user.id  }}" class="btn btn-xs btn-danger click_add" onclick="return false">删除用户</button>
+            </td>
+        </tr>
+        {% endfor %}
+
+        </table>
+        <table class="table table-striped table-bordered" id="user_list">
+        <td><h3>其他人员</h3></td>
+        <td><h3>所属部门</h3></td>
+        <td><h3>邮箱</h3></td>
+        <td><h3>手机</h3></td>
+        <td><h3>操作</h3></td>
+        <tr>
+        </tr>
+        {% for one in rest_user %}
+        <tr>
+            <td>{{ one.first_name }}</td>
+            <td>{{ one.department }}</td>
+            <td>{{ one.email }}</td>
+            <td>{{ one.mobile }}</td>
+            <td><button href="/assets/server/type/edit/{{business_item.uuid}}/user/add/?user_id={{ one.id  }}" class="btn btn-success btn-xs click_add" onclick="return false">增加用户</button></td>
+        </tr>
+        {% endfor %}
+        </table>
+
+<script>
+ $(function(){
+    $('.click_add').unbind('click').bind('click',function(){
+      var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#edit_result").html(data);
+         });
+    });
+
+ })
+
+</script>

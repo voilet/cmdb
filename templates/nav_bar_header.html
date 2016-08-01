@@ -1,0 +1,95 @@
+{% load user_msage %}
+{% load my_tag %}
+
+<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i> </a>
+        <form role="search" class="navbar-form-custom" method="get" action="/assets/search/">
+{#            {% csrf_token %}#}
+            <div class="form-group">
+{#                <input type="text" placeholder="输入搜索..." class="form-control" name="host_node" id="id-host_node">#}
+            </div>
+        </form>
+    </div>
+    <ul class="nav navbar-top-links navbar-right">
+        {% if request.user.username %}
+        <li>
+            <span class="m-r-sm text-muted welcome-message">欢迎使用运维自动化平台</span>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+{#                <i class="fa fa-envelope"></i>  <span class="label label-warning">{{  request.user.username }}</span>#}
+                <i class="fa fa-envelope"></i>  <span class="label label-warning">{% if request.user.username %}{{  request.user.username | message }}{% endif %}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-messages">
+                <li>
+                    <div class="dropdown-messages-box">
+                        <a href="/incident/my/" class="pull-left">
+                            <img alt="image" class="img-circle" src="/static/new/img/a7.jpg">
+                        </a>
+                        <div class="media-body">
+                            <strong>我的故障</strong> <span class="label label-danger pull-right">{{  request.user.first_name|myIncident }}</span>  <br>
+                            <small class="text-muted">&nbsp</small>
+                        </div>
+                    </div>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <div class="dropdown-messages-box">
+                        <a href="/incident/nodone/" class="pull-left">
+                            <img alt="image" class="img-circle" src="/static/new/img/a4.jpg">
+                        </a>
+                        <div class="media-body ">
+                            <strong>待处理故障</strong> <span class="label label-danger pull-right">{{  request.user.first_name|NoDone }}</span><br>
+                            <small class="text-muted">&nbsp</small>
+                        </div>
+                    </div>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <div class="dropdown-messages-box">
+                        <a href="/message/news/" class="pull-left">
+                            <img alt="image" class="img-circle" src="/static/new/img/a4.jpg">
+                        </a>
+                        <div class="media-body ">
+                            <strong>自动化发布</strong> <span class="label label-danger pull-right">{% if request.user.username %}{{  request.user.username|swanmessage }}{% endif %}</span> <br>
+                            <small class="text-muted">&nbsp</small>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="/accounts/loginout/"><i class="fa fa-sign-out"></i> 退出</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% if not request.user.menu_status %}
+<script language="javascript">
+function refresh(){
+    $("body").toggleClass("mini-navbar");
+    SmoothlyMenu();
+}
+window.refresh();
+</script>
+{% endif %}
+
+
+<script>
+    $(function() {
+        $(document).on("click", ".navbar-minimalize", function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            $.ajax({
+                type: "GET",
+                url: "/accounts/menu/"
+            }).done(function (data) {
+                //$("#edit_result").html(data);
+            });
+            return false;
+        });
+    });
+</script>

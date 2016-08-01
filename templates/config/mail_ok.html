@@ -1,0 +1,5 @@
+{% if status %}
+<button type="button" class="btn btn-xs btn-success" disabled="disabled">发送成功</button>
+{% else %}
+<a id="/conf/log_mail_restart/{{ id }}/" class="btn btn-danger btn-xs" onClick="showDetail(this)">发送失败</a>
+{% endif %}

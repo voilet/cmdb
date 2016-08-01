@@ -1,0 +1,60 @@
+{% extends 'default/base.html' %}
+{% block content %}
+<script type="text/javascript" src="/static/js/quickpaginate.js"></script>
+
+<div class="col-md-12 column" id="salt_cmd">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>salt认证key管理 | Assets List.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+    <h3>未接受的key</h3>
+        <table class="table table-striped table-bordered" id="pre_key_list">
+        {% for one in minions_pre %}
+        <tr>
+        <td>{{ one }}</td><td><a href="/salt/accept_key/?node_name={{ one  }}" class="accept_key">接受</a></td>
+        </tr>
+        {% endfor %}
+        </table>
+    <div id="pre_key_list_counter"></div>
+	<div class="loading"></div>
+    <h3>已管理的key</h3>
+        <table class="table table-striped table-bordered" id="key_list">
+
+        {% for one in minions %}
+        <tr>
+        <td>{{ one }}</td><td><a href="/salt/delete_key/?node_name={{ one  }}">删除</a></td>
+        </tr>
+        {% endfor %}
+        </table>
+    <div id="key_list_counter"></div>
+</div>
+    <script type="text/javascript">
+	$(function(){
+		$('#pre_key_list tr').quickpaginate({
+			perpage: 10,
+			pager: $('#pre_list_counter')
+		});
+		$('#key_list tr').quickpaginate({
+			perpage: 10,
+			pager: $('#key_list_counter')
+		});
+		$('.accept_key').click(function(e){
+			e.preventDefault();
+			$('.loading').html("loading");
+			var that = $(this);
+			var url = $(this).attr("href");
+			
+			$.get(url,function(data){
+				if (data == "Y"){
+					$('.loading').hide();
+					that.closest('tr').remove();
+				}
+			});
+		});
+	});
+</script>
+
+{% endblock %}

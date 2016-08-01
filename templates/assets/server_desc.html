@@ -1,0 +1,99 @@
+{% include 'op_header.html' %}
+<script type="text/javascript" src="/static/js/highslide/highslide-with-html.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/js/highslide/highslide.css" />
+<!-- 弹出浮动层 -->
+<style>
+.voilet_search{float:right;padding-right:100px;}
+</style>
+<div class="voilet">
+    <div class="voilet_search">
+        <form class="form-search" method="get" action="/search/server/">
+            <input class="input-medium search-query" type="text" name=search />
+            <button class="btn" contenteditable="true" id = ip type="submit">查找</button>
+        </form>
+    </div>
+</div>
+			<table class="table"> <!-- <table class="table table-condensed"> -->
+				<thead>
+					<tr>
+						<th>
+							资产编号
+						</th>
+						<th>
+							远控卡IP
+						</th>
+						<th>
+							网卡1
+						</th>
+                        <th>
+							网卡2
+						</th>
+                        <th>
+							所属机房
+						</th>
+						<th>
+							机柜位置
+						</th>
+						<th>
+							cpu/内存/硬盘
+						</th>
+						<th>
+							服务器型号
+						</th>
+                        <th>
+							快速服务代码
+						</th>
+                        <th>
+							修改
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                {% for list in emps %}
+					<tr>
+						<td>
+							<a href="/server/list_id/{{ list.id }}">{{ list.Server_Asset_number }}</a>
+						</td>
+						<td>
+							{{ list.Server_Remote_control_card }}
+						</td>
+						<td>
+							{{ list.Server_eth1 }}
+						</td>
+                        <td>
+							{{ list.Server_eth2 }}
+						</td>
+                        <td>
+							<a href="/server/room_id/{{ list.Server_engine_room_id }}">{{ list.Server_engine_room }}</a><!-- 所属机房-->
+						</td>
+						<td>
+							<a href="/server/Location_id/{{ list.Server_number_Location_id }}">{{ list.Server_number_Location }} 柜 {{ list.Server_cabinet_id }}</a>
+						</td>
+						<td>
+							{{ list.Server_Memory }}
+						</td>
+						<td>
+							{{ list.Server_Model }}
+						</td>
+                        <td>
+                            {{ list.Server_number_code }}
+                        </td>
+                        <td>
+							<a href="/server/edit_id/{{ list.id }}" target=_blank onclick="return hs.htmlExpand(this, { objectType: 'iframe',width:1200,height:1200,} )" id="goto" >修改</a>
+						</td>
+                    </tr>
+                {% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% include 'op_bottom.html' %}
+
+<script type="text/javascript">
+hs.graphicsDir = '/static/js/highslide/graphics/';
+hs.outlineType = 'rounded-white';
+hs.wrapperClassName = 'draggable-header';
+
+</script>

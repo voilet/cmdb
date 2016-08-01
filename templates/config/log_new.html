@@ -1,0 +1,50 @@
+{#<script type="text/javascript" charset="utf-8">#}
+{#    window.UEDITOR_HOME_URL = "/static/js/ueditor/";#}
+{#</script>#}
+{#<script type="text/javascript" charset="utf-8" src="/static/js/ueditor/editor_config.js"></script>#}
+{#<script type="text/javascript" charset="utf-8" src="/static/js/ueditor/editor_all_min.js"></script>#}
+{#<link rel="stylesheet" type="text/css" href="/static/js/ueditor/themes/default/ueditor.css"/>#}
+
+{% extends 'config/base.html' %}
+{#{% load editor %}#}
+{% block content %}
+{% load bootstrap %}
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+
+</style>
+{#{{ uf }}#}
+
+<form class="form-horizontal"  method="post" role="form" >
+    {% csrf_token %}
+    {{ form.mail_title|bootstrap }}
+    {{ form.content|bootstrap }}
+{#     <textarea id="editor"  name="content" cols="40">{{article.content}}</textarea>#}
+            <div class="col-sm-offset">
+                 <button type="submit" class="btn btn-success btn-block">提交</button>
+            </div>
+</form>
+{#{% editor %}#}
+{% endblock content %}
+
+
+
+
+

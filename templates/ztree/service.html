@@ -1,0 +1,100 @@
+{% extends "default/base.html" %}
+{% load business_tag %}
+{% block content %}
+
+    <style>.voilet-input input{margin-right:10px;}</style>
+
+            <div class="col-lg-9 animated fadeInRight">
+                {% if content_status %}
+                <div class="mail-box-header">
+                    <div class="row wrapper border-bottom white-bg page-heading">
+                        <div class="col-lg-10">
+                            <h2>{{ business_name }}</h2>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <a href="/">首页</a>
+                                </li>
+                                <li>
+                                    {{ business_name }}
+                                </li>
+                                <li class="active">
+                                    <strong>{{ service_tag }}</strong>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="col-lg-2">
+
+                        </div>
+                    </div>
+                        <div id="result">
+                            <div id="host_rest"><br/><div id="websocket_rest"></div>
+                            <div class="clearfix visible-xs-block"></div>
+                            <div id="edit_result">
+                            <form  method="post" id="form_data">
+                            {% csrf_token %}
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select_all" /></th>
+                                        <th> eth1 </th>
+                                        <th> 机柜 </th>
+                                        <th> 业务 </th>
+                                        <th> 状态 </th>
+                                    </tr>
+                                </thead>
+
+                                {% for i in server_list %}
+                                    <tbody>
+                                        <tr >
+                                            <td width="40"><input type="checkbox" name="node_name" value="{{i.node_name}}"/></td>
+                                            <td width="120"> <a href="/assets/server/node_id/{{ i.id }}/" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                            <td width="100"><a href="{% url 'cabinet' %}?cabinet={{ i.cabinet }}&room_number={% if i.room_number %}{{ i.room_number }}{% endif %}" > {% if i.room_number %}{{ i.room_number }} {% endif %}{% if i.cabinet %}- {{ i.cabinet }} - {% endif %}{% if i.server_cabinet_id %}{{ i.server_cabinet_id }}{% endif %}</a></td>
+                                            <td width="100">
+                                            {% for s in i.uuid|business_list %}
+                                            <a href="/assets/server/server_type/?service_name={{ s }}" class="btn btn-info btn-xs">{{ s }}</a>
+                                            {% endfor %}
+                                            </td>
+                                            <td width="50">
+                                            <div class="btn-group tooltip-demo" data-toggle="buttons">
+                                                {% if i.status == 0 %}
+                                                    <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                                                {% elif i.status == 1 %}
+                                                <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                                                {% else %}
+                                                <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                                                {% endif %}
+                                            </div></td>
+                                        </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                            <div class="clearfix visible-xs-block"></div>
+                            <div class="panel-options">
+                                <div class="input-group voilet-input">
+                                    <input href={% url 'service_status' service_all.uuid %}?name={{ business_name }}&token={{ sum_token }}&status"_restart" type="submit" class="btn btn-primary btn-xs click_post" value="重启 {{ service_tag }}">
+                                    <input href={% url 'service_status' service_all.uuid %}?name={{ business_name }}&token={{ sum_token }}&status"_reload" type="submit" class="btn btn-primary btn-xs click_post" value="reload {{ service_tag }}">
+                                    <input href={% url 'service_status' service_all.uuid %}?name={{ business_name }}&token={{ sum_token }}&status"_stop" type="submit" class="btn btn-primary btn-xs click_post" value="停止 {{ service_tag }}">
+                                    <input href={% url 'service_status' service_all.uuid %}?name={{ business_name }}&token={{ sum_token }}&status"_start" type="submit" class="btn btn-primary btn-xs click_post" value="启动 {{ service_tag }}">
+                                    <input href={% url 'service_status' service_all.uuid %}?name={{ business_name }}&token={{ sum_token }}&status"_status" type="submit" class="btn btn-primary btn-xs click_post" value="{{ service_tag }} 状态">
+                                </div>
+                            </div>
+
+                            </form>
+                        </div>
+                    </div><br/>
+                </div>
+                </div>
+                    <div class="mail-box"></div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-dismissable alert-danger">
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4>
+                    Alert!
+                </h4> <strong>Warning!</strong> 走错地方了吧，或许你的URL不应该是你有权限访问的哦
+            </div>
+            {% endif %}
+        </div>
+{% include "ztree/edit_node.html" %}
+{% endblock %}

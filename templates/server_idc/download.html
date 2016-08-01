@@ -1,0 +1,12 @@
+<div class="col-md-12 column">
+    <div class="alert alert-success alert-dismissable">
+         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4>
+            提醒!
+            {% if data == "pdf" %}
+            </h4> <strong>Warning!</strong> pdf文件已生成请点击 <a href="/static/pdf/fun.pdf" target="_blank" class="alert-link">下载</a>
+            {% else %}
+            </h4> <strong>Warning!</strong> excel文件已生成请点击 <a href="/static/pdf/fun.xls" target="_blank" class="alert-link">下载</a>
+            {% endif %}
+    </div>
+</div>

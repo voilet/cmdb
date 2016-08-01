@@ -1,0 +1,47 @@
+<pre>DNS解析记录</pre>
+
+{% load pagination_tags %}
+{% autopaginate data 15 %}
+
+<button type="button" href="{% url 'dns_add' %}" class="btn btn-primary add">增加记录</button>
+<div id="add"></div>
+<div class="clearfix" style="margin-top:8px;"></div>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>主机记录</th>
+            <th>记录类型</th>
+            <th>记录值</th>
+            <th>操作人</th>
+            <th>操作时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for k in data %}
+        <tr>
+            <td>
+                {{ k.host_name }}
+            </td>
+            <td>
+                {{ k.type }}
+            </td>
+            <td>
+                {{ k.record }}
+            </td>
+            <td>
+                {{ k.update_user }}
+            </td>
+            <td>{{ k.update_time }}</td>
+            <td></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div  class="voilet_page_dns">
+    {% paginate %}
+</div>
+
+
+
+{#{{ data }}#}

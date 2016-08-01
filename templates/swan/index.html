@@ -1,0 +1,188 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{% block content %}
+<style>
+.voilet-top{margin-top:8px;}
+#websocket_rest{margin-top:12px;}
+#content-block{margin-top:10px;}
+.voilet{margin-left:12px;}
+.voilet-left{margin-left:16px;}
+.voilet a{margin-left:2px;}
+</style>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>自动化发布 | Assets List.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+
+<div id="content-block">
+    <div id="result">
+        <form class="form-inline" id="swan_form" >
+        {% csrf_token %}
+            <div class="row">
+                <div class="input-group col-lg-12 voilet-left">
+                    <div class="input-group col-lg-3">
+                        <select id="project_name" class="form-control select_business" name="project_name">
+                            <option  value="">选择你要发布的项目</option>
+                          {% for git_target in swan_data %}
+                            <option  value="{{git_target.service_name}}" >{{git_target.service_name}}</option>
+                          {% endfor%}
+                        </select>
+                    </div>
+                    <div class="input-group voilet-left voilet-margin">
+                        <div id="result_select">
+                            <select id="swan_name" class="form-control parameters" name="project_all_tag">
+                                <option value="" selected="selected">选择发布功能</option>
+                            </select>
+                         </div>
+                     </div>
+                    <div class="input-group voilet-margin">
+                        <div id="result_Parameters">
+                            <select id="tgt_name" class="form-control" name="tgt_name">
+                                <option value="" selected="selected">选择项目参数</option>
+                            </select>
+                         </div>
+                     </div>
+                    <div class="input-group voilet-left voilet-margin">
+                        <select id="id-arg" class="form-control" name="arg">
+                            <option value="" selected="selected">请选择发布参数</option>
+                            <option value="all">all</option>
+                            <option value="dynamic">dynamic</option>
+                            <option value="static">static</option>
+                        </select>
+                     </div>
+                    <div class="input-group voilet">
+                        <span class="input-group-btn">
+                           <a class="btn btn-primary swan_push monitor" href="/swan/release/" onclick="return false">发布</a>
+                        </span>
+{#                        <span class="input-group-btn">#}
+{#                            <a class="btn btn-success swan_push" href="/swan/show_tag/" onclick="return false">显示tag</a>#}
+{#                        </span>#}
+{#                        <span class="input-group-btn">#}
+{#                            <a class="btn btn-info swan_push" href="/swan/release_check/" onclick="return false">检查</a>#}
+{#                        </span>#}
+{#                        <span class="input-group-btn">#}
+{#                            <a class="btn btn-danger swan_push" href="/swan/release_half/" onclick="return false">半自动发布pro</a>#}
+{#                        </span>#}
+                    </div>
+                </div><!-- /input-group -->
+            </div>
+
+            <div class="row voilet-top">
+              <div class="col-lg-6">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="请输入回退版本号">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" >回退</button>
+                  </span>
+                </div><!-- /input-group -->
+              </div><!-- /.col-lg-6 -->
+              <div class="col-lg-6">
+            </div><!-- /.row -->
+          </div>
+        <div id="host_rest"></div>
+      </form>
+        <div class="clearfix visible-xs-block"></div>
+      <div id="websocket_rest"></div>
+    </div>
+</div>
+
+<script>
+   $('.swan_push').unbind('click').bind('click',function(){
+       var project_name=$("#project_name").val();
+       var project_name_all=$("#swan_name").val();
+       var project_name_tgt=$("#tgt_name").val();
+       if(project_name == ""){
+           $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>项目名必选</div>");
+            return false;
+       }
+       if(project_name_all == ""){
+           $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-warning\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>发布功能必选</div>");
+            return false;
+       }
+       // if(project_name_tgt == ""){
+       //     $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-info\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>项目参数必选</div>");
+       //      return false;
+       // }
+
+       else {
+           $.ajax({
+           type: "POST",
+           url: $(this).attr("href"),                  // 提交的页面
+           data: $('#swan_form').serialize(), // 从表单中获取数据
+           dataType: "json",
+           success: function(data){
+               // alert(data);
+               // console.log(data);
+               //$("#voilet_websocket").remove();
+
+               var uid = '/swan/websocket/?jid=' + data["uid"];
+               console.log(uid);
+               $.layer({
+                    type : 2,
+                    shade : [0.5 , '#000' , true],
+                    shadeClose : true,
+                    maxmin: true,
+                    moveOut: true,
+                    shift: 'top',
+                    border: [10, 0.3, '#000'],
+                    title : "服务器详细信息",
+                    area : ['800px' , '600px'],
+                    iframe : {src : uid }
+                });
+                event.preventDefault();
+           }
+        });
+       }
+   });
+    // 查询项目参数
+    $(function(){
+        $(document).ready(function(){
+            $('.select_business').change(function() {
+                if ($(this).val().length==0){return false}
+                $("#voilet_websocket").remove();
+                var project_name=$(this).val();
+                    var url= '/swan/swan_select/?project_name=' + project_name;
+                    $.ajax({
+                     type: "GET",
+                     url: url }).done(function( data ) {
+                     $("#result_select").html(data);
+                     // 联动查询主机
+                     $(document).triggerHandler("parament",project_name);
+                });
+
+                $.ajax({
+                     type: "GET",
+                     url: '/swan/swan_select_myfrom/?project_name=' + project_name }).done(function( data ) {
+                     $("#host_rest").html(data);
+                });
+
+            });
+
+            $(document).bind("parament", function(e,pname){
+                $('#swan_name').change(function() {
+                    $("#voilet_websocket").remove();
+                    var url= '/swan/swan_select_tgt/?project=' + pname + "&tgt=" + $(this).val();
+                        $.ajax({
+                         type: "GET",
+                         url: url }).done(function( data ) {
+                         $("#result_Parameters").html(data);
+                    });
+                    // console.log('/swan/swan_select_botton/?project=' + pname + "&swan_name=" + $(this).val());
+                    $.ajax({
+                         type: "GET",
+                         url: '/swan/swan_select_botton/?project=' + pname + "&swan_name=" + $(this).val() }).done(function( data ) {
+                         $("#host_rest").html(data);
+                    });
+                });
+            });
+
+        });
+    });
+
+</script>
+
+{% endblock content %}

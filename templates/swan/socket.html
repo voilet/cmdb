@@ -1,0 +1,66 @@
+<link href="/static/new/css/bootstrap.min.css" rel="stylesheet">
+<script src="/static/new/js/jquery-2.1.1.js"></script>
+
+<script src="/static/new/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	 // $(".table-bordered").hide();
+    // $("#websocket_rest").remove();
+	if(!("WebSocket" in window)){
+		$('#chatLog, input, button, #examples').fadeOut("fast");
+		$('<p>Oh no, you need a browser that supports WebSockets. How about <a href="http://www.google.com/chrome">Google Chrome</a>?</p>').appendTo('#container');
+	}else{
+		//The user has WebSockets
+
+	connect();
+    var i = 0;
+	function connect(){
+			// var socket;
+			var host = "ws://{{ web_socket }}/?jid={{ jid }}";
+			// var host = "ws://192.168.50.99:8001/websocket";
+
+			try{
+				var socket = new WebSocket(host);
+				message('<p class="event">Socket Status: '+socket.readyState);
+				socket.onopen = function(){
+					message('<p class="event">已连接websocket等待返回结果...');
+				};
+
+				socket.onmessage = function(msg){
+{#					message(JSON.parse(msg.data).message);#}
+					message('<p class="message">'+JSON.parse(msg.data).message);
+				};
+
+				socket.onclose = function(){
+					message('<p class="event">Socket Status: '+socket.readyState+' (Closed)');
+				}
+
+			} catch(exception){
+				message('<p>Error'+exception);
+			}
+            // var tag = $('<div id="chatLog" style="height: 500px;overflow: auto;"></div>');
+{#			function message(msg){#}
+{#                var sum_top = ".voilet_websocket"[1];#}
+{#                console.log(sum_top);#}
+{#                i++;#}
+{#                document.getElementById('voilet_websocket').scrollTop = i*28;#}
+{#				var msg_data = $('.voilet_websocket').append(msg+'</p>');#}
+{#			}//End message()#}
+            function message(msg){
+				$('.voilet_websocket').append(msg+'</p>');
+{#				$('#chatLog').append(msg+'</p>');#}
+			}//End message()
+
+            $('.close').click(function(){
+                socket.close();
+            });
+
+            // dialogInstance.close().socket.clone();
+		}
+	}//End connect()
+});
+</script>
+<style>.row{margin:5px;}</style>
+<div class="row">
+    <pre><div class="voilet_websocket" id="voilet_websocket"></div></pre>
+</div>

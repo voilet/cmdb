@@ -1,0 +1,25 @@
+{% include 'login_header.html' %}
+
+<form class="form-horizontal" method="post" action="">
+    {% csrf_token %}
+  <div class="control-group">
+    <label class="control-label" >用户名</label>
+    <div class="controls">
+     <input id="id_username" type="text" name="username" maxlength="254">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label">密码</label>
+    <div class="controls">
+     <input id="id_password" type="password" name="password">
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn" >登陆</button>
+      <li class="btn"><a href="/accounts/register/" style="color:#aa1111">注册</a></li>
+    </div>
+  </div>
+</form>
+
+{% include 'op_bottom.html' %}

@@ -1,0 +1,70 @@
+{% include "default/header.html" %}
+{% include "default/index_left.html" %}
+<div class="col-md-10 column" id="salt_cmd">
+{% if cmd_Advanced %}
+<div class="tabbable" id="tabs-241140">
+asdf
+</div>
+{% else %}
+<div class="alert alert-dismissable alert-info">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <strong>使用方法：</strong><br><br>
+    输入主机和需要安装的服务名称
+</div>
+
+<style>
+li{margin:0; padding:0; list-sytle:none}
+.form-group div{float:left;margin:0; padding:0; list-sytle:none}
+.form-group .voilet_li{float:left;margin-left:8px;}
+.voilet_sls{font-size:14px;line-height:30px;color: #ff0000}
+</style>
+
+<form class="form-inline" id="salt_sls" role="form">{% csrf_token %}
+{#	<div class="form-group">#}
+{#             <div><input class="form-control" id="salt_node" name="salt_node" type="text" /></div>#}
+{#             <div class="voilet_li"><label class="voilet_sls">state.sls</label></div>#}
+{#             <div class="voilet_li"><input class="form-control" id="salt_sls" name="salt_sls" type="text" /></div>#}
+{#	</div>#}
+{#	<div class="form-group">#}
+{#        <button type="submit" class="btn btn-default" id="but_salt_state_sls">安装</button>#}
+{#	</div>#}
+<div class="row">
+          <div class="col-lg-6">
+            <div class="input-group">
+              <span class="input-group-btn">
+                <button class="btn btn-default disabled" type="button">主机名</button>
+              </span>
+              <input type="text" class="form-control" name="salt_node" id = "salt_node"   maxlength="100" size="100" />
+              <span class="input-group-addon ">state.sls
+{#                  <select id="id_brand" name="comm_shell">#}
+{#                    <option value="cmd" selected="selected">cmd.run</option>#}
+{#                    <option value="grains">grains.item</option>#}
+{#                    <option value="ping">test.ping</option>#}
+{#                   </select>#}
+              </span>
+            </div><!-- /input-group -->
+          </div><!-- /.col-lg-6 -->
+          <div class="col-lg-6">
+            <div class="input-group">
+             <span class="input-group-btn">
+                <button class="btn btn-default disabled" type="button">服务名称</button>
+              </span>
+             <input type="text" class="form-control" name="salt_sls" id="salt_sls" maxlength="100" size="100"/>
+              <span class="input-group-btn">
+                <button class="btn btn-success" id="but_salt_state_sls" type="button">执行</button>
+              </span>
+{#                <button type="submit" id="button" class="btn btn-default" id="but_salt_state_sls">安装</button>#}
+            </div><!-- /input-group -->
+          </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+</form>
+<p id="voilet_sls"></p>
+
+{% endif %}
+
+</div>
+{% include "default/footer.html" %}
+{% include "default/jquery.html" %}
+
+
+

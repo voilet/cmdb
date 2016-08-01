@@ -1,0 +1,133 @@
+{% extends 'default/base.html' %}
+{% block content %}
+
+<div class="clearfix"></div><br>
+
+    <div id="edit_result">
+    {% load pagination_tags %}
+    {% autopaginate server_list 20 %}
+    <ul class="list-unstyled list-inline">
+        {% for i in server_user_all %}
+            {% if i.first_name %}
+                <button type="button" class="btn btn-default"><li>{{ i.first_name }}</li></button>
+            {% else %}
+                <button type="button" class="btn btn-default"><li>{{ i.username }}</li></button>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <pre>{{ business_name }}业务列表  总共有:{{server_list_count}}台  真实机:{{ server_node }}  Centos: {{ centos }}台</pre>
+    {% if server_list %}
+        <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select_all" /></th>
+                        <th> eth1 </th>
+                        <th> 机柜 </th>
+                        <th> 业务 </th>
+                        <th> 系统状态 </th>
+                        <th> 操作 </th>
+                    </tr>
+                </thead>
+
+                {% for i in server_list %}
+                <tbody>
+                    <tr >
+                        <td width="40"><input type="checkbox" name="node_name" value="{{i.node_name}}"/></td>
+                        <td width="120"> <a class="iframe" href="/assets/server/node_id/{{ i.id }}/" >{{ i.eth1 }}</a></td>
+                        <td width="100"><a href="{% url 'cabinet' %}?cabinet={{ i.cabinet }}&room_number={% if i.room_number %}{{ i.room_number }}{% endif %}" > {% if i.room_number %}{{ i.room_number }} - {% endif %}{{ i.cabinet }} - {{ i.server_cabinet_id }}</a></td>
+{#                                <td width="200">  {% if i.business %}<a href="/assets/server/server_type/{{ i.business.id }}/ ">{{ i.business }}</a>{% endif %}  </td>#}
+                        <td width="200">
+                        {% for a in business_list %}
+                            {% for k,v in a.items %}
+                                {% if k == i.eth1 %}
+                                    {% for bc in v %}
+                                        <a href="/assets/server/server_type/?service_name={{ bc }}" class="btn btn-info btn-xs">{{ bc }}</a>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        </td>
+                        <td width="50">
+                        <div class="btn-group" data-toggle="buttons">
+                            {% if i.status == 0 %}
+                                <label class="btn btn-xs btn-danger disabled">
+                                <input type="radio" name="options" id="option3">
+                                未安装系统</label>
+                            {% elif i.status == 1 %}
+                            <label class="btn btn-xs btn-success disabled">
+                                <input type="radio" name="options" id="option3">
+                                OK</label>
+                            {% else %}
+                            <label class="btn btn-xs btn-warning disabled">
+                                <input type="radio" name="options" id="option3">
+                                系统安装中</label>
+                            {% endif %}
+                        </div></td>
+                        <td width="160">
+                            <a href="/assets/edit_id/{{ i.id }}/" class="btn btn-xs btn-primary node-edit" >修改</a>
+                            <a href="/assets/server/node_del/{{ i.id }}/" class="btn btn-xs btn-danger node-edit">删除</a>
+                            {% if i.status == 1 %}
+                            <a href="/assets/update_id/{{ i.id }}/" class="btn btn-xs btn-success" >更新</a>
+                            {% else %}
+                            <a href="/assets/update_id/{{ i.id }}/" class="btn btn-xs btn-success disabled" >更新</a>
+                            {% endif %}
+                            <a href="/assets/server/restart/{{ i.id }}/" class="btn btn-xs btn-danger voilet_restart" >重装系统</a>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+
+        <div  class="voilet_page">
+            {% paginate %}
+        </div>
+    {% else %}
+        <p>暂无数据!</p>
+
+    {% endif %}
+    </div>
+<script type="text/javascript">
+$(function(){
+     // 搜索
+     $(document).ready(function(){
+          $('#node_search').click(function(){
+            jQuery.ajax({
+              url: "/assets/search/",                  // 提交的页面
+              data: $('#search_hostname').serialize(), // 从表单中获取数据
+              type: "POST",                       // 设置请求类型为"POST"，默认为"GET"
+              beforeSend: function(){             // 设置表单提交前方法
+                //alert('表单提交前');
+              },
+              error: function(request){           // 设置表单提交出错
+                alert("表单提交出错，请稍候再试");
+              },
+              dataType:'text',
+              success: function(msg){
+                    //alert(msg);
+                  $("#edit_result").html(msg)
+                                       // 设置表单提交完成使用方法
+              }
+            });
+          });
+          return false;
+     });
+    $(document).on("click",".update_host",function(e){
+        e.preventDefault();
+        url = $(this).attr('data-href');
+        $.get(url,{},function(data){
+          $("#edit_result").html(data);
+        });
+        return false;
+
+    });
+
+
+});
+</script>
+
+{% endblock content %}
+
+
+
+

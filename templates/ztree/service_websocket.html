@@ -1,0 +1,56 @@
+
+<style>.voilet-input input{margin-right:10px;}</style>
+
+            <div id="chatLog">   </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    if(!("WebSocket" in window)){
+        $('<p>当前浏览器不支持websocket，请更换浏览器，建意使用firefox或chrome</p>').appendTo('#container');
+    }else{
+        //The user has WebSockets
+
+    connect();
+
+    function connect(){
+            var host = "ws://127.0.0.1:8888/websocket/?jid={{ jid }}";
+            try{
+                var socket = new WebSocket(host);
+                var return_sum = 0;
+                // message('<p class="event">Socket Status: '+socket.readyState);
+                socket.onopen = function(){
+                    message('<p class="event">共发送({{ fqdn_sum }})台机器</p>');
+                    message('<p class="event">已连接websocket等待返回结果...</p><br>');
+                };
+
+                socket.onmessage = function(msg){
+                    return_sum += 1;
+                    var msg_status = JSON.parse(msg.data).message;
+                    if (msg_status){
+                        message('<button type="button" class="btn btn-success btn-xs">' + JSON.parse(msg.data).id + '</button> ' + '<button type="button" class="btn btn-info btn-xs"> <i class="fa fa-linux" style="color:#080506"></i>' + JSON.parse(msg.data).message + '</button><br/>');
+                    }
+                    else{
+                        message('<button type="button" class="btn btn-success btn-xs">' + JSON.parse(msg.data).id + '</button> ' + '<button type="button" class="btn btn-danger btn-xs"> <i class="fa fa-linux" style="color:#080506"></i>' + JSON.parse(msg.data).message + '</button><br/>');
+                    }
+
+                    $('#chatLog').append('<br>');
+                }
+
+            } catch(exception){
+                message('<p>Error'+exception + '</p>');
+            }
+
+            function message(msg){
+                $('#chatLog').append(msg);
+            }//End message()
+
+            $('#disconnect').click(function(){
+                socket.close();
+            });
+        }
+    }//End connect()
+
+});
+</script>
+
+

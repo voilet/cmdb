@@ -1,0 +1,162 @@
+<html>
+    <head>
+        <link href="/static/new/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/static/new/font-awesome/css/font-awesome.css" rel="stylesheet">
+        <link href="/static/new/css/plugins/iCheck/custom.css" rel="stylesheet">
+        <link href="/static/new/css/animate.css" rel="stylesheet">
+        <link href="/static/new/css/style.css" rel="stylesheet">
+
+        <script src="/static/new/js/jquery-2.1.1.js"></script>
+{#        <style>#}
+{#            body {background: #ffffff;}#}
+{#        </style>#}
+    </head>
+
+{% load bootstrap %}
+{% block content %}
+
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-10">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 class="text-center"> 填写修改主机信息. </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user"></ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+
+            <div class="ibox-content">
+                <form class="form-horizontal" action="" id="signupForm"  method="post" name="horizontal" role="form" autocomplete="off">
+                {% csrf_token %}
+                    <input id="ids" style="display: none">
+                    {{ uf.env|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.idc|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.brand|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="groups" class="col-sm-2 control-label">所属项目组</label>
+
+                        <div class="col-sm-3">
+                            <select id="groups" size="10" class="form-control m-b" multiple>
+                            {% for i in projects %}
+                                    <option value="{{ i.uuid }}">{{ i }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="btn-group" style="margin-top: 50px;">
+                                <button type="button" class="btn btn-white" onclick="move_right('groups', 'groups_selected')"><i class="fa fa-chevron-right"></i></button>
+                                <button type="button" class="btn btn-white" onclick="move_left('groups_selected', 'groups')"><i class="fa fa-chevron-left"></i> </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div>
+                                <select id="groups_selected" name="business" class="form-control m-b" size="10"  multiple>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="services" class="col-sm-2 control-label">运行服务</label>
+
+                        <div class="col-sm-3">
+                            <select id="services" size="10" class="form-control m-b" multiple>
+                            {% for i in services %}
+                                <option value="{{ i.uuid }}">{{ i }} -- {{ i.port }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="btn-group" style="margin-top: 50px;">
+                                <button type="button" class="btn btn-white" onclick="move_right('services', 'services_selected')"><i class="fa fa-chevron-right"></i></button>
+                                <button type="button" class="btn btn-white" onclick="move_left('services_selected', 'services')"><i class="fa fa-chevron-left"></i> </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div>
+                                <select id="services_selected" name="service" class="form-control m-b" size="10"  multiple>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.cabinet|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.editor|bootstrap_horizontal }}
+                    <div class="hr-line-dashed"></div>
+
+                   <div class="form-group">
+                       <div class="col-sm-4 col-sm-offset-5">
+                           <button class="btn btn-white" type="submit"> 重置 </button>
+                           <button class="btn btn-primary" id="host_edit"> 提交 </button>
+                       </div>
+                   </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#host_edit').click(function () {
+            var args = {};
+            var match = null;
+            var uuid = decodeURIComponent(location.search.substring(1));
+            var reg = /(?:([^&amp;]+)=([^&amp;]+))/g;
+            while((match = reg.exec(uuid))!==null){
+                args[match[1]] = match[2];
+            }
+            var ids = args['uuid'];
+            $('#uuid').val(ids)
+        });
+    });
+
+    function move_left(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+                $(this).attr("selected",'false');
+            }
+            $(this).attr("selected",'true');
+        });
+    }
+    function move_right(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+            }
+
+        });
+    }
+
+    function move_all(from, to){
+        $("#"+from).children().each(function(){
+            $("#"+to).append(this);
+        });
+    }
+</script>
+{% endblock content %}
+</body>
+</html>
+

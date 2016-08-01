@@ -1,0 +1,29 @@
+{% extends 'config/base.html' %}
+{% block content %}
+
+<style>
+   .col-sm-11 .n-invalid{
+    border: 1px solid #ff0000;
+}
+</style>
+
+
+		<div class="col-md-10 column">
+                <div class="jumbotron">
+                    <h3>
+                        配置系统
+                    </h3>
+                    <p>
+                        需要特别注意，配置系统是根据每个项目所安装的服务来识别是否需要配置文件，然后根据提交的配置文件生成saltstack格式将此配置下发到各台机器，因此操作需谨慎小心
+                    </p>
+                </div>
+                <div class="alert alert-success alert-dismissable">
+        {#				 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>#}
+                        <h4>
+                            操作需谨慎!
+                        </h4> <strong>注意!</strong> 此配置文件一段提交，在自动化推送中会下发到所有相关业务的机器哦，您确认好了吗？
+                    </div>
+            </div>
+        </div>
+
+{% endblock content %}

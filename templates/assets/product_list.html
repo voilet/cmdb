@@ -1,0 +1,71 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate product_data 15 %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>产品线列表 | Assets List.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<style>
+    .wrapper{margin-top:10px;}
+    .wanghui{margin-top:10px;}
+</style>
+<div class="wrapper">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="result">
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    名称
+                                </th>
+                                <th>
+                                    别名
+                                </th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in product_data %}
+                            <tr>
+                                <td class="col-lg-3">
+                                   {{ i.name }}
+                                </td>
+                                <td class="col-lg-3">
+                                   {{ i.slug }}
+                                </td>
+
+                                <td class="col-lg-3">
+                                   <div class="wanghui">
+                                    <a href="{% url 'product_edit' i.uuid %}" class="btn btn-xs btn-info">修改</a>
+{#                                    <a href="/assets/server/type/del/{{ i.uuid }}/" type="button" class="btn btn-xs btn-danger">删除</a>#}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div  class="voilet_page">
+                         {% paginate %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+{% extends 'config/base.html' %}
+{% block content %}
+<style>
+   .col-sm-11 .n-invalid{
+    border: 1px solid #ff0000;
+    }
+    .setup_return{margin-top:8px;}
+</style>
+<form class="form-horizontal"  method="post" role="form" >
+    {% csrf_token %}
+    <div id="content-block" class="col-sm-11 col-md-5">
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">配置名称</label>
+                <div class="col-sm-10">
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">初始文件</label>
+                <div class="col-sm-10">
+                    {{ form.init_file }}
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">模板文件</label>
+                <div class="col-sm-10">
+                    {{ form.template_file }}
+                </div>
+            </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                 <button type="submit" class="btn btn-success btn-block">保存</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+function showDetail(obj){
+  var id= obj.attributes["id"].nodeValue;
+    $.ajax({
+   type: "GET",
+   url: id })  .done(function( data ) {
+    $("#setup_install").html(data);
+  });
+}
+</script>
+
+
+{% endblock content %}

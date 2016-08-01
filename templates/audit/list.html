@@ -1,0 +1,58 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate audit_data 50 %}
+<link rel="stylesheet" type="text/css" href="/static/js/bootsrap-select/bootstrap-select.min.css" />
+<script type="text/javascript" src="/static/js/bootsrap-select/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.dragsort-0.5.2.min.js"></script>
+    <link href="http://v2.bootcss.com/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+<style>
+	.col-sm-11 pre {
+		height: 40px;
+		overflow: hidden;
+	}
+	.row {
+		height: 35px;
+	}
+{#.btn-group .voilet_restart{margin-left:15px;}#}
+</style>
+
+<div class="clearfix"></div>
+<br>
+<div id="host_node_list"></div>
+<div id="host_list">
+
+        <div id="edit_result">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th> 操作用户 </th>
+                        <th> 命令 </th>
+                        <th> 操作时间 </th>
+                        <th> 服务器ip </th>
+                    </tr>
+                </thead>
+                {% for i in audit_data %}
+
+                <tbody>
+                    <tr >
+
+                        <td width="120"> <a class="fancybox fancybox.ajax" href="/assets/server/node_id/{{ i.user_name }}/" >{{ i.user_name }}</a></td>
+                        <td width="120">{{ i.bash_shell }}</td>
+                        <td width="120">{{ i.audit_data_time }}</td>
+                        <td width="120">{{ i.server_ip }}</td>
+
+                    </tr>
+                </tbody>
+                {#        {% endif %}#}
+                {% endfor %}
+            </table>
+            <div  class="oilet_page">
+                {% paginate %}
+            </div><br>
+
+        </div>
+</div>
+{% endblock  %}

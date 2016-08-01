@@ -1,0 +1,13 @@
+{% ifnotequal rst true %}
+    <div class="form-group">
+        <label for="module_name"  class="col-lg-2 control-label"> 项目参数 <span class="red-fonts">*</span> </label>
+        <div id="result_Parameters" class="col-sm-8">
+            <select id="tgt_name" name="tgt_name" class="form-control m-b">
+                <option value="" selected="selected">选择项目参数</option>
+                {% for i in rst_data %}
+                    <option value="{{ i.uuid }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+{% endifnotequal %}

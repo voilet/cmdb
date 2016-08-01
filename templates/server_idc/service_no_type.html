@@ -1,0 +1,145 @@
+{#{% extends 'assets/base.html' %}#}
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate no_node 20 %}
+
+<div id="result">
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>
+				主机名
+			</th>
+			<th>
+				机房
+			</th>
+			<th>
+				eth1
+			</th>
+			<th>
+				内存
+			</th>
+            <th>
+				核数
+			</th>
+            <th>
+				硬盘
+			</th>
+            <th>
+				服务器型号
+			</th>
+			<th>
+				系统
+			</th>
+			<th>
+				业务
+			</th>
+			<th>
+				资产编号
+			</th>
+            <th>
+				分配业务
+			</th>
+            <th>
+				删除
+			</th>
+
+		</tr>
+	</thead>
+    {% for i in no_node %}
+	<tbody>
+		<tr >
+			<td width="200">
+				<a href="/assets/server/node_id/{{ i.id }}/" >{{ i.node_name }}</a>
+			</td>
+			<td width="125">
+				{{ i.idc }}
+			</td>
+			<td width="150">
+				{{ i.eth1 }}
+			</td>
+			<td width="80">
+				{% widthratio i.memory 1024 1 %}G
+			</td>
+            <td width="100">
+				{{ i.core_num }} Cores
+			</td>
+            <td width="100">
+                {% if i.hard_disk %}
+				{{ i.hard_disk }} G
+                    {% else %}
+                    无数据
+                {% endif %}
+			</td>
+            <td width="100">
+				{{ i.brand }}
+			</td>
+			<td width="160">
+				{{ i.system }} - {{ i.system_cpuarch }}
+			</td>
+			<td width="100">
+                {% for test in i.business.all %}
+                    <a href="/assets/server_type/{{ test.id }}/ ">{{ test.service_name }}</a>
+                {% endfor %}
+			</td>
+			<td>
+				{{ i.number }}
+			</td>
+            <td width="50">
+				<a href="/assets/edit_id/{{ i.id }}/" class="btn btn-xs btn-primary" data-toggle="modal">分配业务</a>
+			</td>
+            <td width="50">
+				<a href="/assets/server/node_del/{{ i.id }}/" class="btn btn-danger btn-xs">删除</a>
+{#				<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#myModal{{ i.id }}">更新</button>#}
+			</td>
+		</tr>
+	</tbody>
+    {% endfor %}
+    </table>
+    <div  class="voilet_page">
+         {% paginate %}
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+      $(document).on("click",".btn-xs",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#result").html(data);
+         });
+      });
+
+      $(document).on("click",".btn-success",function(e){
+         e.preventDefault();
+         window.location.reload();
+      });
+
+      $(document).on("click",".click-save",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#delete_node').serialize(), // 从表单中获取数据
+             error: function(request){           // 设置表单提交出错
+               alert("表单提交出错，请稍候再试");
+             },
+             dataType:'text',
+             success: function(msg){
+                 $("#delete_ok").html(msg)
+                 setTimeout("window.location.reload();", 3000);
+        //       alert(msg);                       // 设置表单提交完成使用方法
+             }
+         });
+      });
+});
+</script>
+{% endblock content %}
+
+
+
+
+

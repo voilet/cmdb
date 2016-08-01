@@ -1,0 +1,29 @@
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#all" data-toggle="tab" style="cursor:pointer">all</a></li>
+    {% for key in all_env %}
+
+        <li class=""><a href="#{{key.0}}" data-toggle="tab">{{key.0}}</a></li>
+    {% endfor %}
+</ul>
+
+
+<div id="group_node">
+</div>
+
+<script>
+//全选
+$(function(){
+     $('#myTab a').click(function (e) {
+         e.preventDefault();
+         var tab = $(this).attr("href").substr(1);
+         $.get('{% url "business_host_list" item.uuid %}',{'env':tab},function(data){
+             $("#group_node").html(data);
+         });
+     });
+     $.get('{% url "business_host_list" item.uuid %}',{'env':"all"},function(data){
+         $("#group_node").html(data);
+     });
+
+
+});
+</script>

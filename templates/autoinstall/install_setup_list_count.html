@@ -1,0 +1,30 @@
+<pre>
+<h4>
+    <span style="color: #ff0000">{{ business }}</span>
+    项目一共有<strong> <span style="color: #ff0000">{{ node_count }}</span> </strong>
+    台服务器</h4>{% for i in node %}{{ i }}  {% endfor %}
+
+<a id="/auto/setup/{{ setup_id }}/" class="btn btn-success"  onClick="showDetail(this)">确认推送</a>
+
+</pre>
+<div class="alert alert-dismissable alert-success">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4>
+        提醒!
+    </h4> 只会将saltstack上的配置文件及所需安装的服务下发安装,已安装过的服务则不会安装<br>
+    如果服务器上配置文件和saltstack上不同时,则以saltstack为准更改配置文件并重启相应服务
+</div>
+<script>
+function showDetail(obj){
+  var id= obj.attributes["id"].nodeValue;
+  //var id = obj.id;
+   // alert(id)
+    $.ajax({
+   type: "GET",
+   url: id })  .done(function( data ) {
+    $("#setup_install").html(data);
+  });
+}
+</script>
+
+

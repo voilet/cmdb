@@ -1,0 +1,11 @@
+{#<div class="alert alert-success alert-dismissable">#}
+{#     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>#}
+{#    <h4>#}
+{#        保存成功#}
+{#    </h4>#}
+{#</div>#}
+
+<button href="{% url 'project_doc_edit' id %}" type="button" class="btn btn-success btn-action" >修改</button>
+    <div class="clearfix"></div>
+    {% if item.project_doc %}<p>{{ item.project_doc|safe|linebreaksbr }}</p>{% else %}<p>未添加维护手册</p>{% endif %}
+</div>

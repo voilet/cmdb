@@ -1,0 +1,73 @@
+{% include 'default/header.html' %}
+{% include 'default/salt_conf_left.html' %}
+
+<style>
+   .col-sm-11 .n-invalid{
+    border: 1px solid #ff0000;
+    }
+    .setup_return{margin-top:8px;}
+</style>
+<div id="content-block" class="col-sm-11 col-md-10">
+    <pre>请添加以下服务配置文件</pre>
+    <div class="clearfix"></div>
+        <a id="/conf/default/{{ prod_name }}/index?server_name=sls" class="btn btn-primary" onClick="showDetail(this)">{{ prod_name }}安装文件</a>
+        <a id="/conf/default/{{ prod_name }}/index?server_name=templates" class="btn btn-primary" onClick="showDetail(this)">{{ prod_name }}模板</a>
+    <div class="clearfix"></div>
+    <div id="setup_install" class="setup_return">
+        <div class="result">
+            <div class="alert alert-dismissable alert-success">
+                <h4>
+                    选择需要添加配置文件的服务当前为{{ prod_name }} saltstack init.sls配置文件
+                </h4> 只有需要配置文件的服务才会在此出现哦,添加配置文件后，记的推送相关项目哦，否则不能产即生效
+            </div>
+        </div>
+    <form class="form-horizontal" id="form" action="" method="post" role="form">{% csrf_token %}
+        <input type="hidden" name="prod_name" value="{{ prod_name }}" />
+        <textarea class="form-control" id="id_sls_description" style="height: 600px;" name="salt_code" >{{ data }}</textarea>
+        <div class="clearfix"></div>
+        {% if "admin" in request.user.department %}
+         <div style="margin-top:8px;">
+             <input type="submit" id="salt_save" class="btn btn-success btn-block" value="保存" name="save" />
+        </div>
+        {% endif %}
+    </form>
+    </div>
+</div>
+
+<script>
+function showDetail(obj){
+  var id= obj.attributes["id"].nodeValue;
+    $.ajax({
+    type: "GET",
+    url: id })  .done(function( data ) {
+    $("#setup_install").html(data);
+  });
+}
+</script>
+
+{% if "admin" in request.user.department %}
+<script type="text/javascript">
+    $("#form").bind("submit", function () {
+    $.fancybox.showLoading(); // it was $.fancybox.showActivity(); for v1.3.4
+    $.ajax({
+        type: "POST",
+        cache: false,
+        url: "/conf/default/{{ prod_name }}/index?save=sls", // make sure your path is correct
+        data: $(this).serializeArray(), // your were using $(form).serialize(),
+        error: function(request){           // 设置表单提交出错
+            alert("表单提交出错，请稍候再试");
+            setTimeout($.fancybox.close, 1000);
+          },
+        dataType:'text',
+        success: function (data) {
+{#            alert("is ok");#}
+            $('.result').html(data);
+            $.fancybox.close();
+        }
+    });
+    return false;
+    }); // bind
+</script>
+{% endif %}
+
+{% include 'default/footer.html' %}

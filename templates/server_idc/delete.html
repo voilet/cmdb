@@ -1,0 +1,129 @@
+
+
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+</style>
+<div id="date_ok"></div>
+<form class="form-horizontal" id="form_data"  method="post" role="form">
+    {% csrf_token %}
+    <div id="content-block" class="col-sm-11">
+            <div class="alert alert-dismissable alert-danger">
+
+				<h4>
+					确认要删除吗？
+				</h4> <strong> 警告!</strong> 此次删除将从数据库中将此台服务器删除，将通知saltstack将机器销毁，请确认删除后对业务是否有影响，如无法确定请和上级领导确认后在做此操作，以免误操作
+			</div>
+            {% if node_name_list %}
+              <div>
+              本次要删除的主机有：
+              <blockquote>
+              {% for n in node_name_list %}
+                <p>{{ n }}</p>
+              {% endfor %}
+              </blockquote>
+              <br>
+              <input type="hidden" value="{{ node_name }}" name="node_name">
+              </div>
+            {% else %}
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">主机名</label>
+                <div class="col-sm-10">
+                    <div class="form-control" >{{ edit_id.node_name }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">网卡1</label>
+                <div class="col-sm-10">
+                    <div class="form-control" >{{ edit_id.eth1 }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">网卡2</label>
+                <div class="col-sm-10">
+                    <div class="form-control" >{{ edit_id.eth2 }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">机柜位置</label>
+                <div class="col-sm-10">
+                    <div class="form-control" >{{ edit_id.cabinet }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">MAC地址</label>
+                <div class="col-sm-10">
+                    <div class="form-control" >{{ edit_id.mac }}</div>
+                </div>
+            </div>
+            <div class="form-group" type="hidden" >
+                <input type="hidden" value="{{ edit_id.id }}" name="delete_id">
+                <input type="hidden" value="{{ edit_id.node_name }}" name="delete_name">
+                <input type="hidden" value="delete_selected" name="action">
+                <input type="hidden" value="yes" name="post">
+            </div>
+            {% endif %}
+            <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-3">
+            {% if node_name_list %}
+                 <button href="{% url 'server_delete' %}" class="btn btn-danger  btn-block click-delete" onclick="return false">确认删除</button>
+            {% else %}
+                 <button href="/assets/server/node_del/{{ edit_id.id }}/" class="btn btn-danger  btn-block click-delete" onclick="return false">确认删除</button>
+            {% endif %}
+{#                   <a type="submit" class="button button-circle button-caution">确认删除</a>#}
+            </div>
+            <div class="col-sm-offset-2 col-sm-3">
+                 <button class="btn btn-success  btn-block restart-delete" onclick="return false">取消删除</button>
+{#                 <a href="/assets/server/type/notid/" class="button button-circle button-action">取消删除</a>#}
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+ $(function(){
+     $('.click-delete').unbind('click').bind('click',function(){
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#form_data').serialize(), // 从表单中获取数据
+             dataType:'json',
+             success: function(msg){
+               if (msg.status){
+                 window.location.reload();                    // 设置表单提交完成使用方法
+               }else{
+                 $("#edit_result").html(msg.msg);
+               }
+             }
+         });
+      });
+
+     $('.restart-delete').unbind('click').bind('click',function(){
+         window.location.reload();
+      });
+
+ })
+
+</script>
+
+
+
+
+

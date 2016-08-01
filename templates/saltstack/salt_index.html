@@ -1,0 +1,140 @@
+{% extends 'default/base.html' %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>自动化运维 | Auto.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="file-manager">
+                        <h5>自动化运维菜单:</h5>
+                        <div>
+                            <ui id="treeDemo" class="ztree"></ui>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <h5>Folders</h5>
+                        <ul class="folder-list" style="padding: 0">
+                            <li><a href=""><i class="fa fa-folder"></i> Files</a></li>
+                            <li><a href=""><i class="fa fa-folder"></i> Pictures</a></li>
+                            <li><a href=""><i class="fa fa-folder"></i> Web pages</a></li>
+                            <li><a href=""><i class="fa fa-folder"></i> Illustrations</a></li>
+                            <li><a href=""><i class="fa fa-folder"></i> Films</a></li>
+                            <li><a href=""><i class="fa fa-folder"></i> Books</a></li>
+                        </ul>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox-content">
+                        <div id="log" class="log">
+                        <div id="result">
+                            <div class="jumbotron" >
+                                    <h2>
+                                        欢迎使用saltstack集群管理系统
+                                    </h2>
+                                    <p>
+                                        需谨慎操作，不清楚选项请不要随意执行，以免造成重大事故<br><br>
+                                        运维部宣<br>
+                                        2014年12月11日
+                                    </p>
+
+                                </div>
+<pre>
+总服务器:{{ data.server_list_count }}
+{% for i in data.room %}
+{{ i.cabinet_name }}机房( {{ i.count_len }} 个机柜 ):
+{% for a in i.name %}<a href="{% url 'cabinet' %}?cabinet={{ a.cab_name }}&room_number={{ i.cabinet_name }}" >{{ a.cab_name }}</a> ({{ a.cab_num }})   {% endfor %}
+{% endfor %}
+</pre>
+
+                        </div>
+
+                        </div>
+                        <div id="world-map" style="height: 600px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <SCRIPT type="text/javascript">
+		<!--
+		var setting = {
+			data: {
+                view: {
+                    dblClickExpand: dblClickExpand,
+                     showLine: true
+                },
+				key: {
+					title:"name"
+				},
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				beforeClick: beforeClick,
+                onClick: onClick
+			}
+		};
+
+		var zNodes =[
+                { id:1, pId:0, name:"产品线", open:true},
+                {% for one in line_list %}
+                    { id:11, pId:1, name:"{{ one }}", open:true, click:false},
+                    {% for business in one.business.all %}
+                        { id:11{{ forloop.counter }}, pId:11, name:"{{ business }}", href: "{{ business.id }}"},
+                    {% endfor %}
+                {% endfor %}
+		];
+
+		var log, className = "dark";
+		function beforeClick(treeId, treeNode, clickFlag) {
+			className = (className === "dark" ? "":"dark");
+            if (treeNode.href != undefined){
+                var business_id = treeNode.href;
+                var url  = "{% url 'business_item_ajax'  %}";
+                    $.get(url,{'id':business_id},function(data){
+                         $('#log').html(data);
+                    });
+                return false;
+            }
+		}
+		function onClick(e,treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			zTree.expandNode(treeNode);
+		}
+
+        function dblClickExpand(treeId, treeNode) {
+			return treeNode.level > 0;
+		}
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		});
+		//-->
+
+	</SCRIPT>
+
+<style type="text/css">
+.ztree li span.button.switch.level0 {visibility:hidden; width:1px;}
+.ztree li ul.level0 {padding:0; background:none;}
+	</style>
+
+
+{% endblock content %}
+
+

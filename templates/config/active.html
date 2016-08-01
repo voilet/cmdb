@@ -1,0 +1,9 @@
+<div class="panel-options">
+    <ul class="nav nav-tabs">
+        <li class="git"><a href="{% url 'swan_git' item.uuid %}" class="text-center"><i class="glyphicon glyphicon-compressed"></i> git发布 </a></li>
+        <li class="default"><a href="{% url 'swan_default' item.uuid %}" class="text-center"><i class="fa fa-laptop"></i> 普通发布 </a></li>
+        <li class="config"><a href="{% url 'swan_config' item.uuid %}" class="text-center"><i class="fa fa-bar-chart-o"></i> 基础服务 </a></li>
+        <li class="java"><a href="{% url 'swan_java' item.uuid %}" class="text-center"><i class="glyphicon glyphicon-compressed"></i> java发布 </a></li>
+        <li class="shell"><a href="{% url 'swan_shell' item.uuid %}" class="text-center"><i class="glyphicon glyphicon-compressed"></i> shell发布 </a></li>
+    </ul>
+</div>

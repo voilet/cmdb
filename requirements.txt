@@ -1,0 +1,25 @@
+pyzabbix
+django==1.7.4
+Jinja2
+msgpack-python
+pycrypto
+PyYAML
+pyzmq >= 2.1.9
+markupsafe
+requests
+django-pygments
+django-bootstrap-form
+django-crispy-forms
+redis
+django-bootstrap3
+mongoengine
+django-uuidfield
+uuid
+ipy
+apscheduler==2.1.2
+python-nmap
+reportlab
+xlwt
+pika
+django-summernote
+DjangoUeditor

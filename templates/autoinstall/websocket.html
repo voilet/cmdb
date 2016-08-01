@@ -1,0 +1,93 @@
+{% include "link_css.html" %}
+{% if websocket_status %}
+<style>
+body{background: #ffffff;}
+</style>
+<div class="col-lg-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="search-result">
+                <h3>等待返回结果</h3>
+                <p>
+                    服务器执行返回需要时间，请耐心等待
+                </p>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="search-result">
+                <div id="chatLog">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    if(!("WebSocket" in window)){
+        $('<p>当前浏览器不支持websocket，请更换浏览器，建意使用firefox或chrome</p>').appendTo('#container');
+    }else{
+        //The user has WebSockets
+
+    connect();
+
+    function connect(){
+            //var socket;
+            var host = "ws://{{ web_socket_url }}/websocket/?jid={{ jid }}";
+            try{
+                var socket = new WebSocket(host);
+                var return_sum = 0;
+                // message('<p class="event">Socket Status: '+socket.readyState);
+                socket.onopen = function(){
+{#                    message('<p class="event">共发送({{ fqdn_sum }})台机器</p>');#}
+                    message('<p class="event">已连接websocket等待返回结果...</p><br>');
+                    // message('<p class="event">已连接websocket: '+socket.readyState+' (open)');
+                };
+
+                socket.onmessage = function(msg){
+                    return_sum += 1;
+                    message('主机: <button type="button" class="btn btn-success btn-xs">' + JSON.parse(msg.data).id + '</button> 已执行：(' + return_sum + ')台');
+                    message('<p class="message_content"> 执行结果:</p>');
+                    message('<p class="message_lr"> <pre>'+ JSON.parse(msg.data).message + '</pre></p>');
+                    $('#chatLog').append('<br>');
+                }
+
+            } catch(exception){
+                message('<p>Error'+exception + '</p>');
+            }
+
+            function message(msg){
+                $('#chatLog').append(msg);
+            }//End message()
+
+            $('#disconnect').click(function(){
+                socket.close();
+            });
+            /*
+             重新发送执令，触发上一个websocket关闭
+            */
+            // $('#button').click(function(){
+            //     socket.close();
+            // });
+        }
+    }//End connect()
+
+});
+</script>
+{% else %}
+<div class="col-lg-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="search-result">
+                <h3>想干吗了，走错路了吧</h3>
+                <p>
+                    请勿非常尝试，请确保自己是否越权使用
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+

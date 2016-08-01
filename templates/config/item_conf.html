@@ -1,0 +1,46 @@
+{% extends 'config/base.html' %}
+{% block content %}
+{% load pygmentify %}
+<style>
+   .col-sm-11 .n-invalid{
+    border: 1px solid #ff0000;
+}
+</style>
+     <pre>请添加--{{ conf_item.name }} --配置文件</pre>
+    <p>
+        <a  class="btn btn-primary click" a_id="init_file" >{{ conf_item.name }} 安装配置</a>
+        <a  class="btn btn-primary click" a_id="template_file" >{{ conf_item.name }} 模板</a>
+    </p>
+
+    <div class="clearfix"></div>
+    <div id="init_file" class="code_block">
+        {% pygment %}
+        <pre lang="yaml">
+        {{conf_item.init_file|pygmentify}}
+        </pre>
+        {% endpygment %}
+    </div>
+    <div id="template_file" class="code_block">
+        {% pygment %}
+        <pre lang="yaml">
+        {{conf_item.init_file|pygmentify}}
+        </pre>
+        {% endpygment %}
+    </div>
+
+
+<script>
+    $(function(){
+        $('.code_block').hide();
+        $(".click").click(function (e) {
+            e.preventDefault();
+            $('.form-control').hide();
+            var area_name = $(this).attr('a_id');
+            console.log(area_name);
+            $('#'+area_name).show();
+            });
+    });
+</script>
+
+
+{% endblock content %}

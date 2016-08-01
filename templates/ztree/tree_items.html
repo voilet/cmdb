@@ -1,0 +1,63 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load pagination_tags %}
+{% load business_tag %}
+{% autopaginate server_list 15 %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="edit_result">
+                <div class="ibox-title">
+                    <h5> 子树列表</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user"></ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+
+                        <div>
+                            <table id="host_info" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center"><input type="checkbox" id="select_all" onclick="check_all('asset_form')"></th>
+                                        <th class="text-center"> 名称 </th>
+                                        <th class="text-center"> 操作 </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for i in server_list %}
+                                        <tr class="gradeX">
+
+                                            <td class="text-center"><input type="checkbox" name="selected" value="{{ i.uuid }}"></td>
+                                            <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.name }} </a></td>
+                                            <td class="text-center"><a href="/assets/ztree/host/?uuid={{ i.uuid }}"> 添加 </a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {% paginate %}
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock  %}

@@ -1,0 +1,193 @@
+
+<div id="content-block" class="col-md-12 column"><pre>红色为必填项</pre></div>
+<form class="form-horizontal" id="form_data" method="post" role="form">
+    {% csrf_token %}
+    <div class="col-md-12 column">
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label"><span style="color: #ff0000">主机名</span></label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_node_name" name="node_name" value="{{ update_name }}" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">网卡1</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_eth1" name="eth1" value="{{ eth0 }}" name type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">网卡2</label>
+                <div class="col-sm-10">
+                    {% if eth1 %}
+                        <input class="form-control" id="id_eth2" name="eth2" value="{{ eth1 }}" type="text" />
+                    {% elif edit_id.internal_ip %}
+                    <input class="form-control" id="id_eth2" name="eth2" value="{{ edit_id.internal_ip }}" type="text" />
+                    {% else %}
+                    <input class="form-control" id="id_eth2" name="eth2" placeholder="暂无ip" type="text" />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label"><span style="color: #ff0000">MAC地址</span></label>
+                <div class="col-sm-10">
+                    {% if mac == "" %}
+                        <input class="form-control" id="id_mac" maxlength="20" name="mac"  placeholder="未采集到MAC,需手动输入 格式:FA-16-3E-41-0B-BA" type="text" value="FA-16-3E-41-0B-BA" />
+                    {% else %}
+                        <input class="form-control" id="id_mac" maxlength="20" name="mac" value="{{ mac }}"  placeholder="格式:FA-16-3E-41-0B-BA" type="text" />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label"><span style="color: #ff0000">类型</span></label>
+                <div class="col-sm-10">
+                    <select id="id_sort" name="sort" >
+{#                    {{ uf.sort }}#}
+                        {% if vm == "kvm" %}
+                            <option value="openstack" selected="selected">openstack</option>
+                            {% elif vm == "VMware" %}
+                            <option value="cloud" selected="selected">cloud</option>
+                            {% elif vm == "physical" %}
+                            <option value="default" selected="selected">default</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">远控卡</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_internal_ip" name="internal_ip" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">机房</label>
+                <div class="col-sm-10">
+                    {{ uf.idc }}
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label"><span style="color: #ff0000">硬件厂商</span></label>
+                <div class="col-sm-10">
+                    <select id="id_brand" name="brand" >
+                        {% if vm == "kvm" or vm == "VMware" %}
+                            <option value="Other" selected="selected">Other</option>
+                        {% else %}
+                            <option value="DELL" selected="selected">DELL</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label"><span style="color: #ff0000">系统</span></label>
+                <div class="col-sm-10">
+                    <select id="id_system" name="system" >
+                        {% for l,i in edit_system %}
+                            <option {% ifequal l os %} selected="selected"{% endifequal%} value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label"><span style="color: #ff0000">版本</span></label>
+                <div class="col-sm-10">
+                    <select id="id_system_cpuarch" name="system_cpuarch" >
+                        {% for i,i in edit_system_arch %}
+                            <option {% ifequal i edit_id.system %} selected="selected"{% endifequal%} value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">cpu型号</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_cpu" maxlength="64" value="{{ cpu_model }}" name="cpu" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">cpu核数</label>
+                <div class="col-sm-10">
+                    <select id="id_core_num" name="core_num" >
+                        {% for i,l in edit_Cores %}
+                            <option {% ifequal i num_cpus %} selected="selected"{% endifequal%} value="{{ i }}">{{ l }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">内存</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_memory" name="memory" value="{{ mem_total }}" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">业务</label>
+                <div class="col-sm-10">
+                    {{ uf.business }}
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">机柜位置</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_cabinet" maxlength="32" name="cabinet" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">资产编号</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_number" maxlength="32" name="number" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">保修期</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_guarantee_date" maxlength="32" name="guarantee_date" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">快速服务编码</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="Services_Code" maxlength="32" name="Services_Code" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label"></label>
+
+                <div class="col-sm-10">
+                    {% if vm == "kvm" or vm == "VMware" %}
+                    <input type="radio" name="vm" id="optionsRadios1" value="1" checked> 虚拟机
+                    {% endif %}
+                    {% if vm == "physical" %}
+                    <input type="radio" name="vm" id="optionsRadios2" value="0" data-rule="checked" > 真实机
+                    {% endif %}
+                </div>
+            </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                 <button href="/salt/update_node/?node_name={{ update_name }}" class="btn btn-success btn-block click-save" onclick="return false">保存</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+ $(function(){
+     $('.click-save').unbind('click').bind('click',function(){
+         var url= $(this).attr("href");
+         //alert(url);
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#form_data').serialize(), // 从表单中获取数据
+             dataType:'text',
+             success: function(msg){
+                 $.ajax({
+                     type: "GET",
+                     url: "/salt/status/" }).done(function( data ) {
+                     $("#status").html(data);
+                 });                    // 设置表单提交完成使用方法
+             }
+         });
+      });
+ })
+
+</script>
+

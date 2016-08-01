@@ -1,0 +1,20 @@
+<style>
+.voilet_top{margin-top:8px;}
+</style>
+{% if content.return %}
+<div class="alert alert-success alert-dismissable voilet_top">
+         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4>
+            {{ host_list.eth1 }}开始安装中!
+        </h4> <strong> {{ content.result }}</strong>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-success alert-danger voilet_top">
+         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4>
+            安装失败!
+        </h4> <strong> {{ content.result }}</strong>
+    </div>
+</div>
+{% endif %}

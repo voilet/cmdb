@@ -1,0 +1,36 @@
+
+
+{% include 'op_header.html' %}
+<form class="form-horizontal" method="post" action="">
+                  <div class="control-group">
+                    <label class="control-label" >用户名</label>
+                    <div class="controls">
+                      <input id="id_username" type="text" name="username" type="text">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label" >真实姓名</label>
+                    <div class="controls">
+                      <input type="text" name="first_name" id="id_first_name" />
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label">密码</label>
+                    <div class="controls">
+                      <input type="password" name="password1" id="id_password1" />
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label">确认密码</label>
+                    <div class="controls">
+                      <input type="password" name="password2" id="id_password2" />
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <div class="controls">
+                      <button type="submit" class="btn" contenteditable="true">注册</button>
+                      <input type="hidden" name="next" value="" />
+                    </div>
+                  </div>
+</form>
+{% include 'op_bottom.html' %}

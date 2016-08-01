@@ -1,0 +1,45 @@
+<style>
+clear{clear:both;}
+.voilet{height:90px;width:auto;}
+.navbar-form{height:90px;width:100%;}
+</style>
+<pre>请选择需要执行命令的主机</pre>
+<div class="alert alert-dismissable alert-info">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4>
+        高级使用方法:
+    </h4> <strong>例：</strong>search-nginx23@uptime,注意，中间有一个空格，第一个表示主机名，第二个表示需要执行的命令<br>
+        如需同时执行多个命令，可使用searcn-nginx-23 pwd;ls;ifconfig即可，命令和命令中间用";"号区分
+</div>
+<div class="voilet" style="height:50px;">
+    <form method="POST" id="reasonform_garins"  class="navbar-form navbar-left" role="search" onsubmit="return false" >{% csrf_token %}
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="input-group">
+              <span class="input-group-btn">
+                <button class="btn btn-default disabled" type="button">主机名</button>
+              </span>
+              <input type="text" class="form-control" name="salt_node_name" id = "salt_node_name" value="*" maxlength="100" size="100"/>
+            </div><!-- /input-group -->
+          </div><!-- /.col-lg-6 -->
+          <div class="col-lg-6">
+            <div class="input-group">
+             <input type="text" class="form-control" name="salt_cmd" id="salt_cmd" maxlength="100" size="100"/>
+              <span class="input-group-btn">
+                <button class="btn btn-success" id="button_garins" type="button">执行</button>
+              </span>
+            </div><!-- /input-group -->
+          </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+{#        <div class="form-group">#}
+{#            <input type="text" class="form-control" name="salt_cmd" id="salt_cmd" maxlength="100" size="100"/>#}
+{#        </div>#}
+{#        <span class="cmd_voilet" style="width:30px;font-size:16px;font-weight:bold;color:red;margin-left:20px;margin-right:20px;">garins.items</span>#}
+{#        <button type="submit" id="button_garins" class="btn btn-default">执行</button>#}
+    </form>
+</div>
+<div id="salt_cmd_run"></div>
+{#<div class="form-group">#}
+{#    <textarea  id="salt_cmd_run" class="textarea-field admintextareawidget form-control" rows="10" name="content" cols="40"></textarea>#}
+{#    </div>#}
+{% include "default/jquery.html" %}

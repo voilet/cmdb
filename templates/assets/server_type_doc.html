@@ -1,0 +1,25 @@
+{#{% load markup %}#}
+<style>
+    .well p{font-size:14px;line-height:20px;}
+</style>
+<div id="status">
+<div class="jumbotron well">
+<button href="{% url 'project_doc_edit' uuid %}" type="button" class="btn btn-success btn-action click-edit" >修改</button>
+    <div class="clearfix"></div>
+    {% if item.project_doc %}<p>{{ item.project_doc|safe|linebreaksbr }}</p>{% else %}<p>未添加维护手册</p>{% endif %}
+</div>
+</div>
+
+<script>
+ $(function(){
+    $('.click-edit').unbind('click').bind('click',function(){
+      var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#status").html(data);
+         });
+    });
+ })
+
+</script>

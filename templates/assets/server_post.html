@@ -1,0 +1,401 @@
+{% include "op_header.html" %}
+<script type="text/javascript" charset="utf-8">
+    window.UEDITOR_HOME_URL = "/static/js/ueditor/";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="/static/js/ueditor/editor_config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/static/js/ueditor/editor_all_min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/js/ueditor/themes/default/ueditor.css"/>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="alert">
+                             <button type="button" class="close" data-dismiss="alert">×</button>
+                            <h4>
+                                提示!
+                            </h4> <strong>注意!</strong> 如选项中无自己所需要的选项，请联系相关人员后台添加.
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<form class="form-horizontal" method="post">
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">资产编号</label>
+					<div class="controls">
+						<input id="id_Server_Asset_number" type="text" name="Server_Asset_number" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">网卡1</label>
+					<div class="controls">
+						<input id="id_Server_eth1" type="text" name="Server_eth1" maxlength="64" />
+					</div>
+				</div>
+                <div class="control-group">
+					<label class="control-label" for="inputEmail">网卡2</label>
+					<div class="controls">
+						<input id="id_Server_eth2" type="text" name="Server_eth2" maxlength="64" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">远控卡ip</label>
+					<div class="controls">
+						<input id="id_Server_Remote_control_card" type="text" name="Server_Remote_control_card" maxlength="64" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">所属机房</label>
+                    <div class="controls">
+                        {{ uf.Server_engine_room }}
+                        <a id="modal-449168" href="#modal-container-449168" role="button" class="btn" data-toggle="modal">添加机房</a>
+                    </div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">cacti url</label>
+					<div class="controls">
+						<input id="id_Server_cacti" type="text" name="Server_cacti" maxlength="128" />
+					</div>
+				</div>
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">内存/硬盘/cpu</label>
+                    <div class="controls">
+                        <input id="id_Server_Memory" type="text" name="Server_Memory" maxlength="256" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">业务</label>
+                    <div class="controls">
+                        <input id="id_Server_Business" type="text" name="Server_Business" maxlength="256" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_Server_Model">服务器型号</label>
+                    <div class="controls">
+                        {{ uf.Server_Model }}
+                        <a id="modal-549168" href="#modal-container-549168" role="button" class="btn" data-toggle="modal">添加型号</a>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_Server_number">服务编码</label>
+                    <div class="controls">
+                        <input id="id_Server_number" type="text" name="Server_number" maxlength="32" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_Server_number">快速服务代码</label>
+                    <div class="controls">
+                        <input id="id_Server_number_code" type="text" name="Server_number_code" maxlength="32" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_Server_number">机柜</label>
+                    <div class="controls">
+                        {{ uf.Server_number_Location }}
+                        <a id="modal-649168" href="#modal-container-649168" role="button" class="btn" data-toggle="modal">添加机柜</a>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_Server_number">机器位置</label>
+                    <div class="controls">
+                        {{ uf.Server_cabinet_id }}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_Server_number">业务(按ctrl选多个)</label>
+                    <div class="controls" id="id_Business" name="Project" multiple="multiple">
+                        {{ uf.Project }}
+{#                        {% for i in Project %}#}
+{#                            <input type="checkbox" value="{{ i.id }}" name="check_box_list"/> {{ i.check }}#}
+{#                        {% endfor %}#}
+                    </div>
+
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail">备注</label>
+                    <div class="controls">
+{#                        <input id="id_Server_number_Remark" type="text" name="Server_number_Remark" maxlength="256" />#}
+                        <textarea id="editor" name="Server_number_Remark" style="width:600px;height:500px;"></textarea>
+                    </div>
+                </div>
+{#                {{ uf.as_p }}#}
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn">提交</button>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{#添加机房#}
+<div id="modal-container-449168" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<form method="post" id="form-add-modal" onsubmit="return false;">
+            <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">
+                    添加机房
+                </h3>
+            </div>
+            <div class="modal-body">
+                <p>
+                    机房名称：<input type="text" name="engine_room_name" id="addsv" value="" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                 <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <button class="btn btn-primary" onclick="addserver();">保存设置</button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script>
+    function addserver() {
+        newserver_name = $("#addsv").val();
+        function makeaddroom(data){
+            var htmls = ['<option selected="selected" value="">---------</option>'];
+            for (var key in data){
+                htmls.push('<option value="' + key + '">' + data[key] + '</option>');
+            }
+            $('#id_Server_engine_room').html(htmls.join(''));
+        }
+        $.ajax({
+           type: "POST",
+           url: "/server/add_room",
+           data: $("#form-add-modal").serialize(),
+           dataType:'json',
+           complete: function(msg){
+                var data = eval('('+msg.responseText+')');
+                if (data && data.code == 1){
+{#                    $("#id_Server_engine_room").app;#}
+                    $("#modal-container-449168").modal('hide');
+                    if (data.server) makeaddroom(data.server);
+                } else{
+                    alert('添加失败');
+                }
+           }
+        });
+    }
+</script>
+
+
+
+{#添加服务器型号#}
+<div id="modal-container-549168" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<form method="post" id="Poster_Model_id" onsubmit="return false;">
+            <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">
+                    添加服务器型号
+                </h3>
+            </div>
+            <div class="modal-body">
+                <p>
+                    务器型号：<input type="text" name="Poster_Model_id" id="id_Poster_Model_id" value="" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                 <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <button class="btn btn-primary" onclick="Model_id();">保存设置</button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+
+
+<script>
+    function Model_id() {
+        newserver_name = $("#id_Poster_Model_id").val();
+        function makeaddroom(data){
+            var htmls = ['<option selected="selected" value="">---------</option>'];
+            for (var key in data){
+                htmls.push('<option value="' + key + '">' + data[key] + '</option>');
+            }
+            $('#id_Server_Model').html(htmls.join(''));
+        }
+{#        alert($("#Poster_Model_id").serialize());#}
+        $.ajax({
+           type: "POST",
+           url: "/server/add_server_id",
+           data: $("#Poster_Model_id").serialize(),
+           dataType:'json',
+           complete: function(msg){
+                var data = eval('('+msg.responseText+')');
+                if (data && data.code == 1){
+{#                    $("#id_Server_engine_room").app;#}
+                    $("#modal-container-549168").modal('hide');
+                    if (data.server) makeaddroom(data.server);
+                } else{
+                    alert('添加失败');
+                }
+           }
+        });
+    }
+</script>
+
+
+
+{#添加机柜#}
+<div id="modal-container-649168" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<form method="post" id="form-add-modal-id" onsubmit="return false;">
+            <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">
+                    添加机柜
+                </h3>
+            </div>
+            <div class="modal-body">
+                <p>
+                    机柜编号：<input type="text" name="Poster_Source_id" id="Source_id" value="" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                 <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> <button class="btn btn-primary" onclick="Source_name_id();">保存设置</button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script>
+    function Source_name_id() {
+        newserver_name = $("#Source_id").val();
+        function makeaddroom(data){
+            var htmls = ['<option selected="selected" value="">---------</option>'];
+            for (var key in data){
+                htmls.push('<option value="' + key + '">' + data[key] + '</option>');
+            }
+            $('#id_Server_number_Location').html(htmls.join(''));
+        }
+        $.ajax({
+           type: "POST",
+           url: "/server/add_cabinet",
+           data: $("#form-add-modal-id").serialize(),
+           dataType:'json',
+           complete: function(msg){
+                var data = eval('('+msg.responseText+')');
+                if (data && data.code == 1){
+{#                    $("#id_Server_engine_room").app;#}
+                    $("#modal-container-649168").modal('hide');
+                    if (data.server) makeaddroom(data.server);
+                } else{
+                    alert('添加失败');
+                }
+           }
+        });
+    }
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+    var ue=new UE.ui.Editor();
+    ue.render('editor');
+    ue.addListener("selectionchange",function(){
+        var state = ue.queryCommandState("source");
+        var btndiv = document.getElementById("btns");
+        if(btndiv){
+            if(state){
+                btndiv.style.display = "none";
+            }else{
+                btndiv.style.display = "";
+            }
+        }
+
+    });
+    function getContent(){
+        var arr = [];
+        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        arr.push("内容为：");
+        arr.push(ue.getContent());
+        alert(arr.join("\n"));
+    }
+    function getPlainTxt(){
+        var arr = [];
+        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+        arr.push("内容为：");
+        arr.push(ue.getPlainTxt());
+        alert(arr.join('\n'))
+    }
+    function setContent(){
+        var arr = [];
+        arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+        ue.setContent('欢迎使用ueditor');
+        alert(arr.join("\n"));
+    }
+
+    function getText(){
+        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+        var range = ue.selection.getRange();
+        range.select();
+        var txt = ue.selection.getText();
+        alert(txt)
+    }
+
+    function testueditor(){
+    	mycontent=ue.getContentTxt();
+    	alert(mycontent);
+    }
+
+    function insertueditor(){
+    	ue.execCommand('insertHtml',"自定义插件，我的名片	");
+    }
+
+    function getContentTxt(){
+        var arr = [];
+        arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+        arr.push("编辑器的纯文本内容为：");
+        arr.push(ue.getContentTxt());
+        alert(arr.join("\n"));
+    }
+    function hasContent(){
+        var arr = [];
+        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+        arr.push("判断结果为：");
+        arr.push(ue.hasContents());
+        alert(arr.join("\n"));
+    }
+    function setFocus(){
+        ue.focus();
+
+    }
+    function deleteEditor(){
+        var div = document.getElementById('allbtn');
+        var btns = baidu.editor.dom.domUtils.getElementsByTagName(div,"a");
+        for(var i=0,btn;btn=btns[i++];){
+		    btn.style.cssText = "color:#ccc;text-decoration:none;cursor:default";
+            btn.onclick = function(){
+                return false;
+            };
+        }
+        ue.destroy();
+    }
+	function setEnabled(){
+	    var div = document.getElementById('allbtn');
+        var btns = baidu.editor.dom.domUtils.getElementsByTagName(div,"a");
+        for(var i=0,btn;btn=btns[i++];){
+			btn.style.cssText = "color:#3E3E3E;text-decoration:none;cursor:pointer";
+        }
+	    ue.setEnabled();
+	}
+	function setDisable(){
+	    var div = document.getElementById('allbtn');
+        var btns = baidu.editor.dom.domUtils.getElementsByTagName(div,"a");
+        for(var i=0,btn;btn=btns[i++];){
+		    if(btn.innerHTML != "可以编辑"){
+				btn.style.cssText = "color:#ccc;text-decoration:none;cursor:default";
+			}
+        }
+	    ue.setDisabled("fullscreen");
+	}
+
+</script>
+
+<!-- baidu ueditor end -->
+
+
+
+{% include "bottom.html" %}

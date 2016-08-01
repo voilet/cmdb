@@ -1,0 +1,96 @@
+{% include "op_header.html" %}
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<h3 class="text-center">
+				运维报障系统
+			</h3>
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>
+							姓名
+						</th>
+						<th style="width:300px;">
+							故障描述
+						</th>
+						<th>
+							发现时间
+						</th>
+						<th>
+							发生时间
+						</th>
+						<th>
+							解决时间
+						</th>
+{#						<th>#}
+{#							处理过程分析#}
+{#						</th>#}
+						<th>
+							报障来源
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for i in emps %}
+					<tr>
+						<td>
+							{{ i.user_name }}
+						</td>
+						<td>
+							<a href="/op/list/{{ i.id }}" target="_blank" >{{ i.title }}</a>
+						</td>
+						<td>
+							{{ i.Discovery_date }}
+						</td>
+						<td>
+							{{ i.Occur_date }}
+						</td>
+						<td>
+                            {% if i.Solve_date != "None" %}
+							    {{ i.Solve_date }}
+                            {% endif %}
+						</td>
+{#						<td style="width:600px;">#}
+{#						    {{ i.content|safe }}#}
+{#						</td>#}
+						<td>
+                            {% if Source != "None" %}
+							    {{ i.Source }}
+                            {% endif %}
+						</td>
+					</tr>
+                    {% endfor %}
+				</tbody>
+			</table>
+			<div  class="pagination pagination-right">
+				<ul>
+					<li>
+						<a href="#">上一页</a>
+					</li>
+					<li>
+						<a href="#">1</a>
+					</li>
+					<li>
+						<a href="#">2</a>
+					</li>
+					<li>
+						<a href="#">3</a>
+					</li>
+					<li>
+						<a href="#">4</a>
+					</li>
+					<li>
+						<a href="#">5</a>
+					</li>
+					<li>
+						<a href="#">下一页</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% include "op_bottom.html" %}

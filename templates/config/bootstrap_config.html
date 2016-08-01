@@ -1,0 +1,88 @@
+{#{% extends 'user/base.html' %}#}
+{#{% load bootstrap %}#}
+{% load bootstrap3 %}
+
+
+{% block content %}
+<div id="result">
+    <form id="from_data" role="form" action="/conf/project/add/{{ sid }}/?env={{ env }}" method="post">
+        {% csrf_token %}
+    {#    {{ uf | bootstrap}}#}
+        {% bootstrap_form uf %}
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">保存</button>
+            <button class="btn" type="reset">重置</button>
+        </div>
+    </form>
+ </div>
+{#<input type="radio" name="a1" onclick="show(this)" value="1" >选项1#}
+{#<input type="radio" name="a1" onclick="show(this)" value="2">选项2#}
+{##}
+{##}
+{##}
+{#<div id="a3" name=a3 style="display:none;">#}
+{#<input type=radio name=a3 value=1>隐藏选项1#}
+{#<input type=radio name=a3 value=2>隐藏选项2#}
+{#</div>#}
+{##}
+{#<script>#}
+{#var showFlag={};#}
+{#function show(o){#}
+{#    showFlag[o.name]=o.value;#}
+{#    if(showFlag.a1=="2"){#}
+{#        document.getElementById("a3").style.display="";#}
+{#    }else{#}
+{#        document.getElementById("a3").style.display="none";#}
+{#    }#}
+
+{#</script>#}
+<script>
+ $(function(){
+     $('#id_choose_1').unbind('click').bind('click',function(){
+         var url= "/conf/project/add/2/?env=all";
+         alert(url);
+          $.ajax({
+              type: "GET",
+              url: url }).done(function( data ) {
+              $("#result").html(data);
+          });
+      });
+
+     $('#id_choose_0').unbind('click').bind('click',function(){
+         var url= "/conf/project/add/2/?env=default";
+         alert(url);
+          $.ajax({
+              type: "GET",
+              url: url }).done(function( data ) {
+              $("#result").html(data);
+          });
+      });
+
+     //  $(document).ready(function(){
+     //        $('#id_choose_1').click(function() {
+     //            var url= '/conf/project/add/{{ sid }}/?env=all;
+     //
+     //             $.ajax({
+     //                 type: "GET",
+     //                 url: url }).done(function( data ) {
+     //                 $("#edit_result").html(data);
+     //             });
+     //        });
+     //    });
+
+      // $('.click-save').click(function(){
+      //     $.ajax({
+      //         type: "POST",
+      //         url: $(this).attr("href"),                  // 提交的页面
+      //         data: $('#from_data').serialize(), // 从表单中获取数据
+      //         dataType:'text',
+      //         success: function(msg){
+      //             $("#data_ok").html(msg)                    // 设置表单提交完成使用方法
+      //         }
+      //     });
+      //  });
+ });
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,73 @@
+{% extends 'assets/base.html' %}
+{% load bootstrap %}
+{% block content %}
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+    .col-sm-10{width:70%}
+.n-invalid .form-control {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #ff0000;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+
+    #signupForm .n-invalid{
+    border: 1px solid #ff0000;
+}
+
+</style>
+<script type="text/javascript" src="/static/js/from_js/jquery.validVal.js"></script>
+<link rel="stylesheet" href="/static/css/from_cs/jquery.validator.css">
+<script type="text/javascript" src="/static/js/from_js/zh_CN.js"></script>
+
+<pre>注意必填项</pre>
+    <pre>
+    {% for i in product_data %}
+        {{ i.slug }}
+        {{ i.name }}
+    {% endfor %}
+    </pre>
+{#<form class="form-horizontal" action="" id="signupForm"  method="post" name="horizontal" role="form" autocomplete="off" >#}
+{#    <form class="exform form-horizontal" action="opadd" method="post" id="post_form" style="padding-top:8px;">#}
+{#    {% csrf_token %}#}
+{#    <div id="content-block" class="col-sm-11 col-md-8">#}
+{#            {{ uf|bootstrap_horizontal }}#}
+{#        <div class="form-group">#}
+{#            <div class="col-sm-offset-2 col-sm-8">#}
+{#                 <input type="submit" id="btn-submit" class="btn btn-success btn-block" value="保存" name="_save" />#}
+{#            </div>#}
+{#        </div>#}
+{#      </div>#}
+{##}
+{#</form>#}
+
+{% endblock content %}
+
+

@@ -1,0 +1,242 @@
+<SCRIPT type="text/javascript">
+
+
+        var zTree, rMenu, selectNode;
+
+        var setting = {
+            view: {
+				dblClickExpand: false,
+                fontCss: getFont,
+				nameIsHTML: true
+			},
+            edit: {
+				enable: true,
+				showRemoveBtn: false,
+				showRenameBtn: false
+			},
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onRightClick: onRightClick,
+                onExpand: onExpand,
+                onCollapse: onCollapse,
+                beforeDrag: beforeDrag,
+                beforeDrop: beforeDrop,
+                beforeDragOpen: beforeDragOpen,
+                beforeClick: beforeClick,
+                onClick: onClick,
+
+
+            }
+        };
+
+        function getFont(treeId, node) {
+			return node.font ? node.font : {};
+		}
+
+        var zNodes =[
+            { id:'-99', pId:'', name:"默认树", dep:true, root:true, open:open, icon:"/static/img/zTreeStyle/img/diy/1_open.png"},
+            {% for i in ztree_data %}
+                { id: '{{ i.id }}', pId: '{{ i.pId }}', name:"{{ i.name|safe }}", status: {{ i.status }}, token: '{{ i.token }}', uuid: "{{ i.uuid }}", pos:true, open: false, drag:false, icon: "{{ i.icon }}"},
+            {% endfor %}
+
+        ];
+
+
+        var curDragNodes, autoExpandNode;
+        function beforeDrag(treeId, treeNodes) {
+            for (var i=0, l=treeNodes.length; i<l; i++) {
+                console.log("beforeDrag" + treeNodes[i].parentTId);
+                if (treeNodes[i].drag === false) {
+                    curDragNodes = null;
+                    return false;
+                } else if (treeNodes[i].parentTId && treeNodes[i].getParentNode().childDrag === false) {
+                    curDragNodes = null;
+                    return false;
+                }
+            }
+            curDragNodes = treeNodes;
+            return true;
+        }
+        function beforeDragOpen(treeId, treeNode) {
+            autoExpandNode = treeNode;
+            return true;
+        }
+        function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
+            if(!targetNode){
+                return false;
+            }
+            return true;
+        }
+
+        function onRightClick(event, treeId, treeNode) {
+            selectNode = treeNode;
+            if(treeNode && treeNode.root){
+                zTree.selectNode(treeNode);
+                showRMenu("root", event.clientX, event.clientY);
+            }
+            else if (treeNode && treeNode.dep) {
+                zTree.selectNode(treeNode);
+                showRMenu("dep", event.clientX, event.clientY);
+            }
+            else if (treeNode && treeNode.pos) {
+                zTree.selectNode(treeNode);
+                showRMenu("pos", event.clientX, event.clientY);
+            }
+            else if(treeNode && treeNode.emp){
+                zTree.selectNode(treeNode);
+                showRMenu("emp", event.clientX, event.clientY);
+            }
+        }
+
+        function onExpand(event, treeId, treeNode){
+            var cookie = $.cookie("z_tree");
+
+            var z_tree = null;
+            if(cookie){
+                z_tree = JSON.parse(cookie);
+            }
+
+            if(!z_tree){
+                z_tree = new Array();
+            }
+            if(jQuery.inArray(treeNode.id, z_tree)<0){
+                z_tree.push(treeNode.id);
+            }
+
+
+            $.cookie("z_tree", JSON.stringify(z_tree))
+        }
+
+        function onCollapse(event, treeId, treeNode){
+            var cookie = $.cookie("z_tree");
+
+            var z_tree = null;
+            if(cookie){
+                z_tree = JSON.parse(cookie);
+            }
+
+            if(!z_tree){
+                z_tree = new Array();
+            }
+            var index = jQuery.inArray(treeNode.id, z_tree);
+
+            z_tree.splice(index, 1);
+
+            $.cookie("z_tree", JSON.stringify(z_tree), { expires: 31536000 })
+        }
+
+        function onClick(e,treeId, treeNode) {
+            var cookie = $.cookie("z_tree");
+
+            var z_tree = null;
+            if(cookie){
+                z_tree = JSON.parse(cookie);
+            }
+
+            if(!z_tree){
+                z_tree = new Array();
+            }
+            if(jQuery.inArray(treeNode.id, z_tree)<0){
+                z_tree.push(treeNode.id);
+            }
+
+
+            $.cookie("z_tree", JSON.stringify(z_tree), { expires: 31536000 });
+{#			var zTree = $.fn.zTree.getZTreeObj("treeDemo");#}
+{#			zTree.expandNode(treeNode);#}
+		}
+
+        function beforeClick(treeId, treeNode, clickFlag) {
+            var status = treeNode.status;
+            if (status == 1){
+                Project(treeNode.uuid, treeNode.token)
+            }
+
+            else if(status == 2){
+                business(treeNode.uuid, treeNode.token);
+            }
+
+
+            else if(status == -1){
+                CdnIdc(treeNode.line_id, treeNode.token)
+            }
+
+            else if(status == -2){
+                cdncache(treeNode.line_id, treeNode.name, treeNode.token);
+            }
+            else if(status == 3){
+                Host(treeNode.uuid, treeNode.token, treeNode.name);
+            }
+            else if(status == 4){
+                business_ldle(treeNode.uuid, treeNode.token);
+            }
+            else{
+                service_jquery(treeNode.name, treeNode.token, treeNode.business);
+            }
+        }
+
+        function Host(str, token, name) {
+{#            location.href = "/assets/host_detail/?uuid=" + str;#}
+            location.href = "/assets/ztree/business/?uuid=" + str + "&options=host";
+        }
+
+        function Project(str, token) {
+            location.href = "/assets/ztree/business/?uuid=" + str + "&options=project&token=" + token;
+        }
+
+        function business(str, token) {
+            location.href = "/assets/ztree/business/?uuid=" + str + "&options=cmdb&token=" + token;
+        }
+        function business_ldle(str, token) {
+            location.href = "/assets/ztree/business/?uuid=" + str + "&options=cmdb&idle=false&token=" + token;
+        }
+
+        function cdncache(uuid, str, token) {
+            var url = "/assets/ztree/cdn/?uuid=" + uuid + "&services=" +  str + "&token=" + token;
+               $.ajax({
+                 type: "GET",
+                 url: url }).done(function( data ) {
+                 $("#edit_result").html(data);
+           });
+        }
+
+        function CdnIdc(uuid, token) {
+            var url = "/assets/ztree/idc/?uuid=" + uuid + "&token=" + token;
+               $.ajax({
+                 type: "GET",
+                 url: url }).done(function( data ) {
+                 $("#edit_result").html(data);
+           });
+        }
+
+        function service_jquery(str, token, business) {
+{#            location.href = "/assets/ztree/service/?name=" + business + "&service=" + str + "&token=" + token;#}
+            var url = "/assets/ztree/service/?name=" + business + "&service=" + str + "&token=" + token;
+               $.ajax({
+                 type: "GET",
+                 url: url }).done(function( data ) {
+                 $("#edit_result").html(data);
+           });
+        }
+
+        $(document).ready(function(){
+            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            rMenu = $("#rMenu");
+
+            var cookie = $.cookie("z_tree");
+            if(cookie){
+                z_tree = JSON.parse(cookie);
+
+                for(var i=0; i< z_tree.length; i++){
+                    var node = zTree.getNodeByParam('id', z_tree[i]);
+                    zTree.expandNode(node, true)
+                }
+            }
+        });
+
+</script>

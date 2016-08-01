@@ -1,0 +1,459 @@
+<div id="host_list_table" {{ host_list.count }}>
+
+  {% if host_list %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+            <th><input type="checkbox" id="select_all" /></th>
+            <th> eth1 </th>
+            <th> 状态 </th>
+            <th> 操作 </th>
+        </tr>
+      </thead>
+
+      {% for i in host_list %}
+          <tbody>
+            <tr >
+              <td width="40">
+                 <input type="checkbox" name="node_name" value="{{i.node_name}}"/>
+              </td>
+              <td width="200">
+                <a class="fancybox fancybox.ajax" href="/assets/server/node_id/{{ i.id }}/" title="{{ i.eth1 }}" >{{ i.eth1 }}</a>
+              </td>
+              <td width="50">
+                <div class="btn-group tooltip-demo" data-toggle="buttons">
+                    {% if i.status == 0 %}
+                        <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                    {% elif i.status == 1 %}
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                    {% else %}
+                    <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                    {% endif %}
+                </div></td>
+              <td width="160" >
+                 <a href="" class="btn node_cmd" value="{{i.node_name}}" onclick="return false" >执行命令</a>
+              </td>
+            </tr>
+          </tbody>
+      {% endfor %}
+
+    </table>
+    <pre>推送配置文件</pre>
+    <button type="button" class="btn btn-primary" id="node_list_cmd">批量执行命令</button>
+{#    {% if env not in "all" %}#}
+    <button type="button" class="btn btn-info" id="state_highstate">自动化部署</button>
+{#    {% endif %}#}
+    <script type="text/javascript">
+     $(function(){
+       $("#select_all").change(function(){
+         var selected = $("#select_all").prop("checked");
+         if(selected){
+           $("input[name='node_name']").prop('checked',true);
+         }else{
+           $("input[name='node_name']").prop("checked",false);
+         }
+       });
+
+     });
+    </script>
+  {% else %}
+    <pre style="margin-top:8px">该环境木有机器</pre>
+  {% endif %}
+</div>
+
+
+<style>
+#node_name_list{
+   width: 150px;
+    height: auto;
+   max-height: 400px;
+   min-height: 80px;
+   overflow-y: auto;
+   overflow-x: hidden;
+   margin: 0px;
+   background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+}
+#host_list, #swan_host_list{
+   width: 190px;
+    height: auto;
+   max-height: 400px;
+   min-height: 80px;
+   overflow-y: auto;
+   overflow-x: hidden;
+   margin: 0px;
+   background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+}
+.salt-cmd{
+   display:none;
+}
+.highstate{
+   display:none;
+}
+
+.swan_project{display: none}
+
+</style>
+<div class="row salt-cmd">
+  <form method = "post" action="{% url 'cmd_run' %}" id="run_form">
+    {% csrf_token %}
+
+
+    <div class="col-lg-9">
+      <h3>请输入执行命令</h3>
+      <div class="input-group">
+
+        <span class="input-group-addon ">
+          <select id="id_brand" name="comm_shell">
+            <option value="cmd" selected="selected">cmd.run</option>
+{#            <option value="grains">grains.item</option>#}
+          </select>
+        </span>
+        <input type="text" class="form-control" name="salt_cmd" id="salt_cmd" placeholder="如:ifconfig  命令可连输哦，如ls;pwd;uname -a中间以;做分割" maxlength="100" size="60">
+        <span class="input-group-btn">
+          <button class="btn btn-success" id="button" type="submit">执行</button>
+
+        </span>
+
+      </div>
+      <br>
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          磁盘 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=disk_blkid">blkid</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=disk_inodeusage">inode使用情况</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=disk_percent">百分比</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=disk_usage">总使用情况</a></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
+          nginx <span class="caret"></span>
+        </button>
+        <ul role="menu" class="dropdown-menu">
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=nginx_configtest">配置文件检查</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=nginx_status">状态</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=nginx_version">版本</a></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
+          网络 <span class="caret"></span>
+        </button>
+        <ul role="menu" class="dropdown-menu">
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=network_active_tcp">活动TCP连接</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=network_arp">arp</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=network_netstat">netstat</a></li>
+          <li class="divider"></li>
+          <li><a class="btn_cmd_run" data-id="network_connect" data="{% url 'button_cmd_run' %}?cmd=network_connect">测试connect</a></li>
+          <li><a class="btn_cmd_run" data-id="network_dig" data="{% url 'button_cmd_run' %}?cmd=network_dig">dig</a></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
+          进程 <span class="caret"></span>
+        </button>
+        <ul role="menu" class="dropdown-menu">
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=ps_top">top</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=ps_get_users">get_users</a></li>
+          <li><a class="btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=ps_cpu_times">cpu时间</a></li>
+          <li><a class="btn_cmd_run" data-id="ps_pgrep" data="{% url 'button_cmd_run' %}?cmd=ps_pgrep">进程grep</a></li>
+          <li class="divider"></li>
+        </ul>
+      </div>
+      <a class="btn btn-primary btn_cmd_run" data-id="cmd_tail" data="{% url 'button_cmd_run' %}?cmd=cmd_tail">查看文件</a>
+      <a class="btn btn-primary btn_cmd_run" data="{% url 'button_cmd_run' %}?cmd=list_log">Log文件</a>
+      <br>
+      <br>
+      <div style="display:none" id='ps_pgrep'>
+        <div class="form-group col-md-3">
+          <label class="sr-only" for="pattern">pattern</label>
+          <input type="text" class="form-control" id="pattern" placeholder="pattern">
+        </div>
+        <a id="ps_pgrep_btn" data="{% url 'button_cmd_run' %}?cmd=ps_pgrep" class="btn btn-success">提交</a>
+      </div>
+      <div style="display:none" id='network_dig'>
+        <div class="form-group col-md-3">
+          <label class="sr-only" for="host">host</label>
+          <input type="text" class="form-control" id="host" placeholder="host">
+        </div>
+        <a id="network_dig_btn" data="{% url 'button_cmd_run' %}?cmd=network_dig" class="btn btn-success">提交</a>
+      </div>
+      <div style="display:none" id='network_connect'>
+        <div class="form-group col-md-3">
+          <label class="sr-only" for="pattern">host</label>
+          <input type="text" class="form-control" id="host" placeholder="host">
+        </div>
+        <div class="form-group col-md-2">
+          <label class="sr-only" for="pattern">port</label>
+          <input type="text" class="form-control" id="port" placeholder="port">
+        </div>
+        <a id="network_connect_btn" data="{% url 'button_cmd_run' %}?cmd=network_connect" class="btn btn-success">提交</a>
+      </div>
+      <div style="display:none" id='cmd_tail'>
+        <div class="form-group col-md-3">
+          <label class="sr-only" for="pattern">文件路径</label>
+          <input type="text" class="form-control" id="tail_path" placeholder="文件路径">
+        </div>
+        <div class="form-group col-md-2">
+          <label class="sr-only" for="pattern"></label>
+          <input type="text" class="form-control" id="tail_num" placeholder="行数">
+        </div>
+        <a id="cmd_tail_btn" data="{% url 'button_cmd_run' %}?cmd=cmd_tail" class="btn btn-success">提交</a>
+      </div>
+
+      <br>
+      <div id="return_block"></div>
+    </div>
+      <div class="col-lg-3">
+      <h3>选中的机器</h3>
+      <div class="input-group">
+        <ul id="node_name_list" class="list-unstyled"></ul>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div class="row highstate">
+  <form method = "post" action="{% url 'highstate' %}" id="highstate_form">
+
+
+    <div class="col-lg-8">
+      <h3>自动化部署</h3>
+{#      <div class="col-md-12 column">#}
+
+        <pre class="col-md-10 column"></pre>
+        <div class="col-md-10 column">
+			 <button type="button" class="btn btn-success" id="highstate_butten">开始执行</button>
+		</div>
+{#      </div>#}
+      <div id="return_highstate"></div>
+    </div>
+      <div class="col-lg-2">
+      <h3>选中的机器</h3>
+      <div class="input-group">
+          {% csrf_token %}
+        <ul id="host_list" class="list-unstyled"></ul>
+{#        <input hidden="hidden" name="{{ env }}" />#}
+        <input hidden="hidden" name="project"  value="{{ item.aliases_name }}"/>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script type="text/javascript">
+  function get_node(){
+     var arg = '';
+     $("[name='node_name']").each(function(){
+       arg+='&project={{ business_item }}&node_name=' + $(this).attr('value');
+     });
+     return arg;
+  }
+  function input_hide(){
+     $('#network_dig_btn').parent().hide();
+     $('#network_connect_btn').parent().hide();
+     $('#ps_pgrep_btn').parent().hide();
+     $('#cmd_tail_btn').parent().hide();
+  }
+ $(function(){
+   $('.btn_cmd_run').unbind('click').bind('click',function(e){
+     e.preventDefault();
+     var data_id = $(this).attr('data-id');
+     input_hide();
+
+     if (data_id == 'ps_pgrep'){
+       $("#ps_pgrep").show();
+     }else if (data_id == 'network_connect'){
+       $("#network_connect").show();
+     }else if (data_id == 'network_dig'){
+       $("#network_dig").show();
+     }else if (data_id == 'cmd_tail'){
+       $("#cmd_tail").show();
+     }else{
+       var url = $(this).attr('data');
+       var arg = get_node();
+       $.get(url+arg,{},function(data){
+         $("#return_block").html(data);
+       });
+     }
+   });
+   $('#ps_pgrep_btn').click(function(e){
+     e.preventDefault();
+     var arg = get_node();
+     arg += "&pattern=" + $("#pattern").val();
+     var url = $(this).attr('data');
+     $.get(url+arg,{},function(data){
+       $("#return_block").html(data);
+     });
+   });
+   $('#network_dig_btn').click(function(e){
+     e.preventDefault();
+     var arg = get_node();
+     arg += "&host=" + $("#host").val();
+     var url = $(this).attr('data');
+     $.get(url+arg,{},function(data){
+       $("#return_block").html(data);
+     });
+   });
+   $('#cmd_tail_btn').click(function(e){
+     e.preventDefault();
+     var arg = get_node();
+     arg += "&path=" + $("#tail_path").val()+"&num=" + $("#tail_num").val();
+     var url = $(this).attr('data');
+     $.get(url+arg,{},function(data){
+       $("#return_block").html(data);
+     });
+   });
+   $('#network_connect_btn').click(function(e){
+     e.preventDefault();
+     var arg = get_node();
+     arg += "&host=" + $("#host").val()+"&port=" + $("#port").val();
+     var url = $(this).attr('data');
+     $.get(url+arg,{},function(data){
+       $("#return_block").html(data);
+     });
+   });
+
+
+   $('.node_cmd').click(function(){
+     var node_name = $(this).attr('value');
+     var li_html = "<li>"+node_name+"</li>";
+     li_html += "<li><input  type='hidden' name='node_name' value="+node_name+"></li>";
+     $('#node_name_list').html(li_html);
+     $('#host_list_table').remove();
+     $('.salt-cmd').show()
+   });
+
+   $('#node_list_cmd').click(function(){
+     $("table :checked").each(function(){
+       node_name = $(this).attr('value');
+       if (node_name != undefined) {
+         var li_html = "<li>"+node_name+"</li>";
+         li_html += "<li><input  type='hidden' name='node_name' value="+node_name+"></li>";
+         li_html += "<li><input hidden='hidden' name='project' value='{{ business_item }}'></li>";
+         $('#node_name_list').append(li_html);
+         $('#host_list_table').remove();
+         $('.salt-cmd').show();
+       };
+     });
+   });
+
+   $('#button').click(function(e){
+     e.preventDefault();
+     $.post($('#run_form').attr('action'),$('#run_form').serialize(),function(data){
+       $("#return_block").html(data);
+     });
+   });
+
+   // 自动部署
+   $('#state_highstate').click(function(){
+     $("table :checked").each(function(){
+       node_name = $(this).attr('value');
+       if (node_name != undefined) {
+         var li_html = "<li>"+node_name+"</li>";
+         li_html += "<li><input  type='hidden' name='node_name' value="+node_name+"></li>";
+         $('#host_list').append(li_html);
+         $('#host_list_table').remove();
+         $('.highstate').show();
+       };
+     });
+   });
+
+
+
+    //  自动部署提交
+    // $('#highstate_butten').unbind('click').bind('click',function(){
+//
+    //    $.post($('#highstate_form').attr('action'), $('#highstate_form').serialize(),function(data){
+    //        //console.log(data);
+    //        var jid=JSON.parse(data.data);
+    //        console.log(jid);
+    //         //$("#return_highstate").html(data);
+    //         //var height = $(window).height(), index = $.layer({
+    //         //    type: 2,
+    //         //    shade: [0.5, '#000', true],
+    //         //    shadeClose: true,
+    //         //    maxmin: true,
+    //         //    // border : [!0],
+    //         //    moveOut: true,
+    //         //    shift: 'top',
+    //         //    border: [10, 0.3, '#000'],
+    //         //    title: "服务器详细信息",
+    //         //    area: ['800px', (height - 50) + 'px'],
+    //         //    //area : ['80%', (height - 50)+'px'],
+    //         //    //iframe: {src: $(this).attr('href')}
+    //         //    iframe: {src: 'http://127.0.0.1:8000/assets/host_detail/?uuid=0547b11f26014b41be9e4bc0c89f3db6'}
+    //         //});
+    //    });
+    // });
+     $('#highstate_butten').unbind('click').bind('click',function(event){
+            $.ajax({
+                type: "POST",
+                url: '/auto/highstate/',                  // 提交的页面
+                data: $('#highstate_form').serialize(), // 从表单中获取数据
+                dataType:'json',
+                success: function(data){
+                    if (data.status == 200){
+                        var height = $(window).height(), index = $.layer({
+                            type: 2,
+                            shade: [0.5, '#000', true],
+                            shadeClose: true,
+                            maxmin: true,
+                            // border : [!0],
+                            moveOut: true,
+                            shift: 'top',
+                            border: [10, 0.3, '#000'],
+                            title: "服务器详细信息",
+                            area: ['800px', (height - 50) + 'px'],
+                            //area : ['80%', (height - 50)+'px'],
+                            //iframe: {src: 'http://127.0.0.1:8000/assets/host_detail/?uuid=0547b11f26014b41be9e4bc0c89f3db6'}
+                            iframe: {src: '/salt/jobs/?jid=' + data.jid + '&token=' + data.token + '&name=' + data.name}
+                        });
+                        event.preventDefault();
+                    }
+
+                }
+            });
+        });
+
+
+   //$(function(){
+       $('.project').unbind('click').bind('click',function(){
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("href"),                  // 提交的页面
+                data: $('#swan_form').serialize(), // 从表单中获取数据
+                dataType:'text',
+                success: function(data){
+                    $("#return_block_push").html(data);
+                }
+            });
+        });
+   //})
+
+ });
+</script>

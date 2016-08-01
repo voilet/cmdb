@@ -1,0 +1,10 @@
+{% extends 'config/base.html' %}
+{% block content %}
+
+{% for one in conf_list %}
+    <p><a href="/conf/list/{{ one.id }}/">{{ one.name }}</a></p>
+{% endfor %}
+
+
+
+{% endblock content %}

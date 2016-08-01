@@ -1,0 +1,63 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{#{% load bootstrap3 %}#}
+
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>{{ item }} 项目添加发布功能  </h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<style>
+    .wrapper{margin-top:10px;}
+    .wanghui{margin-top:10px;}
+    #id_node li{
+       list-style-type :none;line-height:25px;
+    }
+</style>
+<div class="wrapper ibox-content">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="panel-options">
+                <ul class="nav nav-tabs">
+                    <li class="git"><a href="{% url 'swan_git' item.uuid %}" class="text-center"><i class="glyphicon glyphicon-compressed"></i> git发布 </a></li>
+                    <li class="java"><a href="{% url 'swan_java' item.uuid %}" class="text-center"><i class="glyphicon glyphicon-compressed"></i> java发布 </a></li>
+                    <li class="shell"><a href="{% url 'swan_shell' item.uuid %}" class="text-center"><i class="glyphicon glyphicon-compressed"></i> shell发布 </a></li>
+                </ul>
+            </div>
+            <div id="result" >
+                <form id="from_data" role="form" action="" method="post">
+                    {% csrf_token %}
+                    {{ uf |bootstrap }}
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">保存</button>
+                        <button class="btn" type="reset">重置</button>
+                    </div>
+                </form>
+             </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 右侧菜单栏控制 -->
+<script type="text/javascript">
+
+
+</script>
+<script>
+
+ $(function(){
+     var three = document.location.pathname.split("/")[5];
+        if (str == "default"){
+            $("." + str).addClass('active');
+        }
+        $("." + three).addClass('active');
+ });
+
+</script>
+
+{% endblock content %}

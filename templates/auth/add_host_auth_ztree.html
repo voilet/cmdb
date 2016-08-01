@@ -1,0 +1,69 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load auth %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> 服务器授权信息 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content">
+                {% include "auth/active.html" %}
+                <br/>
+                <div class="wrapper wrapper-content">
+                    <div class="row">
+                        {% include "auth/ztree_js.html" %}
+                        <div class="col-lg-9">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>{% if user_data.first_name %}{{ user_data.first_name }} {% else %} {{ user_data.username }}{% endif %}- 服务器总数({{ node_count }})台</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>ip</th>
+                                                <th>主机名</th>
+                                                <th>权限</th>
+{#                                                <th>所属项目</th>#}
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        {% for i in all_node %}
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ i.node.eth1 }}</td>
+                                                    <td>{% if i.node.node_name %}{{ i.node.node_name }}{% endif %}</td>
+                                                    <td>
+                                                       {% if i.auth %}管理员{% else %}普通用户{% endif %}
+                                                    </td>
+{#                                                    <td>{{ i.project }}</td>#}
+                                                    <td>
+                                                        {% if i.auth %}
+                                                        <a href="/auth/host/del_host/{{ i.id }}/" class="btn btn-xs btn-success">取消权限</a>
+                                                        {% else %}
+                                                        <a href="/auth/host/add_host/{{ i.id }}/" class="btn btn-xs btn-success">添加权限</a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}

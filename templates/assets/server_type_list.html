@@ -1,0 +1,95 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate business_list 15 %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>项目列表 | Assets List.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<style>
+    .wrapper{margin-top:10px;}
+    .wanghui{margin-top:10px;}
+</style>
+<div class="wrapper">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="result">
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    项目名
+                                </th>
+                                <th>
+                                    发布功能
+                                </th>
+                                <th>
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in business_list %}
+                            <tr>
+                                <td class="col-lg-3">
+                                   {{ i.service_name }}
+                                </td>
+                                <td class="col-lg-5">
+                                    {% for swan in swan_all %}
+                                    {% if swan.project_name.uuid == i.uuid %}<a href="/conf/project/edit/{{ i.uuid }}/{{ swan.uuid }}/" class="btn btn-success active btn-xs ajex_edit" >{{ swan.swan_name }}</a> {% endif %}{% endfor %}
+                                </td>
+                                <td class="col-lg-3">
+                                   <div class="wanghui">
+                                    <a href="/conf/project/add/{{ i.uuid }}/git/" class="btn btn-success btn-xs add_config">添加发布</a>
+                                    <a href="/assets/server/type/edit/{{ i.uuid }}/" class="btn btn-xs btn-info ajex_edit">修改</a> <a href="/assets/server/type/del/{{ i.uuid }}/" type="button" class="btn btn-xs btn-danger">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div  class="voilet_page">
+                         {% paginate %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+     $(document).on("click",".ajex_edit",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#result").html(data);
+         });
+     });
+
+
+    // 自动化发布配置
+    // $(document).on("click",".add_config",function(e){
+    //     e.preventDefault();
+    //     var url= $(this).attr("href");
+    //     $.ajax({
+    //         type: "GET",
+    //         url: url }).done(function( data ) {
+    //         $("#result").html(data);
+    //     });
+    // });
+
+
+});
+</script>
+{% endblock %}
+
+
+

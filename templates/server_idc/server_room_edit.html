@@ -1,0 +1,58 @@
+{% extends 'assets/base.html' %}
+{% block content %}
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+</style>
+{#{{ uf }}#}
+<form class="form-horizontal"  method="post" role="form" >
+    {% csrf_token %}
+    <div id="content-block" class="col-sm-11 col-md-5">
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">机房名称</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_name" type="text" name="name" />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">机房电话</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="id_telphone" type="text" name="telphone"  />
+                </div>
+            </div>
+            <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">备注</label>
+                <div class="col-sm-10">
+                    <textarea id="id_description" class="form-control" rows="10" name="description" cols="83"></textarea>
+                </div>
+            </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                 <button type="submit" class="btn btn-success btn-block">保存</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock content %}
+
+
+
+
+

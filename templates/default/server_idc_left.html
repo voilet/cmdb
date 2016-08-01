@@ -1,0 +1,119 @@
+<div class="col-md-2 column">
+    <div class="panel-group" id="panel-349889"><!--  panel panel-primary -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-290449">资产管理</a></h3>
+            </div>
+            {% if "/assets/server/add/" in  request.path  %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/server/list/" in  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/server/edit_id/" in  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/server/list_id/" in  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/edit_id/" in  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/server/" ==  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/server/update_id/" in  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/server/node_id/" in  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/server/vm/" ==  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/assets/server/batch/" ==  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% else %}
+                <div id="panel-element-290449" class="panel-collapse collapse">
+            {% endif %}
+                <div class="panel-body">
+                    <p><a href="/assets/server/add/" >添加真实机</a></p>
+                    <p><a href="/assets/server/vm/" >申请虚拟机</a></p>
+                    <p><a href="/assets/server/batch/" >批量添加资产</a></p>
+                    <p><a href="/assets/server/list/" >服务器列表</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-85212785">机房管理</a></h3>
+            </div>
+                {% if "/assets/server/room/" in  request.path  %}
+                    <div id="panel-element-85212785" class="panel-collapse collapse in">
+                    {% elif "/assets/server/room_list/" in  request.path %}
+                    <div id="panel-element-85212785" class="panel-collapse collapse in">
+                    {% else %}
+                    <div id="panel-element-85212785" class="panel-collapse collapse">
+                {% endif %}
+                <div class="panel-body">
+                    <p><a href="/assets/server/room/add/" >添加机房</a></p>
+                    <p><a href="/assets/server/room/list/" >机房列表</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-52457896">项目分类</a></h3>
+            </div>
+                {% if "/assets/server/server_type/" in  request.path  %}
+                    <div id="panel-element-52457896" class="panel-collapse collapse in">
+                    {% else %}
+                    <div id="panel-element-52457896" class="panel-collapse collapse">
+                {% endif %}
+                <div class="panel-body">
+                    {% for i in server_type %}
+                        <p><a href="/assets/server/server_type/{{ i.id }}/" >{{ i }}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+{#        {% if user.is_superuser %}#}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-564813221">项目管理</a></h3>
+            </div>
+                {% if "/assets/server/type/add/" in  request.path  %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% elif "/assets/server/type/list/" in request.path %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% elif "/assets/server/type/edit/" in request.path %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% elif "/assets/server/edit/log/" in request.path %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% elif "/assets/server/type/notid/" in request.path %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% else %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse">
+                {% endif %}
+                <div class="panel-body">
+                        <p><a href="/assets/server/type/notid/" > 未分配项目主机</a></p>
+                        <p><a href="/assets/server/edit/log/" > 操作日志</a></p>
+                </div>
+            </div>
+        </div>
+{#        <div class="panel panel-default">#}
+{#            <div class="panel-heading">#}
+{#                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-52455215">系统安装状态</a></h3>#}
+{#            </div>#}
+{#                {% if "/assets/server/install/" ==  request.path  %}#}
+{#                <div id="panel-element-52455215" class="panel-collapse collapse in">#}
+{#                {% elif "/assets/server/install_error/" ==  request.path  %}#}
+{#                <div id="panel-element-52455215" class="panel-collapse collapse in">#}
+{#                {% else %}#}
+{#                <div id="panel-element-52455215" class="panel-collapse collapse">#}
+{#                {% endif %}#}
+{#                <div class="panel-body">#}
+{#                    <p><a href="/assets/server/install/" > 正在安装系统服务器列表</a></p>#}
+{#                    <p><a href="/assets/server/install_error/" > 安装系统失败服务器列表</a></p>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        {% endif %}#}
+    </div>
+</div>
+
+
+
+

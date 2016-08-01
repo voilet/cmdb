@@ -1,0 +1,72 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+    <style>
+    .mail-date{width:200px;}
+    .mail-ontact{width:100px;}
+    </style>
+         <div class="wrapper wrapper-content">
+            <div class="row">
+            {% include 'malfunction/left.html' %}
+            <div class="col-lg-9 animated fadeInRight">
+            <div class="mail-box-header">
+                <div class="pull-right tooltip-demo">
+                    <a href="/incident/edit/{{ data.uuid }}/" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="解决"><i class="fa fa-reply"></i> 解决</a>
+
+                </div>
+                <h2>
+                    故障详情
+                </h2>
+                <div class="mail-tools tooltip-demo m-t-md">
+                    <h3>
+                        <span class="font-noraml"></span>{{ data.title }}
+                    </h3>
+                    <h4><span class="font-noraml">故障等级: {{ data.get_grade_display }}</span></h4>
+                    <h5>
+                        <span class="pull-right font-noraml">解决时间: {{ data.stoptime | safe }}</span>
+                        <span class="font-noraml">业务负责人: {% if data.projectuser %}{{ data.projectuser }}{% endif %}</span>
+                    </h5>
+                </div>
+            </div>
+            <div class="mail-box">
+            <div class="mail-body">
+                <p>
+{#                    报障来源: {% for i in source %} {% if data.get_source_display() %} {{ data.source }}#}
+                    报障来源: {{ data.source }}
+                    </p>
+                    发生时间: {{ data.starttime }}
+                    </p>
+                    发现时间: {% if data.scantime %}{{ data.scantime }}{% endif %}
+                    </p>
+                    <p>解决时间: {{ data.stoptime }}</p>
+                    故障时长: {{ sum_time }}
+                    </p>
+                    {% if data.closeuser %}
+                    故障处理人员: {{ data.closeuser }}
+                    </p>
+                    {% endif %}
+                    {% if data.url %}
+                    URL: <a href="{{ data.url }}" target="_blank">{{ data.url }}</a>
+                    {% endif %}
+
+                <br/>
+
+                <p>
+                    <h3>报障内容</h3>
+                    {{ data.mailcomment|safe}}
+                    </p>
+                <br/>
+                <p>
+                    <h3>处理过程</h3>
+                    <br/>
+                    {% if data.comment  %}
+                    {{ data.comment|safe }}
+                    {% endif %}
+                    </p>
+                </p>
+            </div>
+        </div>
+     </div>
+
+
+{% endblock %}

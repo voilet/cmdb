@@ -1,0 +1,46 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2></h2>
+        <div class="row">
+        <select class="form-control select_business">
+        <option value="">选择产品线</option>
+         {% for one in line_list %}
+            {% for business in one.business.all %}
+                <option value="{{ business.id }}" id="{{ business.id }}" >{{ business }}</option>
+            {% endfor %}
+        {% endfor %}
+        </select>
+        </div>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div id="result"></div>
+</div>
+
+<script>
+    // 查询项目参数
+    $(function(){
+        $(document).ready(function(){
+        $('.select_business').change(function() {
+            if ($(this).val().length==0){return false;}
+                var url  = "{% url 'business_item_ajax'  %}";
+
+                // var url= {% url 'business_item_ajax'  %} + "?id=" + $(this).val();
+                $.get(url,{'id':$(this).val()},function(data){
+                     $('#result').html(data);
+                });
+            });
+        });
+    });
+</script>
+{% endblock content %}
+
+

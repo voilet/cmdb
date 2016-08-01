@@ -1,0 +1,57 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load auth %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %} - 服务器授权信息 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">未启用 1</a>
+                        </li>
+                        <li><a href="#">未启用 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content">
+                    {% include "auth/active.html" %}
+                    <br/>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>eth1</th>
+                            <th>项目</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    {% for i in data %}
+                        <tbody>
+                            <tr>
+                                <td>{{ i.node.eth1 }}</td>
+                                <td>{{ i.project }}</td>
+                                <td>
+                                    <a href="###" class="btn btn-xs btn-success">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

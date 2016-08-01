@@ -1,0 +1,156 @@
+{#{% extends 'user/base.html' %}#}
+{% load bootstrap %}
+{#{% load bootstrap3 %}#}
+
+
+{% block content %}
+<div class="wrapper">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="result">
+                <h3>{{ item }} 项目添加发布功能</h3>
+                <form id="from_data" role="form" action="/conf/project/edit/{{ item.uuid }}/?project_name={{ swan_data.swan_name }}" method="post">
+                    {% csrf_token %}
+{#                    {% bootstrap_form uf %}#}
+                    {% if not swan_data.choose %}
+                        {{ uf.choose|bootstrap }}
+                        {{ uf.swan_name|bootstrap }}
+                        {{ uf.script|bootstrap }}
+                        {{ uf.tgt|bootstrap }}
+
+                        <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="select_all" /></th>
+                                            <th> eth1 </th>
+                                            <th> 机柜 </th>
+                                            <th> 系统状态 </th>
+                                        </tr>
+                                    </thead>
+
+                                    {% for i in host_list %}
+                                    <tbody>
+                                        <tr >
+                                            {% if i.uuid in ip_list %}
+                                                <td width="40"><input type="checkbox" checked name="node" value="{{i.uuid}}" /></td>
+                                            {% else %}
+                                                <td width="40"><input type="checkbox" name="node" value="{{i.uuid}}" /></td>
+                                            {% endif %}
+                                            <td width="120"> {{ i.eth1 }}</td>
+                                            <td width="100">{{ i.room_number }} - {{ i.server_cabinet_id }}</td>
+            {#                                <td width="200">  {% if i.business %}<a href="/assets/server/server_type/{{ i.business.id }}/ ">{{ i.business }}</a>{% endif %}  </td>#}
+
+                                            <td width="50">
+                                            <div class="btn-group" data-toggle="buttons">
+                                                {% if i.status == 0 %}
+                                                    <label class="btn btn-xs btn-danger disabled">
+                                                    <input type="radio" name="options" id="option3">
+                                                    未安装系统</label>
+                                                {% elif i.status == 1 %}
+                                                <label class="btn btn-xs btn-success disabled">
+                                                    <input type="radio" name="options" id="option3">
+                                                    OK</label>
+                                                {% else %}
+                                                <label class="btn btn-xs btn-warning disabled">
+                                                    <input type="radio" name="options" id="option3">
+                                                    系统安装中</label>
+                                                {% endif %}
+                                            </div></td>
+                                        </tr>
+                                    </tbody>
+                                    {% endfor %}
+                        </table>
+                    {% else %}
+                        {{ uf.choose|bootstrap }}
+                        {{ uf.swan_name|bootstrap }}
+                        {{ uf.config_name|bootstrap }}
+                        {{ uf.salt_sls|bootstrap }}
+                        {{ uf.bat_push|bootstrap }}
+                        {{ uf.check_port_status|bootstrap }}
+                        {{ uf.check_port|bootstrap }}
+                        <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="select_all" /></th>
+                                            <th> eth1 </th>
+                                            <th> 机柜 </th>
+                                            <th> 系统状态 </th>
+                                        </tr>
+                                    </thead>
+
+                                    {% for i in host_list %}
+                                    <tbody>
+                                        <tr >
+                                            {% if i.id in ip_list %}
+                                                <td width="40"><input type="checkbox" checked name="ip" value="{{i.id}}"/></td>
+                                            {% else %}
+                                                <td width="40"><input type="checkbox" name="ip" value="{{i.id}}"/></td>
+                                            {% endif %}
+                                            <td width="120"> {{ i.eth1 }}</td>
+                                            <td width="100">{{ i.room_number }} - {{ i.server_cabinet_id }}</td>
+            {#                                <td width="200">  {% if i.business %}<a href="/assets/server/server_type/{{ i.business.id }}/ ">{{ i.business }}</a>{% endif %}  </td>#}
+
+                                            <td width="50">
+                                            <div class="btn-group" data-toggle="buttons">
+                                                {% if i.status == 0 %}
+                                                    <label class="btn btn-xs btn-danger disabled">
+                                                    <input type="radio" name="options" id="option3">
+                                                    未安装系统</label>
+                                                {% elif i.status == 1 %}
+                                                <label class="btn btn-xs btn-success disabled">
+                                                    <input type="radio" name="options" id="option3">
+                                                    OK</label>
+                                                {% else %}
+                                                <label class="btn btn-xs btn-warning disabled">
+                                                    <input type="radio" name="options" id="option3">
+                                                    系统安装中</label>
+                                                {% endif %}
+                                            </div></td>
+                                        </tr>
+                                    </tbody>
+                                    {% endfor %}
+                        </table>
+                    {% endif %}
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">保存</button>
+                        <button class="btn" type="reset">重置</button>
+                    </div>
+                </form>
+             </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on("click","#select_all",function(e){
+       var selected = $("#select_all").prop("checked");
+       if(selected){
+         $("input[name='node']").prop('checked',true);
+       }else{
+         $("input[name='node']").prop("checked",false);
+       }
+     });
+</script>
+
+<script>
+ $(function(){
+     $('#id_choose_1').unbind('click').bind('click',function(){
+         var url= "/conf/project/add/{{ item.id }}/?env=all";
+          $.ajax({
+              type: "GET",
+              url: url }).done(function( data ) {
+              $("#result").html(data);
+          });
+      });
+
+     $('#id_choose_0').unbind('click').bind('click',function(){
+         var url= "/conf/project/add/{{ item.id }}/?env=default";
+          $.ajax({
+              type: "GET",
+              url: url }).done(function( data ) {
+              $("#result").html(data);
+          });
+      });
+</script>
+
+{% endblock content %}

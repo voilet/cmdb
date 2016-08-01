@@ -1,0 +1,29 @@
+{% extends 'assets/base.html' %}
+{% block content %}
+<script type="text/javascript" src="/static/js/from_js/jquery.validVal.js"></script>
+<link rel="stylesheet" href="/static/css/from_cs/jquery.validator.css">
+<script type="text/javascript" src="/static/js/from_js/zh_CN.js"></script>
+<style>
+   .col-sm-11 .n-invalid{
+    border: 1px solid #ff0000;
+}
+</style>
+{% if batch %}
+    <div id="content-block" class="col-sm-12">
+        <pre>批量添加主机</pre>
+        <form class="form-horizontal" action=""   method="post" name="horizontal" role="form" autocomplete="off" data-validator-option="{theme:'yellow_right_effect'}">{% csrf_token %}
+        <textarea class="form-control" rows="10" data-rule="required" placeholder="l-zhany6.ops.prod.cn1.jumei.com	192.168.1.1 default DELL CentOS x86_64" name="add_batch"></textarea>
+    <div class="clearfix"></div><br>
+        <button type="submit" class="btn btn-success btn-block">保存</button>
+        </form>
+
+    </div>
+    {% else %}
+    <div id="content-block" class="col-sm-12">
+            <pre>批量添加失败主机列表</pre>
+             <pre>{% for i in error %}{{ i }}
+{% endfor %}{% endif %}</pre>
+
+
+{% endblock content %}
+

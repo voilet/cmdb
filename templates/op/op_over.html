@@ -1,0 +1,59 @@
+{% include "op_header.html" %}
+
+<div class="container-fluid">
+			<h3>
+				{{ op_list.title }}
+			</h3>
+			<table class="table">
+				<thead>
+					<tr>
+                        <th>
+							报障人
+						</th>
+						<th>
+							发现时间
+						</th>
+						<th>
+							发生时间
+						</th>
+						<th>
+							解决时间
+						</th>
+						<th>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+                        <td>
+							{{ op_list.user_name|safe }}
+						</td>
+						<td>
+							{{ op_list.Discovery_date|safe }}
+						</td>
+						<td>
+							{{ op_list.Occur_date|safe }}
+						</td>
+						<td>
+							{% if paramters.Solve_date %}
+							{{ op_list.Solve_date|safe }}
+							{% endif %}
+						</td>
+						<td>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="hero-unit">
+                <h3>
+                    <li style="color:#FD0301">故障说明：</li>
+                </h3></br>
+				<p>
+					{{ op_list.content|safe }}
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% include "op_bottom.html" %}

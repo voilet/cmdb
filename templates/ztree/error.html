@@ -1,0 +1,108 @@
+{% extends "default/base.html" %}
+{% block content %}
+<div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content mailbox-content">
+                        <div class="file-manager">
+                            <button class="btn btn-block btn-primary compose-mail" >产品线</button>
+                            <div class="space-25"></div>
+                            <h5>Folders</h5>
+                                <ul class="m-b-md ztree" id="treeDemo" style="padding: 0"></ul>
+                            <div class="clearfix"></div>
+                            <ul id="log" class="log"></ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 animated fadeInRight">
+            {% if content_status %}
+            <div class="mail-box-header">
+                <div class="result">
+                <h2>{{ business_name }}</h2>
+                    <div class="ibox float-e-margins ibox-content">
+                            {% include "ztree/active.html" %}
+                            <br/>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select_all" /></th>
+                                        <th> eth1 </th>
+                                        <th> 机柜 </th>
+                                        <th> 业务 </th>
+                                        <th> 状态 </th>
+                                        <th> 操作 </th>
+                                    </tr>
+                                </thead>
+
+                                {% for i in server_list %}
+                                <tbody>
+                                    <tr >
+                                        <td width="40"><input type="checkbox" name="node_name" value="{{i.node_name}}"/></td>
+                                        <td width="120"> <a href="/assets/server/node_id/{{ i.id }}/" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                        <td width="100"><a href="{% url 'cabinet' %}?cabinet={{ i.cabinet }}&room_number={% if i.room_number %}{{ i.room_number }}{% endif %}" > {% if i.room_number %}{{ i.room_number }} {% endif %}{% if i.cabinet %}- {{ i.cabinet }} - {% endif %}{% if i.server_cabinet_id %}{{ i.server_cabinet_id }}{% endif %}</a></td>
+                {#                                <td width="200">  {% if i.business %}<a href="/assets/server/server_type/{{ i.business.id }}/ ">{{ i.business }}</a>{% endif %}  </td>#}
+                                        <td width="200">
+                                        {% for a in business_list %}
+                                            {% for k,v in a.items %}
+                                                {% if k == i.eth1 %}
+                                                    {% for bc in v %}
+                                                        <a href="/assets/server/server_type/?service_name={{ bc }}" class="btn btn-info btn-xs">{{ bc }}</a>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                        </td>
+                                        <td width="50">
+                                        <div class="btn-group tooltip-demo" data-toggle="buttons">
+                                            {% if i.status == 0 %}
+                                                <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                                            {% elif i.status == 1 %}
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                                            {% else %}
+                                            <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                                            {% endif %}
+                                        </div></td>
+                                        <td width="160">
+                                            <div class="tooltip-demo">
+                                            {% if request.user.is_superuser or request.session.fun_auth.edit_host %}
+                                            <a href="/assets/edit_id/{{ i.id }}/" class="btn btn-xs btn-primary node-edit" data-toggle="tooltip" data-placement="bottom" title="修改"><i class="fa fa-edit"></i></a>
+                                            {% endif %}
+                                            {% if request.user.is_superuser or request.session.fun_auth.delete_host %}
+                                            <a href="/assets/server/node_del/{{ i.id }}/" class="btn btn-xs btn-danger node-edit" data-toggle="tooltip" data-placement="bottom" title="删除"><i class="fa fa-trash-o"></i></a>
+                                            {% endif %}
+                                            {% if i.status == 1 and request.user.is_superuser or request.session.fun_auth.update_host %}
+                                            <a href="/assets/update_id/{{ i.id }}/" class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                            {% elif request.user.is_superuser or request.session.fun_auth.update_host %}
+                                                <a href="/assets/update_id/{{ i.id }}/" class="btn btn-xs btn-success disabled" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                            {% else %}
+                                            {% endif %}
+                                            {% if request.user.is_superuser or request.session.fun_auth.setup_system %}
+
+                {#                                        <button type="button" class="btn btn-xs" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Tooltip on bottom</button>#}
+                                                <a href="/assets/server/restart/{{ i.id }}/" class="btn btn-xs btn-danger voilet_restart" data-toggle="tooltip" data-placement="bottom" title="重装系统"><i class="fa fa-desktop">装机</i></a>
+                                            {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
+                    </div>
+                </div>
+            </div>
+                <div class="mail-box"></div>
+            </div>
+        </div>
+        {% else %}
+        走错地了吧
+        {% endif %}
+        </div>
+
+    {% include "ztree/script.html" %}
+<div id="edit_result">
+
+</div>
+{% endblock %}

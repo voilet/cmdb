@@ -1,0 +1,77 @@
+{% extends "default/base.html" %}
+{% block content %}
+<div class="col-md-12 column" id="restus">
+{% load pagination_tags %}
+{% autopaginate log 15 %}
+{#<div id="restus">#}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>saltstack操作记录 | list jid.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				用户名
+			</th>
+			<th>
+				主机
+			</th>
+            <th>
+				类型
+			</th>
+            <th>
+				命令
+			</th>
+			<th>
+				jobs
+			</th>
+			<th>
+				时间
+			</th>
+			<th>
+				返回数据
+			</th>
+
+		</tr>
+	</thead>
+    {% for i in log %}
+        <tbody>
+		<tr>
+			<td>
+				{{ i.username }}
+			</td>
+			<td>
+				{% for s in i.minions %}{{ s }},{% endfor %}
+			</td>
+            <td>
+				{{ i.stalt_type }}
+			</td>
+            <td>
+				{{ i.stalt_input }}
+			</td>
+			<td>
+				{{ i.jobs_id }}
+			</td>
+			<td>
+				{{ i.log_time }}
+			</td>
+			<td>
+				<a class="btn btn-success btn-xs fancybox fancybox.ajax" href="{% url 'handle_redis' %}?jid={{ i.jobs_id }}" >详细信息</a>
+			</td>
+		</tr>
+	</tbody>
+    {% endfor %}
+</table>
+{#</div>#}
+{# {{ log }}#}
+   <div  class="voilet_page_log">
+         {% paginate %}
+    </div>
+
+</div>
+{% endblock %}

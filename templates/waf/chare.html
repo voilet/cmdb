@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+</head>
+
+<body>
+    <div id="main" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+    <div id="mainMap" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+<script src="/static/js/asset/echarts-plain-map.js"></script>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+            myChart.setOption({
+            title : {
+                text: 'nginx waf攻击拦截比较',
+                subtext: '线上所有环境',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                data:[{% for i,v in chart.items %}'{{ i }}',{% endfor %}]
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : true,
+                    dataView : {readOnly: false},
+                    restore : true,
+                    saveAsImage : true
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', 260],
+                    data:[
+                        {% for i,k in chart.items %}
+                            {value:{{ k }},name:'{{ i }}'},
+                        {% endfor %}
+                    ]
+                }
+            ]
+        }
+    );
+
+</script>
+<li>{% for i,v in chart.items %}
+    {{ i }}
+{% endfor %}
+{{ chart }}
+</li>
+</body>
+</html> 

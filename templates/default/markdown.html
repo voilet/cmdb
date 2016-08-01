@@ -1,0 +1,55 @@
+{% extends 'default/base.html' %}
+{% block content %}
+<style>
+    .test_width{ width:130px; }
+</style>
+<link rel="stylesheet" href="/static/css/markdown/editormd.css" />
+<script src="/static/js/markdown/zepto.min.js"></script>
+<script src="/static/js/markdown/editormd.js"></script>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="edit_result">
+                <div class="ibox-content">
+                    <div class="editormd" id="ops_editormd">
+                        <textarea name="description"> </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+			var fun_Editor;
+			var jQuery = Zepto;  // 为了避免修改 flowChart.js 和 sequence-diagram.js 的源码，所以想支持 flowChart / sequenceDiagram 就得加上这一句
+
+            $(function() {
+                $.get("/static/md/ops.md", function(md){
+					fun_Editor = editormd("ops_editormd", {
+						width  : "100%",
+						height : 720,
+						path   : '/static/lib/',
+						markdown : md,
+                        codeFold : true,
+                        searchReplace : true,
+                        saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
+                        watch : false,
+                        htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+                        emoji : true,
+                        taskList : true,
+                        tocm            : true,         // Using [TOCM]
+                        tex : true,                     // 开启科学公式 TeX 语言支持，默认关闭
+                        //previewCodeHighlight : false,  // 关闭预览窗口的代码高亮，默认开启
+                        flowChart : true,
+                        sequenceDiagram : true,         // 同上
+						onload : function() {
+							fun_Editor.previewing();
+						}
+					});
+
+				});
+            });
+
+</script>
+{% endblock  %}
+

@@ -1,0 +1,36 @@
+{% include "link_css.html" %}
+<div class="form-group">
+    {{ content }}
+
+    {% if danger %}
+        <div class="alert alert-dismissable alert-info">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4>
+                您无权使用此命令:
+            </h4>
+            <strong>注意：</strong>此命令危险等级较高,如需执行请登录跳板机进行操作,以免因误操作带来不可挽回的损失
+
+        </div>
+    {% else %}
+
+        <div id="log"></div>
+
+    {% endif %}
+</div>
+<style>
+    .voilet_bk{border:solid 1px #8bcbff}
+    #chatLog{margin:8px;}
+</style>
+<div class="col-lg-12" id="content-block">
+        <div id="chatLog">
+            {% for k,v in result.items %}
+                <h3>{{ k }}</h3>
+                <pre>{{ v }}</pre>
+            {% endfor %}
+{#            {{ content_data }}#}
+        </div>
+</div>
+
+
+
+

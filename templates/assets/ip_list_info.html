@@ -1,0 +1,89 @@
+<div id="network-replace" class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-2">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="text text-primary"><b>{{ network }}</b></span>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ibox-heading">
+                    <h3>{{ idc_name }}</h3>
+                    <small><i class="fa fa-map-marker"></i> {{ idc_name }}{{ network }} IP列表.</small>
+                </div>
+
+                <div class="ibox-content">
+                    <div>
+                        <div class="text-left">
+                            <h3 class="text-center">已使用</h3>
+                            <table class="table">
+                                {% for ip in ip_active %}
+                                    <tr>
+                                        <td class="text-navy">{{ ip }}</td>
+                                        <td><a href="/assets/host_detail/?ip={{ ip }}">详情</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="text text-primary"><b>{{ network }}</b></span>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ibox-heading">
+                    <h3>{{ idc_name }}</h3>
+                    <small><i class="fa fa-map-marker"></i> {{ idc_name }}{{ network }} IP列表.</small>
+                </div>
+
+                <div class="ibox-content">
+                    <div>
+                        <div class="text-left">
+                            <h3 class="text-center text-danger">未使用</h3>
+                            <table class="table">
+                                {% for ip in ip_unactive %}
+                                    <tr>
+                                        <td class="text-navy">{{ ip }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

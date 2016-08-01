@@ -1,0 +1,123 @@
+{% extends 'saltstack/base.html' %}
+{% block content %}
+<style>
+
+.alert{padding-left: 0;margin-left:0;margin-top:8px;}
+.voilet {padding-left: 0;margin-left:0;}
+.form-group .checkbox-inline{margin-left:8px;}
+#checkAll{margin-left:8px;}
+</style>
+<pre>请选择需要执行命令的主机</pre>
+
+<div class="voilet">
+    <form method="POST" id="reasonform"  role="search" onsubmit="return false" >{% csrf_token %}
+        <div class="voilet_test">
+            {% for i in service_name %}
+            <button href="{% url 'business_host_list' id=i.id %}" style="cursor:pointer" class="btn btn-sm btn-info btn-ajax">{{ i }}</button>
+            {% endfor %}
+        </div>
+        <div class="alert alert-dismissable ">
+            <div id="node_name">　亲！点击项目名称选择主机哦</div>
+        </div>
+        {% if "jumeiops" in request.user.department %}
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="input-group">
+              <input type="text" class="form-control" name="salt_node_name" id = "salt_node_name" placeholder="输入主机名"  maxlength="100" size="100" />
+              <span class="input-group-addon ">命令类型
+                  <select id="id_brand"  name="comm_shell">
+                    <option value="cmd" selected="selected">cmd.run</option>
+                    <option value="grains">grains.item</option>
+                   </select>
+              </span>
+            </div><!-- /input-group -->
+          </div><!-- /.col-lg-6 -->
+          <div class="col-lg-6">
+            <div class="input-group">
+             <span class="input-group-btn">
+                <button class="btn btn-default disabled" type="button">命令</button>
+              </span>
+             <input type="text" class="form-control" name="salt_cmd" id="salt_cmd" placeholder="如:ifconfig  命令可连输哦，如ls;pwd;uname -a中间以;做分割" maxlength="100" size="100"/>
+              <span class="input-group-btn">
+                <button class="btn btn-success" id="button" type="submit">执行</button>
+
+              </span>
+
+            </div><!-- /input-group -->
+          </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+        {% else %}
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="input-group">
+             <span class="input-group-btn">
+                <button class="btn btn-default disabled" type="button">命令</button>
+              </span>
+             <input type="text" class="form-control" name="salt_cmd" id="salt_cmd" placeholder="如:ifconfig  命令可连输哦，如ls;pwd;uname -a中间以;做分割" maxlength="100" size="100"/>
+              <span class="input-group-addon ">命令类型
+                  <select id="id_brand"  name="comm_shell">
+                    <option value="cmd" selected="selected">cmd.run</option>
+                    <option value="grains">grains.item</option>
+                    <option value="ping">test.ping</option>
+                   </select>
+              </span>
+              <span class="input-group-btn">
+                <button class="btn btn-success" id="button" type="submit">执行</button>
+              </span>
+{#                <button type="submit" id="button" class="btn btn-default" id="but_salt_state_sls">安装</button>#}
+            </div><!-- /input-group -->
+          </div><!-- /.col-lg-6 -->
+        {% endif %}
+    </form>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#button').click(function(){
+    jQuery.ajax({
+      url: "/salt/cmd/",                  // 提交的页面
+      data: $('#reasonform').serialize(), // 从表单中获取数据
+      type: "POST",                       // 设置请求类型为"POST"，默认为"GET"
+      beforeSend: function(){             // 设置表单提交前方法
+        //alert('表单提交前');
+      },
+      error: function(request){           // 设置表单提交出错
+        alert("表单提交出错，请稍候再试");
+      },
+      dataType:'text',
+      success: function(msg){
+          $("#salt_cmd_run").html(msg)
+{#        alert(msg);                       // 设置表单提交完成使用方法#}
+      }
+    });
+    return false;
+  });
+});
+
+//根据人员查询业务分类和主机
+
+$(function(){
+  $(".btn-ajax").click(function(){
+         var url = $(this).attr("href");
+         $.get(url,function(data){
+             $("#node_name").html(data);
+         })
+   
+     });
+ });
+
+
+$("body").bind('keyup',function(event) {
+    if(event.keyCode==13){
+    document.form.submit();
+    }
+});
+
+</script>
+
+
+<div id="salt_cmd_run"></div>
+
+
+{% endblock content %}

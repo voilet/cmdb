@@ -1,0 +1,50 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate data 20 %}
+    <style>
+    .mail-date{width:200px;}
+    .mail-ontact{width:100px;}
+    </style>
+         <div class="wrapper wrapper-content">
+            <div class="row">
+            {% include 'malfunction/left.html' %}
+            <div class="col-lg-9 animated fadeInRight">
+            <div class="mail-box-header">
+
+                {% include 'malfunction/search.html' %}
+                <h2>
+                    已处理故障
+                </h2>
+            </div>
+            <div class="mail-box">
+
+                <table class="table table-hover table-mail">
+                <tbody>
+                <tr class="unread">
+                    <td class="mail-subject">标题</td>
+                    <td class="mail-ontact">业务负责人</td>
+                    <td class="text-right mail-date">发现时间</td>
+                    <td class="text-right">状态 </td>
+                </tr>
+                {% for i in data %}
+                <tr class="read">
+                    <td class="mail-subject" ><a href="/incident/{{ i.uuid }}/">{{ i.title }}</a> {% if i.classical %}<i class="fa fa-vimeo-square" style="color:#2ad49e"></i>{% endif %}</td>
+                    <td class="mail-ontact">{{ i.projectuser }}</td>
+                    <td class="text-right mail-date voilet">{{ i.scantime|safe }}</td>
+                    <td class="text-right">{% if i.status %}<i class="fa fa-check-circle" style="color: #2ad49e"></i>{% else %}<i class="fa fa-exclamation-circle" style="color: #ff3842"></i>{% endif %}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+                </div>
+{#                <div  class="voilet_page">#}
+                     {% paginate %}
+{#                </div>#}
+            </div>
+        </div>
+     </div>
+
+
+{% endblock %}

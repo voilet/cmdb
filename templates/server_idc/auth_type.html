@@ -1,0 +1,99 @@
+{% block content %}
+        <div class="form-group">
+            <label class="control-label col-sm-2 col-lg-2 " for="id_user_name">选择需要授权主机</label>
+            <div class=" col-sm-5 col-lg-5 ">
+                <table class="table table-condensed table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" value="" id="select_all" /> 全选
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tab-add">
+                        {% for i in server_list %}
+                            <tr>
+                            {% if i.status == 1 %}
+                                {% if i.uuid not in ip_list %}
+                                    <td> <input type="checkbox" value="{{ i.uuid }}" name="node" /> {{ i.eth1 }}</td>
+                                {% endif %}
+                            {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class=" col-sm-5 col-lg-5 ">
+                <table class="table table-condensed table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                已分配权限主机
+                            </th>
+                            <th>权限</th>
+                            <th>
+                                删除
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in data %}
+                            {% if i.node.status == 1 %}
+                                <tr id="{{ i.id }}">
+                                        <td>{{ i.node.eth1 }}</td>
+                                        <td> <a class="btn btn-xs btn-success" href="{{ i.id }}">{% if i.auth %}管理员{% else %}普通用户{% endif %}</a></td>
+                                        <td> <a class="save_delete" id="{{ i.id }}" value="{{ i.node.uuid }}" name="{{ i.node.eth1 }}" href="/accounts/server/auth/delete/?uuid={{ i.node.uuid }}&auth_id={{ user_data.uuid }}" onclick="return false">删除</a></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+<script>
+    $('.save_delete').unbind('click').bind('click',function(){
+      $("tr[id='"+$(this).attr("id")+"']").remove();
+      var node_name_data= $(this).attr("name");
+      var node_name_uuid= $(this).attr("value");
+      $.ajax({
+         type: "GET",
+         node_name_data: $(this).attr("name"),
+         url: $(this).attr("href") }).done(function( data ) {
+          $("#tab-add").append("<tr>"
+                               +"<td>"+"<input type=\"checkbox\" value=" + node_name_uuid + " name=\"node_name\">" + node_name_data + "</td>"
+                           +"</tr>");
+         return false;
+      });
+    });
+    // 请求保存
+     $('.edit-save').unbind('click').bind('click',function(){
+          $.ajax({
+              type: "POST",
+              url: $(this).attr("href"),                  // 提交的页面
+              data: $('#form_data').serialize(), // 从表单中获取数据
+              dataType:'text',
+              success: function(msg){
+                  // alert(msg);
+                  $("#edit_result").html(msg);
+              }
+          });return false;
+         });
+    $(document).on("click","#select_all",function(e){
+           var selected = $("#select_all").prop("checked");
+           if(selected){
+             $("input[name='node']").prop('checked',true);
+           }else{
+             $("input[name='node']").prop("checked",false);
+           }
+         });
+</script>
+
+{% endblock content %}
+
+
+
+

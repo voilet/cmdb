@@ -1,0 +1,25 @@
+<li class="nav-header">
+    <div class="dropdown profile-element"> <span>
+        <img alt="image" class="img-circle" src="/static/new/img/profile_small.jpg" />
+         </span>
+        <a  class="dropdown-toggle" href="/accounts/password/">
+        <span class="clear">
+            <span class="block m-t-xs">
+                <strong class="font-bold">
+                {% if request.user.first_name %}
+                欢迎， {{  request.user.first_name }}
+                {% else %}
+                欢迎， {{  request.user.username }}
+                {% endif %}
+                </strong>
+             </span>
+
+        </span> </a>
+    运维管理系统
+
+{#        <a href="/accounts/loginout/"><strong>退出</strong></a>#}
+    </div>
+    <div class="logo-element">
+        Fun
+    </div>
+</li>

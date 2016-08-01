@@ -1,0 +1,57 @@
+
+{#{% for i in data %}#}
+    {% if server_name == "init" %}
+        <pre>{{ data.service_name }} 安装配置,数据为yaml格式</pre>
+        <div id="salt_save_list"></div>
+        <div class="clearfix"></div>
+    <form class="form-horizontal" id="salt_conf" method="post" role="form">{% csrf_token %}
+        <input type="hidden" name="prod_name" value="{{ data.service_name }}" >
+        <input type="hidden" name="server_name" value="init">
+        <textarea class="form-control" id="id_sls_description" style="height: 600px;" name="salt_code" >{% if data.init_sls %}{{ data.init_sls }}{% else %} {% endif %}</textarea>
+        <div class="clearfix"></div>
+         <div style="margin-top:8px;">
+{#             <input type="submit" id="btn-submit" class="btn btn-success btn-block" value="保存" name="_save" />#}
+             <input type="submit" id="salt_save" class="btn btn-success btn-block" value="保存" name="save" />
+        </div>
+    </form>
+    {% else %}
+        <pre>{{ data.service_name}} 模板</pre>
+        <div id="salt_save_list"></div>
+        <div class="clearfix"></div>
+    <form class="form-horizontal" id="salt_conf" method="post" role="form">{% csrf_token %}
+        <input type="hidden" name="prod_name" value="{{ data.service_name}}" >
+        <input type="hidden" name="server_name" value="templates">
+        <textarea class="form-control" id="id_sls_description" style="height: 600px;" name="salt_code" >{% if data.init_sls %}{{ data.templates }}{% else %} {% endif %}</textarea>
+        <div class="clearfix"></div>
+         <div style="margin-top:8px;">
+{#             <input type="submit" id="btn-submit" class="btn btn-success btn-block" value="保存" name="_save" />#}
+             <input type="submit" id="salt_save" class="btn btn-success btn-block" value="保存" name="save" />
+        </div>
+    </form>
+    {% endif %}
+{#{% endfor %}#}
+
+<script>
+//异步提交配置文件
+$(document).ready(function(){
+  $('#salt_save').click(function(){
+    jQuery.ajax({
+      url: "/conf/save",                  // 提交的页面
+      data: $('#salt_conf').serialize(), // 从表单中获取数据
+      type: "POST",                       // 设置请求类型为"POST"，默认为"GET"
+      beforeSend: function(){             // 设置表单提交前方法
+        //alert('表单提交前');
+      },
+      error: function(request){           // 设置表单提交出错
+        alert("表单提交出错，请稍候再试");
+      },
+      dataType:'text',
+      success: function(msg){
+          $("#salt_save_list").html(msg)
+//        alert(msg);                       // 设置表单提交完成使用方法
+      }
+    });
+    return false;
+  });
+});
+</script>

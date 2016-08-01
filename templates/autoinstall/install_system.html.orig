@@ -1,0 +1,164 @@
+
+{% load pagination_tags %}
+{% autopaginate list 10 %}
+<div id="content-block" class="col-sm-11 col-md-12">
+
+<div id="salt_cmd_run">
+
+</div>
+
+<table class="table table-bordered">
+    <pre>未安装系统服务器列表</pre>
+    {% if error %}
+        <pre>安装失败列表<br>{% for i in data %}
+{{ i.result }}{% endfor %}
+        </pre>
+    {% endif %}
+    {% if return %}
+    <pre>开始安装系统中<br>{% for i in data %}
+{{ i.result }}{% endfor %}
+        </pre>
+    {% endif %}
+	<thead>
+		<tr>
+			<th width="60">
+				<input id="checkAll" type="checkbox">
+			</th>
+			<th>
+				主机名
+			</th>
+			<th>
+				机房
+			</th>
+			<th>
+				eth1
+			</th>
+			<th>
+				内存
+			</th>
+            <th>
+				核数
+			</th>
+            <th>
+				硬盘
+			</th>
+            <th>
+				服务器型号
+			</th>
+			<th>
+				系统
+			</th>
+			<th>
+				业务
+			</th>
+			<th>
+				用途
+			</th>
+            <th>
+				状态
+			</th>
+
+		</tr>
+	</thead>
+<form id="changelist-form" method="POST" action="/auto/install/">{% csrf_token %}
+    {% for i in list %}
+{#        {% if i.auto_install == 0 %}#}
+	<tbody>
+		<tr >
+            <td>
+                <label for="checkbox-inline"><input id="id_business_{{ i.id }}" type="checkbox" name="hostname_id" value="{{ i.id }}"></label>
+            </td>
+			<td width="200">
+				<a href="/assets/server/node_id/{{ i.id }}/" >{{ i.node_name }}</a>
+			</td>
+			<td width="125">
+				{{ i.idc }}
+			</td>
+			<td width="150">
+				{{ i.eth1 }}
+			</td>
+			<td width="80">
+				{% widthratio i.memory 1024 1 %}G
+			</td>
+            <td width="100">
+				{{ i.core_num }} Cores
+			</td>
+            <td width="100">
+                {% if i.hard_disk %}
+				{{ i.hard_disk }} G
+                    {% else %}
+                    无数据
+                {% endif %}
+			</td>
+            <td width="100">
+				{{ i.brand }}
+			</td>
+			<td width="160">
+				{{ i.system }} - {{ i.system_cpuarch }}
+			</td>
+			<td width="100">
+                {% for test in i.business.all %}
+                    <a href="/assets/server/server_type/{{ test.id }}/ ">{{ test.service_name }}</a>
+                {% endfor %}
+			</td>
+			<td>
+				{{ i.usage }}
+			</td>
+            <td width="50">
+				<a  id = "{{ i.id }}" class="btn btn-xs btn-primary" data-toggle="modal" onClick="showDetail(this)" >安装系统</a>
+			</td>
+		</tr>
+	</tbody>
+    {% endfor %}
+    </table>
+    <button type="submit" class="btn btn-success btn-sm">批量安装系统</button>
+
+</form>
+
+    <div  class="voilet_page">
+         {% paginate %}
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+       $("#checkAll").click(function() {
+            $('input[name="hostname_id"]').prop("checked",this.checked);
+        });
+        var $subBox = $("input[name='hostname_id']");
+        $subBox.click(function(){
+            $("#checkAll").attr("checked",$subBox.length == $("input[name='hostname_id']:checked").length ? true : false);
+        });
+    });
+</script>
+
+
+<script>
+function showDetail(obj){
+  var id= obj.attributes["id"].nodeValue;
+    $.ajax({
+   url: "/auto/install_node/",
+   data: ({
+       "hostname_id":id,
+       "csrfmiddlewaretoken":"{{ request.COOKIES.csrftoken }}"
+   }),
+   type: "POST",
+    beforeSend: function(){             // 设置表单提交前方法
+        //alert('error');
+      },
+      error: function(request){           // 设置表单提交出错
+        alert("表单提交出错，请稍候再试");
+      },
+      dataType:'text',
+      success: function(msg){
+          $("#salt_cmd_run").html(msg)
+        //alert(msg);                       // 设置表单提交完成使用方法
+      }
+    });
+    return false;
+
+}
+</script>
+
+

@@ -1,0 +1,52 @@
+{% include 'op_header.html' %}
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							编号
+						</th>
+						<th>
+							服务器IP
+						</th>
+						<th>
+							可疑文件
+						</th>
+						<th>
+							报警内容
+						</th>
+						<th>
+							监控时间
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                {% for list in emps%}
+					<tr>
+						<td>
+							{{ list.id|safe }}
+						</td>
+						<td>
+							{{ list.server_ip|safe }}
+						</td>
+						<td>
+							{{ list.file_path|safe }}
+						</td>
+						<td>
+							{{ list.dangerous|safe  }}
+						</td>
+						<td>
+							{{ list.files_create_time|safe  }}
+						</td>
+					</tr>
+                {% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% include 'op_bottom.html' %}

@@ -1,0 +1,32 @@
+<div class="form-group">
+{% if cmd_Advanced %}
+<div class="alert alert-dismissable alert-info">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4>
+        高级使用方法:
+    </h4> <strong>例：</strong>search-nginx23@uptime,注意，中间有一个空格，第一个表示主机名，第二个表示需要执行的命令<br>
+        如需同时执行多个命令，可使用searcn-nginx-23 pwd;ls;ifconfig即可，命令和命令中间用";"号区分
+</div>
+{% endif %}
+{% if salt_cmd %}
+<div>
+{% for k, v in cmd_run.items %}
+<h3>{{ k }}</h3><pre>{{ v|linebreaks }}</pre>
+
+{% endfor %}
+</div>
+    {% elif auth_content %}
+<div class="alert alert-dismissable alert-info">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4>
+        您无权使用此命令:
+    </h4> <strong>注意：</strong>此命令危险等级较高,如需执行请登录跳板机进行操作,以免因误操作带来不可挽回的损失
+    </div>
+    {% else %}
+    未提交数据
+    {% endif %}
+</div>
+
+
+
+

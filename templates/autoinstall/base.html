@@ -1,0 +1,121 @@
+{% extends 'default/base.html' %}
+{% block left %}
+<link href="/static/css/tree.css" rel="stylesheet" media="screen">
+    <div class="panel-group" id="panel-349880"><!--  panel panel-primary -->
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                 <h3 class="panel-title glyphicon glyphicon-pushpin"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349880" href="#panel-element-290440">产品线</a></h3>
+            </div>
+
+            <div id="panel-element-290440" class="panel-collapse collapse in">
+                <div class="panel-body in tree">
+
+                    <ul>
+                        {% for one in line_list %}
+                        <li><a style="cursor:pointer">{{ one }}</a>
+                            <ul>
+                                {% for business in one.business.all %}
+                                <li><a class="business_item" style="cursor:pointer" id="{{ business.id }}">{{ business }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        {% endfor %}
+                        <li><a style="cursor:pointer">未分类</a>
+                            <ul>
+                                {% for nobusiness in business_noline %}
+                               <li><a class="business_item" style="cursor:pointer" id="{{ nobusiness.id }}">{{ nobusiness }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+{#        {% if "jumeiops" in request.user.department or "admin" in request.user.department %}#}
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                 <h3 class="panel-title " data-toggle="collapse" data-parent="" href="#panel-element-50499">运维工具</h3>
+            </div>
+            <div id="panel-element-50499" class="panel-collapse">
+                <div class="panel-body">
+                    <p><a href="/auto/install/" style="cursor:pointer" class="btn-action_class">安装系统</a></p>
+                    <p><a href="/salt/status/" style="cursor:pointer" class="btn-action_class">主机上报</a></p>
+                    <p><a href="/salt/key_list/" style="cursor:pointer" class="btn-action_class">认证主机管理</a></p>
+                </div>
+            </div>
+        </div>
+{#        {% endif %}#}
+{#        {% if "jumeiops" in request.user.department %}#}
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                 <h3 class="panel-title " data-toggle="collapse" data-parent="" href="#panel-element-50499">日志审计</h3>
+            </div>
+            <div id="panel-element-50499" class="panel-collapse">
+                <div class="panel-body">
+                    <p><a href="/salt/logs/" style="cursor:pointer" class="btn-action_class">日志记录</a></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+
+$(function(){
+      $('.tree li').each(function(){
+                if($(this).children('ul').length > 0){
+                        $(this).addClass('parent');
+                }
+      });
+
+      $('.tree li.parent > a').click(function(){
+                $(this).parent().toggleClass('active');
+                $(this).parent().children('ul').slideToggle('fast');
+      });
+      $('.business_item').click(function(){
+         var business_id = $(this).attr('id');
+         var url  = "{% url 'business_item_ajax'  %}"
+          $.get(url,{'id':business_id},function(data){
+             $('#result').html(data);
+          });
+
+      });
+
+      $(document).on("click",".btn-action_class",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#result").html(data);
+         });
+     });
+
+     $(document).on("click",".add",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#add").html(data);
+         });
+     });
+
+     $(document).on("click",".voilet_page_log >ul >li >a",function(e){
+         e.preventDefault();
+         var url= "/salt/logs/" + $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#restus").html(data);
+         });
+     });
+
+});
+
+
+</script>
+
+{% endblock left %}
+{% block content %}
+{% endblock content %}

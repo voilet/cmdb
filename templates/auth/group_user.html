@@ -1,0 +1,93 @@
+{% include "script.html" %}
+{% include "link_css.html" %}
+{% block content %}
+{% load bootstrap %}
+<style>
+body{background:#FFFFFF;}
+</style>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <form class="form-horizontal" id="add_user_group" method="post"  role="form">{% csrf_token %}
+                <div class="form-group">
+                    <div class="col-sm-5">
+                        <select id="groups" size="12" class="form-control m-b" multiple>
+                        {% for i in userall %}
+                                {% if i.first_name not in user_list %}
+                                    <option value="{{ i.id }}">{{ i.first_name }}</option>
+                                {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="btn-group" style="margin-top: 50px;">
+                            <button type="button" class="btn btn-white" onclick="move_right('groups', 'groups_selected')"><i class="fa fa-chevron-right"></i></button>
+                            <button type="button" class="btn btn-white" onclick="move_left('groups_selected', 'groups')"><i class="fa fa-chevron-left"></i> </button>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div>
+                            <select id="groups_selected" name="group_user" class="form-control m-b" size="12"  multiple>
+                                {% for i in all_user %}
+                                    <option value="{{ i.id }}" selected="selected" >{{ i.first_name }}</option>
+                                {% endfor %}
+                                {{ data_id }}
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- 业务 -->
+                    <div class="form-group">
+                       <div class="col-sm-4 col-sm-offset-5">
+                           <button class="btn btn-white" type="submit"> 重置 </button>
+                           <a class="btn btn-primary" href="/auth/cmdb/group_user/{{ uuid }}/" onclick="return false" > 提交 </a>
+                       </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function move_left(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+                $(this).attr("selected",'false');
+            }
+            $(this).attr("selected",'true');
+        });
+    }
+    function move_right(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+            }
+
+        });
+    }
+
+    function move_all(from, to){
+        $("#"+from).children().each(function(){
+            $("#"+to).append(this);
+        });
+    }
+    $(document).ready(function(){
+          $('.btn-primary').click(function(){
+            jQuery.ajax({
+              url: $(this).attr('href'),                  // 提交的页面
+              data: $('#add_user_group').serialize(), // 从表单中获取数据
+              type: "POST",                       // 设置请求类型为"POST"，默认为"GET"
+              dataType:'text',
+              success: function(){
+                  var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+                              parent.layer.close(index); //执行关闭
+              }
+            });
+          });
+          return false;
+    });
+</script>
+{% endblock content %}

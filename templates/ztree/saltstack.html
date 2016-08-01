@@ -1,0 +1,261 @@
+{% extends "default/base.html" %}
+
+{% load business_tag %}
+{% block content %}
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            {% include "ztree/ztree_js.html" %}
+            <div class="col-lg-9 animated fadeInRight">
+                {% if content_status %}
+                    <div class="mail-box-header">
+                        <div class="row wrapper border-bottom white-bg page-heading">
+                            <div class="col-lg-10">
+                                <h2>{{ bus_data.service_name }}</h2>
+                                <ol class="breadcrumb">
+                                    <li>
+                                        <a href="/">首页</a>
+                                    </li>
+                                    <li>
+                                        {{ bus_data.service_name }}
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="col-lg-2">
+
+                            </div>
+                        </div>
+                        <br/>
+                        {% include "ztree/active.html" %}
+                        {% if request.user.is_superuser or request.session.fun_auth.select_host %}
+                            <div class="ibox float-e-margins">
+                                <div id="host_list_table">
+                                    <form class="form-inline" id="swan_form">{% csrf_token %}
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="select_all"/></th>
+                                                <th> eth1</th>
+                                                <th> 机柜</th>
+                                                <th> 业务</th>
+                                                <th> 状态</th>
+                                                <th> 操作</th>
+                                            </tr>
+                                            </thead>
+
+                                            {% for i in server_list %}
+                                                <tbody>
+                                                <tr>
+                                                    <td width="40"><input type="checkbox" name="node_name"
+                                                                          value="{{ i.node_name }}"/></td>
+                                                    <td width="120"><a href="/assets/host_detail/?uuid={{ i.uuid }}"
+                                                                       class="select_node"><i class="fa fa-linux"
+                                                                                              style="color:#080506"></i> {{ i.eth1 }}
+                                                    </a></td>
+                                                    <td width="100">
+                                                        {% if i.room_number %}{{ i.room_number }} {% endif %}
+                                                        {% if i.cabinet %}- {{ i.cabinet }} - {% endif %}
+                                                        {% if i.server_cabinet_id %}
+                                                            {{ i.server_cabinet_id }}{% endif %}</td>
+                                                    {#                                <td width="200">  {% if i.business %}<a href="/assets/server/server_type/{{ i.business.id }}/ ">{{ i.business }}</a>{% endif %}  </td>#}
+                                                    <td width="100">
+                                                        {% for s in i.uuid|business_list %}
+                                                            <a href="/assets/server/server_type/?service_name={{ s }}"
+                                                               class="btn btn-info btn-xs">{{ s }}</a>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td width="50">
+                                                        <div class="btn-group tooltip-demo" data-toggle="buttons">
+                                                            {% if i.status == 0 %}
+                                                                <span class="glyphicon glyphicon-remove"
+                                                                      data-toggle="tooltip" data-placement="bottom"
+                                                                      title="未安装系统" aria-hidden="true"
+                                                                      style="color: #ff6846"></span>
+                                                            {% elif i.status == 1 %}
+                                                                <span class="glyphicon glyphicon-ok" aria-hidden="true"
+                                                                      data-toggle="tooltip" data-placement="bottom"
+                                                                      title="已安装系统" style="color:#2ad49e"></span>
+                                                            {% else %}
+                                                                <span class="glyphicon glyphicon-saved"
+                                                                      aria-hidden="true" data-toggle="tooltip"
+                                                                      data-placement="bottom" title="安装系统中..."
+                                                                      style="color:#2d98d4"></span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </td>
+                                                    <td width="160">
+                                                        <div class="tooltip-demo">
+                                                            {% if request.user.is_superuser or request.session.fun_auth.edit_host %}
+                                                                <a href="/assets/host_edit/?uuid={{ i.uuid }}"
+                                                                   class="btn btn-xs btn-primary node-edit"
+                                                                   data-toggle="tooltip" data-placement="bottom"
+                                                                   title="修改"><i class="fa fa-edit"></i></a>
+                                                            {% endif %}
+                                                            {% if request.user.is_superuser or request.session.fun_auth.delete_host %}
+                                                                <a href="/assets/host_del/?uuid={{ i.uuid }}"
+                                                                   class="btn btn-xs btn-danger node-edit"
+                                                                   data-toggle="tooltip" data-placement="bottom"
+                                                                   title="删除"><i class="fa fa-trash-o"></i></a>
+                                                            {% endif %}
+                                                            {% if i.status == 1 and request.user.is_superuser or request.session.fun_auth.update_host %}
+                                                                <a href="/assets/update_id/{{ i.uuid }}/"
+                                                                   class="btn btn-xs btn-success" data-toggle="tooltip"
+                                                                   data-placement="bottom" title="自动上报硬件信息"><i
+                                                                        class="fa fa-recycle">更新</i></a>
+                                                            {% elif request.user.is_superuser or request.session.fun_auth.update_host %}
+                                                                <a href="/assets/update_id/{{ i.uuid }}/"
+                                                                   class="btn btn-xs btn-success disabled"
+                                                                   data-toggle="tooltip" data-placement="bottom"
+                                                                   title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                                            {% else %}
+                                                            {% endif %}
+                                                            {% if request.user.is_superuser or request.session.fun_auth.setup_system %}
+                                                                {#                                        <button type="button" class="btn btn-xs" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Tooltip on bottom</button>#}
+                                                                <a href="{% url 'host_edit' %}{{ i.uuid }}/"
+                                                                   class="btn btn-xs btn-danger voilet_restart"
+                                                                   data-toggle="tooltip" data-placement="bottom"
+                                                                   title="重装系统"><i class="fa fa-desktop">装机</i></a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            {% endfor %}
+                                        </table>
+                                        <div class="input-group">
+                                            {#                                <button href="{% url 'host_edit' %}{{ i.uuid }}/" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="执行命令"><i class="fa fa-desktop">执行命令</i></button>#}
+                                            <button type="button" class="btn btn-primary" id="node_list_cmd"
+                                                    onclick="return false">批量执行命令
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <div class="clearfix visible-xs-block"></div>
+                                </div>
+                            </div>
+                            <div class="row salt-cmd">
+                                <form method="post" action="{% url 'cmd_run' %}?args=cmd" id="run_form">{% csrf_token %}
+                                    <div class="col-lg-9">
+                                        <h3>请输入执行命令</h3>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="salt_cmd" id="salt_cmd"
+                                                   placeholder="如:ifconfig  命令可连输哦，如ls;pwd;uname -a中间以;做分割"
+                                                   maxlength="100" size="60">
+                                            <span class="input-group-btn">
+                                              <button class="btn btn-success" href="{% url 'cmd_run' %}?args=cmd"
+                                                      id="button" type="submit">执行
+                                              </button>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        <div id="return_block"></div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <h3>选中的机器</h3>
+                                        <div class="input-group">
+                                            <ul id="node_name_list" class="list-unstyled"></ul>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        {% else %}
+                            <br>
+                            <div class="alert alert-dismissable alert-warning">
+
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    ×
+                                </button>
+                                <h4>
+                                    Alert!
+                                </h4> <strong>Warning!</strong> 你没有权限查看,请联系管理员申请权限或发送邮件到op@fun.tv申请权限
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mail-box"></div>
+                    </div>
+                    {#            </div>#}
+                {% else %}
+                    <div class="alert alert-dismissable alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4>
+                            Alert!
+                        </h4> <strong>Warning!</strong> 走错地方了吧，或许你的URL不应该是你有权限访问的哦
+                    </div>
+                {% endif %}
+        </div>
+    </div>
+
+    {% include "ztree/edit_node.html" %}
+    <style>
+        #node_name_list {
+            width: 200px;
+            height: auto;
+            max-height: 400px;
+            min-height: 80px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin: 0px;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+            color: #555;
+            display: block;
+            font-size: 14px;
+            line-height: 1.42857;
+            padding: 6px 12px;
+            transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+            vertical-align: middle;
+        }
+
+        .salt-cmd {
+            display: none;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        $(function () {
+
+            $('.node_cmd').click(function () {
+                var node_name = $(this).attr('value');
+                var li_html = "<li>" + node_name + "</li>";
+                li_html += "<li><input  type='hidden' name='node_name' value=" + node_name + "></li>";
+                $('#node_name_list').html(li_html);
+                $('#host_list_table').remove();
+                $('.salt-cmd').show()
+            });
+
+            $('#node_list_cmd').click(function () {
+                $("table :checked").each(function () {
+                    node_name = $(this).attr('value');
+                    if (node_name != undefined) {
+                        var li_html = "<li>" + node_name + "</li>";
+                        li_html += "<li><input  type='hidden' name='node_name' value=" + node_name + "></li>";
+                        li_html += "<li><input hidden='hidden' name='project' value='{{ business_item }}'></li>";
+                        $('#node_name_list').append(li_html);
+                        $('#host_list_table').remove();
+                        $('.salt-cmd').show();
+                    }
+                    ;
+                });
+            });
+
+            $('#button').unbind('click').bind('click', function () {
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr("href"),
+                    data: $("#run_form").serialize(),
+                    beforeSend: function(){             // 设置表单提交前方法
+                        $("#return_block").html('<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span class="sr-only">100% Complete</span>正在执行中</div></div>');
+                    },
+                    success: function (data) {
+                        $("#return_block").html(data);
+                    }
+                });
+                return false;
+            });
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate log_list 30 %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>资产操作日志 | cmdb log.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<style>
+    .voilet_top{margin-top:10px}
+</style>
+<div class="voilet_top"></div>
+    <pre><ul>{% for i in log_list %}<li>{{ i.edit_time }} {{ i.edit_user_name }} 对 {{ i.edit_server_nodename }} 做了 <span style="color: #ff0000;font-weight:bold;">{{ i.edit_server_type }}</span> 操作，上次修改人是{{ i.old_editname }},上次修改时间是 {{ i.old_editdatetime }}</li>{% endfor %}
+    </ul></pre>
+    <div  class="voilet_page">
+         {% paginate %}
+    </div>
+
+{% endblock content %}
+
+
+
+
+
+

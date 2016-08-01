@@ -1,0 +1,177 @@
+{% include "default/header.html" %}
+{% include "default/op_left.html" %}
+<style>
+    .col-sm-2{width:100px;margin-left:8px;}
+    .form-group select {width:300px;}
+    .form-control.form-control{width:300px;}
+    .form-group select {border: 1px solid #CCCCCC;}
+</style>
+<div id="content-block" class="col-sm-11 col-md-10">
+    <pre>增加报璋</pre>
+        <form class="exform form-horizontal" action="opadd" method="post" id="post_form" style="padding-top:8px;">
+            {% csrf_token %}
+            	<div class="form-group">
+                     <label for="inputEmail3" class="col-sm-2">故障类型</label>
+                    <div class="col-sm-10" id="id_fault_type" name="fault_type">
+                       {{ uf.fault_type }}
+                    </div>
+                </div>
+                <div class="form-group">
+                     <label for="inputEmail3" class="col-sm-2">报障来原</label>
+                    <div class="col-sm-10 " id="id_Source" name="Source">
+                       {{ uf.Source }}
+                    </div>
+                </div>
+                <div class="form-group">
+                     <label for="inputPassword3" class="col-sm-2">故障描述</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="id_title" maxlength="64" name="title" type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                     <label for="inputPassword3" class="col-sm-2">发现时间</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="id_Occur_date" name="Occur_date" type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                     <label for="inputPassword3" class="col-sm-2">发生时间</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="id_Discovery_date" name="Discovery_date" type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                     <label for="inputPassword3" class="col-sm-2">解决时间</label>
+                    <div class="col-sm-10" id="datetimepicker">
+                        <input class="form-control" id="id_Solve_date" name="Solve_date" type="text" /><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+                    </div>
+                </div>
+{#                <div id="datetimepicker" class="input-append date">#}
+{#                  <input type="text"></input>#}
+{#                  <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>#}
+{#                </div>#}
+                <div class="form-group">
+                     <label for="inputPassword3" class="col-sm-2">处理过程</label>
+                    <div class="col-sm-10">
+                        <textarea id="editor" name="content" style="width:auto;height:auto;"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-0 col-sm-0">
+                         <button type="submit" class="btn btn-default">提交</button>
+                    </div>
+                </div>
+        </form>
+
+    </div>
+    </div>
+
+
+{#编缉器JS#}
+<script type="text/javascript">
+    var ue=new UE.ui.Editor();
+    ue.render('editor');
+    ue.addListener("selectionchange",function(){
+        var state = ue.queryCommandState("source");
+        var btndiv = document.getElementById("btns");
+        if(btndiv){
+            if(state){
+                btndiv.style.display = "none";
+            }else{
+                btndiv.style.display = "";
+            }
+        }
+
+    });
+    function getContent(){
+        var arr = [];
+        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        arr.push("内容为：");
+        arr.push(ue.getContent());
+        alert(arr.join("\n"));
+    }
+    function getPlainTxt(){
+        var arr = [];
+        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+        arr.push("内容为：");
+        arr.push(ue.getPlainTxt());
+        alert(arr.join('\n'))
+    }
+    function setContent(){
+        var arr = [];
+        arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+        ue.setContent('欢迎使用ueditor');
+        alert(arr.join("\n"));
+    }
+
+    function getText(){
+        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+        var range = ue.selection.getRange();
+        range.select();
+        var txt = ue.selection.getText();
+        alert(txt)
+    }
+
+    function testueditor(){
+            mycontent=ue.getContentTxt();
+            alert(mycontent);
+    }
+
+    function insertueditor(){
+            ue.execCommand('insertHtml',"自定义插件，我的名片        ");
+    }
+
+    function getContentTxt(){
+        var arr = [];
+        arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+        arr.push("编辑器的纯文本内容为：");
+        arr.push(ue.getContentTxt());
+        alert(arr.join("\n"));
+    }
+    function hasContent(){
+        var arr = [];
+        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+        arr.push("判断结果为：");
+        arr.push(ue.hasContents());
+        alert(arr.join("\n"));
+    }
+    function setFocus(){
+        ue.focus();
+
+    }
+    function deleteEditor(){
+        var div = document.getElementById('allbtn');
+        var btns = baidu.editor.dom.domUtils.getElementsByTagName(div,"a");
+        for(var i=0,btn;btn=btns[i++];){
+                    btn.style.cssText = "color:#ccc;text-decoration:none;cursor:default";
+            btn.onclick = function(){
+                return false;
+            };
+        }
+        ue.destroy();
+    }
+        function setEnabled(){
+            var div = document.getElementById('allbtn');
+        var btns = baidu.editor.dom.domUtils.getElementsByTagName(div,"a");
+        for(var i=0,btn;btn=btns[i++];){
+                        btn.style.cssText = "color:#3E3E3E;text-decoration:none;cursor:pointer";
+        }
+            ue.setEnabled();
+        }
+        function setDisable(){
+            var div = document.getElementById('allbtn');
+        var btns = baidu.editor.dom.domUtils.getElementsByTagName(div,"a");
+        for(var i=0,btn;btn=btns[i++];){
+                    if(btn.innerHTML != "可以编辑"){
+                                btn.style.cssText = "color:#ccc;text-decoration:none;cursor:default";
+                        }
+        }
+            ue.setDisabled("fullscreen");
+        }
+
+</script>
+
+<!-- baidu ueditor end -->
+
+
+ {% include "default/footer.html" %}

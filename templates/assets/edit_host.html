@@ -1,0 +1,133 @@
+{% extends 'assets/base.html' %}
+{% load bootstrap %}
+{% block content %}
+<style>
+{#    .col-sm-10 ul{list-style-type:none;line-height:33px;}#}
+{#    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}#}
+{##}
+{#.control-label{width:100px;}#}
+{#.form-control{width:100%;}#}
+{#.col-sm-10 select{width:100%;}#}
+.voilet_bottom{margin-left:100px;margin-bottom:100px;}
+.voilet_bottom{margin-bottom:30px;}
+.voilet_bottom_top{padding-top:40px;}
+{#.mail-box-header{height:1900px;}#}
+{#.float-e-margins{height:1800px;}#}
+{##}
+</style>
+<div>
+<div id="data_ok"></div>
+<form class="form-horizontal"  method="post" id="form_data">
+    {% csrf_token %}
+    {{ uf.node_name|bootstrap_horizontal }}
+    {{ uf.room_number|bootstrap_horizontal }}
+    {{ uf.eth1|bootstrap_horizontal }}
+    {{ uf.eth2|bootstrap_horizontal }}
+    {{ uf.mac|bootstrap_horizontal }}
+    {{ uf.internal_ip|bootstrap_horizontal }}
+    {{ uf.idc|bootstrap_horizontal }}
+    {{ uf.room_number|bootstrap_horizontal }}
+    {{ uf.cabinet|bootstrap_horizontal }}
+    {{ uf.server_cabinet_id|bootstrap_horizontal }}
+    {{ uf.number|bootstrap_horizontal }}
+
+    <!-- 业务 -->
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="groups" class="col-lg-2 control-label">所属服务组</label>
+
+        <div class="col-sm-3">
+            <select id="groups" size="12" class="form-control m-b" multiple>
+            {% for i in business %}
+                {% if i not in business_group %}
+                    <option value="{{ i.id }}">{{ i }}</option>
+                {% endif %}
+            {% endfor %}
+            </select>
+        </div>
+        <div class="col-sm-1">
+            <div class="btn-group" style="margin-top: 50px;">
+                <button type="button" class="btn btn-white" onclick="move_right('groups', 'groups_selected')"><i class="fa fa-chevron-right"></i></button>
+                <button type="button" class="btn btn-white" onclick="move_left('groups_selected', 'groups')"><i class="fa fa-chevron-left"></i> </button>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div>
+                <select id="groups_selected" name="business" class="form-control m-b" size="12"  multiple>
+                {% for i in business %}
+                    {% if i in business_group %}
+                        <option value="{{ i.id }}" selected >{{ i}}</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <!-- 业务 -->
+
+    {{ uf.service|bootstrap_horizontal }}
+    {{ uf.env|bootstrap_horizontal }}
+    {{ uf.cpu|bootstrap_horizontal }}
+    {{ uf.core_num|bootstrap_horizontal }}
+    {{ uf.hard_disk|bootstrap_horizontal }}
+    {{ uf.memory|bootstrap_horizontal }}
+    {{ uf.system|bootstrap_horizontal }}
+    {{ uf.system_cpuarch|bootstrap_horizontal }}
+    {{ uf.sort|bootstrap_horizontal }}
+    {{ uf.vm|bootstrap_horizontal }}
+    {{ uf.Services_Code|bootstrap_horizontal }}
+    {{ uf.brand|bootstrap_horizontal }}
+    {{ uf.guarantee_date|bootstrap_horizontal }}
+    {{ uf.server_sn|bootstrap_horizontal }}
+    {{ uf.editor|bootstrap_horizontal }}
+
+    <div class="voilet_bottom"><a href="/assets/edit_id/{{ edit_id.id }}/" onclick="return false" class="btn btn-info btn-block edit-save" >保存</a></div>
+    <div class="voilet_bottom_top"></div>
+    <div class="clearfix visible-xs-block"></div>
+</form>
+</div>
+<script>
+    function move_left(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+                $(this).attr("selected",'false');
+            }
+            $(this).attr("selected",'true');
+        });
+    }
+    function move_right(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+            }
+
+        });
+    }
+
+    function move_all(from, to){
+        $("#"+from).children().each(function(){
+            $("#"+to).append(this);
+        });
+    }
+
+ $(function(){
+     $('.edit-save').unbind('click').bind('click',function(){
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#form_data').serialize(), // 从表单中获取数据
+             dataType:'text',
+             success: function(msg){
+                 window.location.reload();
+             }
+         });
+      });
+ });
+
+</script>
+{% endblock content %}
+
+
+

@@ -1,0 +1,138 @@
+{% include 'default/header.html' %}
+{% include 'default/auto_left.html' %}
+{% load pagination_tags %}
+{% autopaginate node 10 %}
+<style>
+
+.voilet label{float:left;margin-left:8px;}
+</style>
+<div id="content-block" class="col-sm-11 col-md-10">
+<table class="table table-bordered">
+    <pre>选择需要推送的项目</pre>
+	<thead>
+		<tr>
+			<th width="60">
+				<input id="checkAll" type="checkbox">
+			</th>
+			<th>
+				主机名
+			</th>
+			<th>
+				机房
+			</th>
+			<th>
+				eth1
+			</th>
+			<th>
+				内存
+			</th>
+            <th>
+				核数
+			</th>
+            <th>
+				硬盘
+			</th>
+            <th>
+				服务器型号
+			</th>
+			<th>
+				系统
+			</th>
+			<th>
+				业务
+			</th>
+			<th>
+				用途
+			</th>
+            <th>
+				状态
+			</th>
+
+		</tr>
+	</thead>
+<form id="changelist-form" method="POST" action="">{% csrf_token %}
+    {% for i in node %}
+{#        {% if i.status == 0 %}#}
+	<tbody>
+		<tr >
+            <td>
+                <label for="checkbox-inline"><input id="id_business_{{ i.id }}" type="checkbox" name="hostname_id" value="{{ i.id }}"></label>
+            </td>
+			<td width="200">
+				<a href="/assets/server/node_id/{{ i.id }}/" >{{ i.node_name }}</a>
+			</td>
+			<td width="125">
+				{{ i.idc }}
+			</td>
+			<td width="150">
+				{{ i.eth1 }}
+			</td>
+			<td width="80">
+				{% widthratio i.memory 1024 1 %}G
+			</td>
+            <td width="100">
+				{{ i.core_num }} Cores
+			</td>
+            <td width="100">
+                {% if i.hard_disk %}
+				{{ i.hard_disk }} G
+                    {% else %}
+                    无数据
+                {% endif %}
+			</td>
+            <td width="100">
+				{{ i.brand }}
+			</td>
+			<td width="160">
+				{{ i.system }} - {{ i.system_cpuarch }}
+			</td>
+			<td width="100">
+                {% for test in i.business.all %}
+                    <a href="/assets/server/server_type/{{ test.id }}/ ">{{ test.service_name }}</a>
+                {% endfor %}
+			</td>
+			<td>
+				{{ i.usage }}
+			</td>
+            <td width="50">
+				<button class="btn btn-xs btn-primary" data-toggle="modal">安装系统</button>
+			</td>
+		</tr>
+	</tbody>
+    {% endfor %}
+    </table>
+    <div class="clearfix"></div>
+    <div class="voilet">
+    {% for i in sls %}
+        <label for="checkbox-inline"><input id="sls" type="checkbox" value="{{ i.sls_name }}" name="sls"> {{ i.sls_name }}</label>
+    {% endfor %}
+    </div>
+    <div class="clearfix"></div>
+    <pre>请选择需要安装的服务或包名</pre>
+    <button type="submit" class="btn btn-success btn-sm">批量安装服务</button>
+</form>
+
+    <div  class="voilet_page">
+         {% paginate %}
+    </div>
+</div>
+
+{#{{ uf }}#}
+{% include 'default/footer.html' %}
+
+{#<script src="http://code.jquery.com/jquery-1.4.4.min.js" type="text/javascript"></script>#}
+
+<script type="text/javascript">
+    $(function() {
+       $("#checkAll").click(function() {
+            $('input[name="hostname_id"]').attr("checked",this.checked);
+        });
+        var $subBox = $("input[name='hostname_id']");
+        $subBox.click(function(){
+            $("#checkAll").attr("checked",$subBox.length == $("input[name='hostname_id']:checked").length ? true : false);
+        });
+    });
+</script>
+
+
+

@@ -1,0 +1,113 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load bootstrap %}
+{#<link rel="stylesheet" type="text/css" href="/static/js/bootsrap-select/bootstrap-select.min.css" />#}
+{#<script type="text/javascript" src="/static/js/bootsrap-select/bootstrap-select.min.js"></script>#}
+<style xmlns="http://www.w3.org/1999/html">
+    .col-sm-10 ul{list-style-type:none;line-height:33px;padding-left:0}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+.voilet_top{margin-top:10px;}
+</style>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>添加项目 | Add business.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="voilet_top"></div>
+<form class="form-horizontal"  method="post" role="form" >
+    {% csrf_token %}
+    <div id="content-block" class="col-sm-11 col-md-10">
+        {{ uf.service_name|bootstrap_horizontal }}
+        {{ uf.aliases_name|bootstrap_horizontal }}
+        {{ uf.project_contact|bootstrap_horizontal }}
+        {{ uf.project_contact_backup|bootstrap_horizontal }}
+        {{ uf.line|bootstrap_horizontal }}
+
+{#        {{ uf.project_user_group|bootstrap_horizontal }}#}
+        <!-- 业务 -->
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label for="groups" class="col-lg-2 control-label">研发用户列表</label>
+            <div class="col-sm-4">
+                <select id="groups" size="12" class="form-control m-b" multiple>
+                {% for i in user_list %}
+                    {% if i not in user_group %}
+                        <option value="{{ i.id }}">{{ i }}</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-1">
+                <div class="btn-group" style="margin-top: 50px;">
+                    <button type="button" class="btn btn-white" onclick="move('groups', 'groups_selected')"><i class="fa fa-chevron-right"></i></button>
+                    <button type="button" class="btn btn-white" onclick="move('groups_selected', 'groups')"><i class="fa fa-chevron-left"></i> </button>
+                </div>
+            </div>
+{#             {% for i in user_list %}#}
+            <div class="col-sm-4">
+                <div>
+                    <select id="groups_selected" name="project_user_group" class="form-control m-b" size="12"  multiple>
+                    {% for i in user_list %}
+                        {% if i in user_group %}
+                            <option value="{{ i.id }}">{{ i }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </select>
+                </div>
+            </div>
+{#            {% endfor %}#}
+        </div>
+        <!-- 业务 -->
+        {{ uf.description|bootstrap_horizontal }}
+        {{ uf.sort|bootstrap_horizontal }}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                 <button type="submit" class="btn btn-success btn-block">保存</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script type="text/javascript">
+function move(from, to) {
+    $("#"+from+" option").each(function(){
+        if ( $(this).prop("selected") == true ) {
+            $("#"+to).append(this);
+            }
+    });
+}
+
+function move_all(from, to){
+    $("#"+from).children().each(function(){
+        $("#"+to).append(this);
+    });
+}
+$(function(){
+    $('.selectpicker').selectpicker();
+});
+ </script>
+
+{% endblock content %}
+
+
+
+

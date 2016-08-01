@@ -1,0 +1,172 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{% block content %}
+<style>
+.voilet-top{margin-top:8px;}
+#websocket_rest{margin-top:12px;}
+#content-block{margin-top:10px;}
+.voilet{margin-left:12px;}
+.voilet-left{margin-left:16px;}
+.voilet a{margin-left:2px;}
+</style>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>自动化发布 | Assets List.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+
+<div id="content-block">
+    <div id="result">
+        <form class="form-inline" id="swan_form" >
+        {% csrf_token %}
+            <div class="row">
+                <div class="input-group col-lg-12 voilet-left">
+                    <div class="input-group col-lg-3">
+                        <select id="project_name" class="form-control select_business" name="project_name">
+                            <option value="{{ project_name }}" selected="selected">{{project_name}}</option>
+                        </select>
+                    </div>
+                    <div class="input-group voilet-left voilet-margin">
+                        <div id="result_select">
+                            <select id="swan_name" class="form-control parameters" name="project_all_tag">
+                                <option value="{{ module_name }}" selected="selected">{{ module_name }}</option>
+                            </select>
+                         </div>
+                     </div>
+                    <div class="input-group voilet-margin">
+                        <div id="result_Parameters">
+                            <select id="tgt_name" class="form-control" name="tgt">
+                                {% ifequal module_type 0 %}
+                                    <option value="" selected="selected">{{ module_tgt }}</option>
+                                {% else %}
+                                    <option value="" selected="selected">选择项目参数</option>
+                                {% endifequal %}
+                            </select>
+                         </div>
+                     </div>
+                    <div class="input-group voilet-left voilet-margin">
+                        <select id="id-arg" class="form-control" name="arg">
+                            <option value="" selected="selected">请选择发布参数</option>
+                            <option value="all">all</option>
+                            <option value="dynamic">dynamic</option>
+                            <option value="static">static</option>
+                        </select>
+                     </div>
+                    <div class="input-group voilet">
+                        <span class="input-group-btn">
+                           <a class="btn btn-primary swan_push monitor" href="/swan/release/" onclick="return false">发布</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row voilet-top">
+              <div class="col-lg-6">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="请输入回退版本号">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" >回退</button>
+                  </span>
+                </div><!-- /input-group -->
+              </div><!-- /.col-lg-6 -->
+              <div class="col-lg-6">
+            </div><!-- /.row -->
+          </div>
+        <div id="host_rest"></div>
+      </form>
+        <div class="clearfix visible-xs-block"></div>
+      <div id="websocket_rest">
+          <table class="table table-striped table-bordered table-hover " id="editable" >
+            <thead>
+                <tr>
+                    <th class="text-center"><input id="select_all" type="checkbox" class="i-checks" name="checkall" value="checkall"></th>
+                    <th class="text-center"> eth1 </th>
+                    <th class="text-center"> 机柜 </th>
+                    <th class="text-center"> 系统状态 </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for post in posts %}
+                <tr class="gradeX">
+                    <td class="text-center"><input name="node_name" value="{{ post.eth1 }}" type="checkbox"></td>
+                    <td class="text-center"> {{ post.eth1 }} </td>
+                    <td class="text-center"> {{ post.room_number }} </td>
+                    <td class="text-center">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-xs btn-success disabled"><input type="radio" name="options" id="option3">
+                                {% ifequal post.auto_insatll 0 %}
+                                    未安装系统
+                                {% endifequal %}
+                                {% ifequal post.status 1 %}
+                                    OK
+                                {% endifequal %}
+                                {% ifequal post.status 2 %}
+                                    正在安装
+                                {% endifequal %}
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+
+<script>
+   $('.swan_push').unbind('click').bind('click',function(){
+       var project_name=$("#project_name").val();
+       var project_name_all=$("#swan_name").val();
+       var project_name_tgt=$("#tgt_name").val();
+       if(project_name == ""){
+           $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>项目名必选</div>");
+            return false;
+       }
+       if(project_name_all == ""){
+           $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-warning\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>发布功能必选</div>");
+            return false;
+       }
+       // if(project_name_tgt == ""){
+       //     $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-info\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>项目参数必选</div>");
+       //      return false;
+       // }
+
+       else {
+           $.ajax({
+           type: "POST",
+           url: $(this).attr("href"),                  // 提交的页面
+           data: $('#swan_form').serialize(), // 从表单中获取数据
+           dataType:'text',
+           success: function(data){
+               // alert(data);
+               $("#voilet_websocket").remove();
+                 BootstrapDialog.show({
+                     title: "发布日志",
+                     message: $('<div></div>').load('/swan/websocket/'),
+                     closable: true,
+                     closeByBackdrop: false,
+                     closeByKeyboard: false
+                 });
+
+                //$("#websocket_rest").html(data);
+           }
+        });
+       }
+   });
+
+    $(document).on("click","#select_all",function(e){
+       var selected = $("#select_all").prop("checked");
+       if(selected){
+         $("input[name='node_name']").prop('checked',true);
+       }else{
+         $("input[name='node_name']").prop("checked",false);
+       }
+     });
+
+</script>
+
+{% endblock content %}

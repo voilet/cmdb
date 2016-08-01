@@ -1,0 +1,195 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{% block content %}
+<h1 class="text-center">项目发布申请</h1>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="add_asset" class="ibox float-e-margins">
+                <div id="ibox-content" class="ibox-title">
+                    <h5> 填写要发布项目的基本信息 </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">未启用 1</a>
+                            </li>
+                            <li><a href="#">未启用 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+                    {% if emg %}
+                        <div class="alert alert-warning text-center">{{ emg }}</div>
+                    {% endif %}
+                    {% if smg %}
+                        <div class="alert alert-success text-center">{{ smg }}</div>
+                    {% endif %}
+                    <form id="assetForm" method="post" class="form-horizontal">
+                        {% csrf_token %}
+{#                        <div class="form-group"><label class="col-sm-2 control-label"> 申请人 </label>#}
+{#                            <div class="col-sm-8"><input type="text" name="applyer" value="{{  request.user.first_name }}" class="form-control" readonly="readonly"></div>#}
+{#                        </div>#}
+{##}
+{#                        <div class="hr-line-dashed"></div>#}
+                        <div class="form-group">
+                            <label for="project_name"  class="col-lg-2 control-label"> 项目名称 <span class="red-fonts">*</span> </label>
+                            <div class="col-sm-8">
+                                <select id="project_name" name="project_name" class="form-control m-b select_business">
+                                     <option  value="">选择项目名称</option>
+                                    {% for i in project_name %}
+                                        <option value="{{ i.uuid }}"> {{ i.service_name }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="swan_name"  class="col-lg-2 control-label"> 发布功能 <span class="red-fonts">*</span> </label>
+                            <div id="result_select" class="col-sm-8">
+                                <select id="swan_name" name="swan_name" class="form-control m-b">
+                                    <option value="" selected="selected">选择发布功能</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="result_Parameters"></div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="qa"  class="col-lg-2 control-label"> 测试部门接口人 <span class="red-fonts">*</span> </label>
+                            <div class="col-sm-8">
+                                <select id="qa" name="qa" class="form-control m-b">
+                                    {% for i in qa_users %}
+                                        <option> {{ i.first_name }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="op"  class="col-lg-2 control-label"> 运维部门接口人 <span class="red-fonts">*</span> </label>
+                            <div class="col-sm-8">
+                                <select id="op" name="op" class="form-control m-b">
+                                    {% for i in op_users %}
+                                        <option> {{ i.first_name }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-sm-2 control-label"> 发布说明 </label>
+                            <div class="col-sm-8"><textarea type="text" placeholder="" name="comment" class="form-control" rows="10" cols="20"></textarea></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-5">
+                                <!--<button class="btn btn-white" type="submit"> 重置 </button>-->
+                                <button class="btn btn-primary" type="submit"> 提交 </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+   $('.swan_push').unbind('click').bind('click',function(){
+       var project_name=$("#project_name").val();
+       var project_name_all=$("#swan_name").val();
+       var project_name_tgt=$("#tgt_name").val();
+       if(project_name == ""){
+           $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-danger\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>项目名必选</div>");
+            return false;
+       }
+       if(project_name_all == ""){
+           $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-warning\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>发布功能必选</div>");
+            return false;
+       }
+       // if(project_name_tgt == ""){
+       //     $("#websocket_rest").html("<div class=\"alert alert-dismissable alert-info\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button><strong>Warning! </strong>项目参数必选</div>");
+       //      return false;
+       // }
+
+       else {
+           $.ajax({
+           type: "POST",
+           url: $(this).attr("href"),                  // 提交的页面
+           data: $('#swan_form').serialize(), // 从表单中获取数据
+           dataType:'text',
+           success: function(data){
+               // alert(data);
+               $("#voilet_websocket").remove();
+                 BootstrapDialog.show({
+                     title: "发布日志",
+                     message: $('<div></div>').load('/swan/websocket/'),
+                     closable: true,
+                     closeByBackdrop: false,
+                     closeByKeyboard: false
+                 });
+
+                //$("#websocket_rest").html(data);
+           }
+        });
+       }
+   });
+    // 查询项目参数
+    $(function(){
+        $(document).ready(function(){
+            $('.select_business').change(function() {
+                if ($(this).val().length==0){return false}
+                $("#voilet_websocket").remove();
+                var project_name=$(this).val();
+                    var url= '/swan/swan_select/?project_name=' + project_name;
+                    $.ajax({
+                     type: "GET",
+                     url: url }).done(function( data ) {
+                     $("#result_select").html(data);
+                     // 联动查询主机
+                     $(document).triggerHandler("parament",project_name);
+                });
+
+                $.ajax({
+                     type: "GET",
+                     url: '/swan/swan_select_myfrom/?project_name=' + project_name }).done(function( data ) {
+                     $("#host_rest").html(data);
+                });
+
+            });
+
+            $(document).bind("parament", function(e,pname){
+                $('#swan_name').change(function() {
+                    $("#voilet_websocket").remove();
+                    var url= '/swan/swan_select_tgt/?project=' + pname + "&tgt=" + $(this).val() + "&type=apply";
+                        $.ajax({
+                         type: "GET",
+                         url: url }).done(function( data ) {
+                         $("#result_Parameters").html(data);
+                    });
+                    // console.log('/swan/swan_select_botton/?project=' + pname + "&swan_name=" + $(this).val());
+                    $.ajax({
+                         type: "GET",
+                         url: '/swan/swan_select_botton/?project=' + pname + "&swan_name=" + $(this).val() }).done(function( data ) {
+                         $("#host_rest").html(data);
+                    });
+                });
+            });
+
+        });
+    });
+
+</script>
+{% endblock content %}

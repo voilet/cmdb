@@ -1,0 +1,17 @@
+{% include "op_header.html" %}
+<form class="form-horizontal" method="post" action="">
+{#  <div class="control-group">#}
+{#    <label class="control-label" >清除缓存</label>#}
+{#    <div class="controls">#}
+{#        <input id="id_salt_cmd" type="text" name="nginx_cache_url" type="text">#}
+        <textarea id="id_salt_cmd"  name="nginx_cache_url" style="width:100%;height:200px;margin:10px auto;">
+
+        {{ nginx_cache_count }}
+        </textarea>
+        <br/>
+        <br/><button type="submit" class="btn" >提交</button>
+    </div>
+  </div>
+</form>
+{#{{ nginx_cache_count }}#}
+{% include "op_bottom.html" %}

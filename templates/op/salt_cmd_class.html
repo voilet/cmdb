@@ -1,0 +1,18 @@
+{% include 'op_header.html' %}
+<form class="form-horizontal" method="post" action="">
+  <div class="control-group-left">
+    <label class="control-label" >命令行</label>
+    <div class="controls">
+      <input id="id_salt_cmd" type="text" name="salt_cmd" type="text"> <button type="submit" class="btn" >提交</button>
+    </div>
+  </div>
+</form>
+<textarea name="show" style="width:100%;height:800px;margin:0 auto;">
+
+{% for key, value in cmd_class %}
+    主机：{{key}}
+    {{value}}
+{% endfor %}
+</textarea>
+</body>
+</html>

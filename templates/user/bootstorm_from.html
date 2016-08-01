@@ -1,0 +1,49 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+
+{% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>修改部门 | Add Department.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+
+<div class="col-md-10 column voilet_top">
+    <form class="form-horizontal" method="post" action="" role="form">{% csrf_token %}
+
+        {{ uf|bootstrap_horizontal }}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                 <button type="submit" class="btn btn-success btn-default btn-block">提交</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<style>
+    .voilet_top{margin-top:10px;}
+    .col-sm-10 ul{list-style-type:none;line-height:33px;}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+</style>
+{% endblock content %}

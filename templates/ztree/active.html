@@ -1,0 +1,19 @@
+<div class="panel-options">
+    <ul class="nav nav-tabs">
+        <li class="cmdb"><a href="/assets/ztree/business/?uuid={{ business_name }}&token={{ get_token }}&options=cmdb" class="text-center"><i class="fa fa-laptop"></i> 主机 </a></li>
+        <li class="doc"><a href="/assets/ztree/business/?uuid={{ business_name }}&token={{ get_token }}&options=doc" class="text-center"><i class="fa fa-laptop"></i> 文档 </a></li>
+        <li class="monitor"><a href="/assets/ztree/business/?uuid={{ business_name }}&token={{ get_token }}&options=monitor" class="text-center"><i class="fa fa-eye"></i> 监控 </a></li>
+        <li class="highstate"><a href="/assets/ztree/business/?uuid={{ business_name }}&token={{ get_token }}&options=highstate" class="text-center"><i class="fa fa-cubes"></i> 自动部署 </a></li>
+        <li class="swan_push"><a href="/assets/ztree/business/?uuid={{ business_name }}&token={{ get_token }}&options=swan_push" class="text-center"><i class="fa fa-bar-chart-o"></i>代码发布</a></li>
+        <li class="service"><a href="/assets/ztree/business/?uuid={{ business_name }}&token={{ get_token }}&options=service" class="text-center"><i class="fa fa-bar-chart-o"></i>基础服务</a></li>
+        {% if request.user.is_superuser %}
+        <li class="salt"><a href="/assets/ztree/business/?uuid={{ business_name }}&token={{ get_token }}&options=salt" class="text-center"><i class="fa fa-linux"></i>执行命令</a></li>
+        {% endif %}
+    </ul>
+</div>
+<div class="clearfix visible-xs-block"></div>
+<!-- 右侧菜单栏控制 -->
+<script type="text/javascript">
+    $("." + urlParam('options')).addClass('active');
+</script>
+

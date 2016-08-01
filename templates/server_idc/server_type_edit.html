@@ -1,0 +1,123 @@
+{% block content %}
+{% load bootstrap %}
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;padding-left:0}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+    }
+    .float-e-margins{height:1080px;}
+</style>
+<div id="data_ok"></div>
+<form class="form-horizontal" id="form_data" action="" method="post" role="form" >
+    {% csrf_token %}
+    <div id="content-block" class="col-sm-12">
+        {{ uf.service_name|bootstrap_horizontal }}
+        {{ uf.aliases_name|bootstrap_horizontal }}
+        {{ uf.project_contact|bootstrap_horizontal }}
+        {{ uf.project_contact_backup|bootstrap_horizontal }}
+        {{ uf.line|bootstrap_horizontal }}
+        {{ uf.description|bootstrap_horizontal }}
+{#        {{ uf.project_user_group|bootstrap_horizontal }}#}
+        <!-- 业务 -->
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label for="groups" class="col-lg-2 control-label">研发用户列表</label>
+            <div class="col-sm-4">
+                <select id="groups" size="12" class="form-control m-b" multiple>
+                {% for i in dev_group_userlist %}
+                    {% if i.id not in user_list_id %}
+                        <option value="{{ i.id }}">{{ i }}</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-1">
+                <div class="btn-group" style="margin-top: 50px;">
+                    <button type="button" class="btn btn-white" onclick="move('groups', 'groups_selected')"><i class="fa fa-chevron-right"></i></button>
+                    <button type="button" class="btn btn-white" onclick="move('groups_selected', 'groups')"><i class="fa fa-chevron-left"></i> </button>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div>
+                    <select id="groups_selected" name="project_user_group" class="form-control m-b" size="12"  multiple >
+                        {% for i in dev_group_userlist %}
+                            {% if i.id in user_list_id %}
+                                <option value="{{ i.id }}" selected >{{ i }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- 业务 -->
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                     <button href="{% url 'project_edit_ajax' uuid %}" onclick="return false;" class="btn btn-success btn-block click-save">保存</button>
+                </div>
+            </div>
+    </div>
+
+</form>
+    <script>
+    function move(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+            }
+            $(this).attr("selected",'true');
+        });
+    }
+
+    function move_all(from, to){
+        $("#"+from).children().each(function(){
+            $("#"+to).append(this);
+        });
+    }
+
+ // $(function(){
+ //     $('.click-save').unbind('click').bind('click',function(){
+ //         console.log("jquery is ok");
+ //         $.ajax({
+ //             type: "POST",
+ //             url: $(this).attr("href"),                  // 提交的页面
+ //             data: $('#form_data').serialize(), // 从表单中获取数据
+ //             dataType:'text',
+ //             success: function(msg){
+ //                 $("#data_ok").html(msg);                    // 设置表单提交完成使用方法
+ //             }
+ //         });
+ //      });
+ // });
+
+  $('.click-save').unbind('click').bind('click',function(){
+     $.ajax({
+         type: "POST",
+         url: $(this).attr("href"),                  // 提交的页面
+         data: $('#form_data').serialize(), // 从表单中获取数据
+         error: function(request){           // 设置表单提交出错
+           alert("表单提交出错，请稍候再试");
+         },
+         dataType:'text',
+         success: function(msg){
+            window.location.reload();
+         }
+     });
+  });
+
+</script>
+{% endblock content %}
+

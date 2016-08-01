@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>风行运维自动化 | Login</title>
+
+    {% include 'link_css.html' %}
+    {% include 'script.html' %}
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+
+                <div class="col-md-12 column">
+                    <img  src="/static/img/logo1.jpg" width="140" height="140" class="img-circle" />
+                </div>
+
+            </div>
+            <h3>欢迎使用风行运维自动化管理系统</h3>
+            <p>
+                <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
+            </p>
+            <p>Login in. To see it in action.</p>
+            <form class="m-t" role="form" method="post" action="">{% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="username" id="id_username" name='username' required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="id_password" name="password"  placeholder="Password" required="">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+                <input type="hidden" name="next" value="{{ next }}" />
+                <a href="/accounts/resetpass/"><small>Forgot password?</small></a>
+                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+            </form>
+            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+{% extends "default/base.html" %}
+{% load business_tag %}
+{% load zabbix %}
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate server_list 10 %}
+<div class="wrapper wrapper-content">
+        <div class="row">
+            {% include "ztree/ztree_js.html" %}
+            <div class="col-lg-9 animated fadeInRight">
+            {% if content_status %}
+                <div class="mail-box-header">
+                        <div class="row wrapper border-bottom white-bg page-heading">
+                            <div class="col-lg-10">
+                                <h2>{{ bus_data }}</h2>
+                                <ol class="breadcrumb">
+                                    <li>
+                                        <a href="/">首页</a>
+                                    </li>
+                                    <li>
+                                        {{ bus_data }}
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="col-lg-2">
+
+                            </div>
+                        </div>
+                        <br/>
+                        {% include "ztree/active.html" %}
+                        <div class="ibox float-e-margins">
+                            <div id="result">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select_all" /></th>
+                                        <th> eth1 </th>
+                                        <th> 监控项(个) </th>
+                                        <th> 报警 </th>
+                                        <th> 操作 </th>
+                                    </tr>
+                                </thead>
+
+                                {% for i in server_list %}
+                                <tbody>
+                                    <tr >
+                                        <td width="40"><input type="checkbox" name="node_name" value="{{i.node_name}}" /></td>
+                                        <td width="120"> <a href="/assets/server/node_id/{{ i.uuid }}/" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                        <td width="100">
+                                            {% if i.eth1|zabbix_count %}
+                                                <span class="text-info">{{ i.eth1|zabbix_count }}</span> 个监控项
+                                            {% endif %}
+                                        </td>
+                                        <td width="100">
+                                            {% if i.eth1|zabbix_caveat %}
+                                                <span class="text-danger">{{ i.eth1|zabbix_caveat }}</span> 个报警
+                                            {% endif %}
+                                        </td>
+                                        <td width="60">
+                                            <div class="tooltip-demo">
+                                                <a href="/assets/zabbix_host/?uuid={{ i.uuid }}" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" title="监控信息">监控</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
+                            <div  class="oilet_page">
+                                {% paginate %}
+                            </div>
+                            </div>
+                            <div class="clearfix visible-xs-block"></div>
+                        </div>
+                </div>
+                <div class="mail-box"></div>
+            </div>
+{#            </div>#}
+            {% else %}
+            <div class="alert alert-dismissable alert-danger">
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4>
+                    Alert!
+                </h4> <strong>Warning!</strong> 走错地方了吧，或许你的URL不应该是你有权限访问的哦
+            </div>
+            {% endif %}
+        </div>
+</div>
+
+{% include "ztree/edit_node.html" %}
+
+{% endblock %}

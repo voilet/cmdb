@@ -1,0 +1,214 @@
+{% extends 'assets/base.html' %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>IP列表 | IP List.</h2>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+<br/>
+<div class="row wrapper">
+    <form id="idc_form">
+        {% csrf_token %}
+        <div class="col-lg-6 col-lg-offset-4" style="padding-left: 0px">
+            <label>
+                <select name="idc_name" class="form-control m-b" onchange="change_idc()">
+                    <option value="">选择机房</option>
+                    {% for i in idcs %}
+                        <option value="{{i.name}}"> {{ i.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                <select id="replace" name="network" class="form-control m-b">
+                    <option value="all" class="text-center">选择网段</option>
+                </select>
+            </label>
+           <button class="btn btn-primary" type="button" onclick="change_network(0)"> 提交 </button>
+           <button class="btn btn-success" type="button" onclick="change_network(1)"> <span class="fa fa-refresh"></span> </button>
+       </div>
+    </form>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div id="network-replace" class="row">
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="text text-primary"><b>{{ active_111.0.network }}</b></span>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ibox-heading">
+                    <h3>亦庄电信</h3>
+                    <small><i class="fa fa-map-marker"></i> 亦庄电信 {{ active_111.0.network }} IP列表.</small>
+                </div>
+
+                <div class="ibox-content">
+                    <div>
+                        <div class="text-left">
+                            <h3 class="text-center">已使用</h3>
+                            <table class="table">
+                                {% for i in active_111 %}
+                                    <tr>
+                                        <td class="text-navy">{{ i.ip }}</td>
+                                        <td><a href="/assets/host_detail/?ip={{ i.ip }}">详情</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <h3 class="text-center text-danger">未使用</h3>
+                            <table class="table">
+                                {% for i in unactive_111 %}
+                                    <tr>
+                                        <td class="text-navy">{{ i.ip }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="text text-primary"><b>{{ active_112.0.network }}</b></span>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ibox-heading">
+                    <h3>亦庄电信</h3>
+                    <small><i class="fa fa-map-marker"></i> 亦庄电信{{ active_112.0.network }} IP列表.</small>
+                </div>
+
+                <div class="ibox-content">
+                    <div>
+                        <div class="text-left">
+                            <h3 class="text-center">已使用</h3>
+                            <table class="table">
+                                {% for i in active_112 %}
+                                    <tr>
+                                        <td class="text-navy">{{ i.ip }}</td>
+                                        <td><a href="/assets/host_detail/?ip={{ i.ip }}">详情</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <h3 class="text-center text-danger">未使用</h3>
+                            <table class="table">
+                                {% for i in unactive_112 %}
+                                    <tr>
+                                        <td class="text-navy">{{ i.ip }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="text text-primary"><b>{{ active_113.0.network }}</b></span>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ibox-heading">
+                    <h3>亦庄电信</h3>
+                    <small><i class="fa fa-map-marker"></i> 亦庄电信{{ active_113.0.network }} IP列表.</small>
+                </div>
+
+                <div class="ibox-content">
+                    <div>
+                        <div class="text-left">
+                            <h3 class="text-center">已使用</h3>
+                            <table class="table">
+                                {% for i in active_113 %}
+                                    <tr>
+                                        <td class="text-navy">{{ i.ip }}</td>
+                                        <td><a href="/assets/host_detail/?ip={{ i.ip }}">详情</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <h3 class="text-center text-danger">未使用</h3>
+                            <table class="table">
+                                {% for i in unactive_113 %}
+                                    <tr>
+                                        <td class="text-navy">{{ i.ip }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function change_idc(){
+        $.ajax({
+            type: "GET",
+            url: "/assets/ip_list_ajax/",
+            data: $("#idc_form").serialize(),
+            success: function (data) {
+                $("#replace").html(data);
+            }
+        });
+    }
+
+    function change_network(fresh){
+        var url = "/assets/ip_list_info/?fresh=" + fresh;
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: $("#idc_form").serialize(),
+            success: function (data) {
+                $("#network-replace").html(data);
+            }
+        });
+    }
+</script>
+{% endblock content %}
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <head data-suburl="">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="author" content="运维管理系统" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>运维自动化平台</title>
+
+    <link rel="shortcut icon" href="/static/img/facio.ico" type="image/x-icon">
+    {% include 'link_css.html' %}
+    {% include 'script.html' %}
+    {% block head %} {% endblock %}
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+        {% include 'nav.html' %}
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                {% include 'nav_bar_header.html' %}
+            </div>
+            {% block content %}
+            {% endblock %}
+
+            {% include 'footer.html' %}
+
+        </div>
+    </div>
+</body>
+
+</html>

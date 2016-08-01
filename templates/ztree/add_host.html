@@ -1,0 +1,166 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{% load pagination_tags %}
+{% load business_tag %}
+{% block content %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="ibox-content" class="ibox-title">
+                <h5> 添加 {{ data.name }} 节点主机 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">未启用 1</a>
+                        </li>
+                        <li><a href="#">未启用 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div id="edit_result">
+                <div class="ibox-content">
+                <form class="form-horizontal"  method="post" role="form" >
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="groups" class="col-lg-2 control-label">选择服务器</label>
+
+                        <div class="col-sm-3">
+                            <select id="groups" size="12" class="form-control m-b" multiple>
+                            {% for i in host_list %}
+                                    {% if i.uuid not in host_uuid_list %}
+                                    <option value="{{ i.uuid }}">{{ i.eth1 }}</option>
+                                    {% endif %}
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="btn-group" style="margin-top: 50px;">
+                                <button type="button" class="btn btn-white" onclick="move_right('groups', 'groups_selected')"><i class="fa fa-chevron-right"></i></button>
+                                <button type="button" class="btn btn-white" onclick="move_left('groups_selected', 'groups')"><i class="fa fa-chevron-left"></i> </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div>
+                                <select id="groups_selected" name="host" class="form-control m-b" size="12"  multiple>
+                                    {% for host in click_host %}
+                                        <option value="{{ host.uuid }}" selected>{{ host.eth1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                       <div class="col-sm-4 col-sm-offset-5">
+                           <button class="btn btn-white" type="submit"> 重置 </button>
+                           <button class="btn btn-primary" type="submit"> 提交 </button>
+                       </div>
+                   </div>
+                </form>
+            </div>
+                <div class="ibox-content">
+                    <table id="host_info" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><input type="checkbox" id="select_all" onclick="check_all('asset_form')"></th>
+                                <th class="text-center"> eth1 </th>
+                                <th class="text-center"> IDC </th>
+                                <th class="text-center"> 业务 </th>
+                                <th class="text-center"> 服务 </th>
+                                <th class="text-center"> 状态 </th>
+                                <th class="text-center"> 操作 </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for i in click_host %}
+                                <tr class="gradeX">
+
+                                    <td class="text-center"><input type="checkbox" name="selected" value="{{ i.uuid }}"></td>
+                                    <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                    <td class="text-center"> {{ i.idc.name }} </td>
+                                    <td class="text-center">
+                                        {% for s in i.uuid|business_list %}
+                                             <a href="/assets/server/server_type/?service_name={{ s }}" class="btn btn-info btn-xs">{{ s }}</a>
+                                        {% endfor %}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ i.service.all|group_str2 }}
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group tooltip-demo" data-toggle="buttons">
+                                            {% if i.status == 0 %}
+                                                <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                                            {% elif i.status == 1 %}
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                                            {% else %}
+                                            <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="tooltip-demo">
+                                        {% if request.user.is_superuser or request.session.fun_auth.edit_host %}
+                                        <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="btn btn-xs btn-primary">详情</a>
+                                        <a href="/assets/host_edit/?uuid={{ i.uuid }}" class="btn btn-xs btn-info">修改</a>
+                                        {% endif %}
+                                        {% if request.user.is_superuser or request.session.fun_auth.delete_host %}
+                                        <a href="/assets/host_del/?uuid={{ i.uuid }}" class="btn btn-xs btn-danger node-edit" data-toggle="tooltip" data-placement="bottom" title="删除"><i class="fa fa-trash-o"></i></a>
+                                        {% endif %}
+                                        {% if i.status == 1 and request.user.is_superuser or request.session.fun_auth.update_host %}
+                                        <a href="/assets/update_id/{{ i.id }}/" class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                        {% elif request.user.is_superuser or request.session.fun_auth.update_host %}
+                                            <a href="/assets/update_id/{{ i.id }}/" class="btn btn-xs btn-success disabled" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                        {% else %}
+                                        {% endif %}
+                                        {% if request.user.is_superuser or request.session.fun_auth.setup_system %}
+                                            <a href="/assets/server/restart/{{ i.id }}/" class="btn btn-xs btn-danger voilet_restart" data-toggle="tooltip" data-placement="bottom" title="重装系统"><i class="fa fa-desktop">装机</i></a>
+                                        {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function move_left(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+                $(this).attr("selected",'false');
+            }
+            $(this).attr("selected",'true');
+        });
+    }
+    function move_right(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+            }
+
+        });
+    }
+
+    function move_all(from, to){
+        $("#"+from).children().each(function(){
+            $("#"+to).append(this);
+        });
+    }
+</script>
+
+{% endblock  %}

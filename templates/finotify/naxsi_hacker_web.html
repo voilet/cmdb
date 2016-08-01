@@ -1,0 +1,66 @@
+{% include 'op_header.html' %}
+{% load pagination_tags %}
+{% autopaginate contacts 20 %}
+<script type='text/javascript' src='/static/js/scojs/sco.modal.js'></script>
+<link rel="stylesheet" type="text/css" media="all" href="/static/css/scojs.css" />
+<table class="table">
+	<thead>
+		<tr>
+            <th>攻击时间</th>
+            <th>攻击者类型</th>
+			<th>攻击者ip</th>
+            <th>地理位置</th>
+			<th>提交参数</th>
+            <th>服务器IP</th>
+{#            <th>攻击类型ID</th>#}
+{#            <th>详细</th>#}
+		</tr>
+	</thead>
+	<tbody>
+    {% for i in contacts %}
+		<tr>
+			<td>{{ i.hacker_time|safe }}</td>
+            <td>{{ i.type_attack|safe }}</td>
+			<td>{{ i.hack_ip|safe }}</td>
+            <td>{{ i.hacker_city|safe }} {{ i.hacker_Area|safe }}</td>
+            <td><div class="voilet_naxsi_code" style="width:600px;height:20px;overflow:hidden;line-height:20px;color:#ff0000">{{ i.hack_url_code}}</div></td>
+            <td>{{ i.server_ip|safe }}</td>
+            <td>
+                <a href="#myModal{{ i.id }}" role="button" class="btn" data-toggle="modal">详细</a>
+
+                <!-- Modal -->
+                <div id="myModal{{ i.id }}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">×</button>
+                <h3 id="myModalLabel">攻击详情</h3>
+                </div>
+                <div class="modal-body">
+                <p>攻击时间：{{ i.hacker_time|safe}}</p>
+                <p>攻击类型：{{ i.type_attack|safe}}</p>
+                <p>攻击IP：{{ i.hack_ip|safe}}</p>
+                <p>攻击者所在地：{{ i.hacker_city|safe }} {{ i.hacker_Area|safe }}</p>
+                <p>提交方式：{{ i.hacker_post_get|safe}}</p>
+                <p><div style="color:#ff0000">提交参数：{{ i.hack_url_code}}</div></p>
+                <p>被攻击IP：{{ i.server_ip|safe }}</p>
+                <p>攻址地址：{{ i.hacker_orig_url|safe }}</p>
+                {% if i.hacker_cookie %}
+                    <p>Cookie：{{ i.hacker_cookie|safe }}</p>
+                {% endif %}
+{#                <p>{{ i.Detailed|safe }}</p>#}
+                </div>
+                <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+                </div>
+            </td>
+		</tr>
+    {% endfor %}
+	</tbody>
+</table>
+            <div  class="pagination pagination-left">
+				 {% paginate %}
+			</div>
+
+
+
+{% include 'op_bottom.html' %}

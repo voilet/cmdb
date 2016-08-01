@@ -1,0 +1,76 @@
+{% include "default/header.html" %}
+{% include "default/op_left.html" %}
+{% load pagination_tags %}
+{% autopaginate contacts 20 %}
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<h3 class="text-center">
+				运维报障系统
+			</h3>
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>
+							姓名
+						</th>
+						<th style="width:300px;">
+							故障描述
+						</th>
+						<th>
+							发现时间
+						</th>
+						<th>
+							发生时间
+						</th>
+						<th>
+							解决时间
+						</th>
+						<th>
+							报障来源
+						</th>
+                        <th>
+							修改
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for i in contacts %}
+					<tr>
+						<td>
+							<a href="/op/user_list/{{ i.user_id }}" target="_blank" >{{ i.user_name }}</a>
+						</td>
+						<td>
+							<a href="/op/list/{{ i.id }}" target="_blank" >{{ i.title }}</a>
+						</td>
+						<td>
+							{{ i.Discovery_date|safe}}
+						</td>
+						<td>
+							{{ i.Occur_date|safe}}
+						</td>
+						<td>
+                            {% if i.Solve_date != "None" %}
+							    {{ i.Solve_date|safe}}
+                            {% endif %}
+						</td>
+						<td>
+                            {% if Source != "None" %}
+							    {{ i.Source }}
+                            {% endif %}
+						</td>
+                        <td>
+                            <a href="/op/user_edit/{{ i.id }}">修改</a>
+						</td>
+					</tr>
+                    {% endfor %}
+				</tbody>
+			</table>
+			<div  class="pagination pagination-right">
+				 {% paginate %}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% include "default/footer.html" %}

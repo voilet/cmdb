@@ -1,0 +1,28 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{% block content %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="edit_result">
+                <div class="ibox-content">
+                <form class="form-horizontal"  method="post" role="form" >
+                    {% csrf_token %}
+                     {{ Ztree|bootstrap }}
+
+                    <div class="form-group">
+                       <div class="col-sm-4 col-sm-offset-5">
+                           <button class="btn btn-white" type="submit"> 重置 </button>
+                           <button class="btn btn-primary" type="submit"> 提交 </button>
+                       </div>
+                   </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock  %}

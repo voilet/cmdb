@@ -1,0 +1,259 @@
+{% extends 'assets/base.html' %}
+{% load business_tag %}
+{% load humanize %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="text text-primary"><b>{{ host.eth1 }}</b></span>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ibox-heading">
+                        <h3>主机基本信息</h3>
+                        <small><i class="fa fa-map-marker"></i> 此主机基本信息.</small>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <div class="text-left">
+                                <table class="table">
+                                    <tr>
+                                        <td class="text-navy">IP</td>
+                                        <td>{{ host.eth1 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">主机名</td>
+                                        <td>{{ host.node_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">MAC</td>
+                                        <td>{{ host.mac }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">远控卡IP</td>
+                                        <td>{{ host.internal_ip}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">所属业务</td>
+                                        <td>
+                                             <table class="table">
+                                                 {% for s in host.business.all %}
+                                                    <tr>
+                                                        <td>{{ s.service_name }}</td>
+                                                    </tr>
+                                                 {% endfor %}
+                                             </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">服务</td>
+                                        <td>
+                                             <table class="table">
+                                                 {% for s in host.service.all %}
+                                                    <tr>
+                                                        <td>{{ s.name }} -- {{ s.port }}</td>
+                                                    </tr>
+                                                 {% endfor %}
+                                             </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">环境</td>
+                                        <td>{{ host.env}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">主机类型</td>
+                                        {% if host.vm %}
+                                            <td>虚拟机</td>
+                                        {% else %}
+                                            <td>物理机</td>
+                                        {% endif %}
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">IDC</td>
+                                        <td>{{ host.idc.name }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">机柜信息</td>
+                                        <td>{{ host.cabinet }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">品牌</td>
+                                        <td>{{ host.brand }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">CPU</td>
+                                        <td>{{ host.cpu }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">内存</td>
+                                        <td>{{ host.memory }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">硬盘</td>
+                                        <td>{{ host.hard_disk }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">机器状态</td>
+                                        <td>{{ host.get_status_display }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">操作系统</td>
+                                        <td>{{ host.system }}{{ host.system_version }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">资产编号</td>
+                                        <td>{{ host.number }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">SN号</td>
+                                        <td>{{ host.server_sn }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">快速服务编码</td>
+                                        <td>{{ host.Services_Code }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">激活</td>
+                                        <td>{{ host.is_active}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">添加日期</td>
+                                        <td>{{ host.create_time|date:"Y-m-d" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">备注</td>
+                                        <td>{{ host.editor }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>详细信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ibox-heading">
+                        <h3>主机详细信息</h3>
+                        <small><i class="fa fa-map-marker"></i> 包含了此主机所有授权的用户.</small>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <div class="text-left">
+                                {% if host.vm %}
+                                    <table class="table">
+                                    <tr>
+                                        <h5 class="text-center">父主机信息</h5>
+                                        <td class="text-navy">{{ host.vm.eth1 }}</td>
+                                        <td><a href="/assets/host_detail/?uuid={{ host.vm.uuid }}">详情</a></td>
+                                    </tr>
+                                    </table>
+                                {% elif host.uuid|get_vm_info %}
+                                    <table class="table">
+                                        <h5 class="text-center">子主机信息</h5>
+                                        {% for h in host.uuid|get_vm_info %}
+                                            <tr>
+                                                <td class="text-navy">{{ h.eth1 }}</td>
+                                                <td><a href="/assets/host_detail/?uuid={{ h.uuid }}">详情</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                {% else %}
+                                    <p class="text-center">(暂无)</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>修改记录</h5>
+                        <a href="/assets/host_edit/?uuid={{ host.uuid }}" data-toggle="tooltip" class="text-success pull-center" data-placement="bottom" title="修改">&nbsp&nbsp&nbsp&nbsp点击修改</a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ibox-heading">
+
+                        <h3>主机修改历史记录</h3>
+                        <small><i class="fa fa-map-marker"></i> 此主机所有修改历史记录.</small>
+                    </div>
+                        <div class="ibox-content">
+                        <div class="feed-activity-list">
+                            {% if host_record %}
+                                {% for r in host_record %}
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="pull-right">{{ r.time|naturaltime }}</small>
+                                            <strong class="text-navy">{{ r.user }}</strong>
+                                                {% for i in r.content|str_to_list %}
+                                                    <div>{{ i }}</div>
+                                                {% endfor %}
+                                            <small class="text-success">{{ r.time }}</small>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-center">(暂无)</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#show').click(function(){
+            $('#show').css('display', 'none');
+            $('#more').css('display', 'block');
+        })
+    })
+</script>
+
+
+{% endblock %}

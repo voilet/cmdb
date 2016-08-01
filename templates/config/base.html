@@ -1,0 +1,49 @@
+{% extends 'default/base.html' %}
+{% block left %}
+    <div class="panel-group" id="panel-349889"><!--  panel panel-primary -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" >项目配置文件管理</a></h3>
+            </div>
+            <div >
+
+                 <div class="panel-body">
+                     {% for one in conf_list %}
+                        <p><a href="/conf/list/{{one.id}}/" >{{one.name}}</a></p>
+                     {%endfor%}
+                        <p><a href="/conf/add/" >增加配置文件</a></p>
+                </div>
+            </div>
+        </div>
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-290449">操作记录</a></h3>
+            </div>
+            <div id="panel-element-290449" class="panel-collapse collapse in">
+
+                 <div class="panel-body">
+                    <p><a href="/conf/add_log/" >增加记录</a></p>
+                    <p><a href="/conf/log_list/" >记录列表</a></p>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <a class="panel-title ">安装包管理</a>
+            </div>
+
+                <div class="panel-body">
+                    <p><a href="/conf/sls/add/" >添加安装包</a></p>
+                    <p><a href="/conf/sls/list/" >安装名列表</a></p>
+                </div>
+            </div>
+        </div>
+
+{% endblock left %}
+{% block content %}
+{% endblock content %}
+
+

@@ -1,0 +1,97 @@
+{% load bootstrap %}
+{% block content %}
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+.control-label{width:100px;}
+.form-control{width:100%;}
+.col-sm-10 select{width:100%;}
+*.btn-block{margin-left:100px;margin-bottom:100px;}*
+</style>
+<div id="data_ok"></div>
+<div class="alert alert-info" role="alert">
+    本次更新系统信息的主机有：{{ node_name }}
+</div>
+<form class="form-horizontal col-sm-11 col-md-12" method="post" autocomplete="off" id="form_data">
+    {% csrf_token %}
+    <input type="hidden" value="{{ node_name }}" name="node_name">
+    <div class="form-group">
+        <label for="id_system" class="control-label col-sm-2 col-lg-2 ">系统类型</label>
+        <div class=" col-sm-10 col-lg-10 ">
+            <select name="system" id="id_system" class=" form-control">
+            <option value="">---------</option>
+            {% for k, v in system_os %}
+            <option value="{{ v }}">{{ k }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="id_system_cpuarch" class="control-label col-sm-2 col-lg-2 ">系统版本</label>
+        <div class=" col-sm-10 col-lg-10 ">
+            <select name="system_cpuarch" id="id_system_cpuarch" class=" form-control">
+            <option value="">---------</option>
+            {% for k, v in system_cpuarch %}
+            <option value="{{ v }}">{{ k }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="id_sort" class="control-label col-sm-2 col-lg-2 ">机器类型</label>
+        <div class=" col-sm-10 col-lg-10 ">
+            <select name="sort" id="id_sort" class=" form-control">
+            <option value="">---------</option>
+            {% for k, v in system_usage %}
+            <option value="{{ v }}">{{ k }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="col-sm-10 col-lg-10"><button href="{% url 'update_system' %}" onclick="return false" class="btn btn-info btn-block edit-save" >保存</button></div>
+</form>
+{% endblock content %}
+<script>
+ $(function(){
+     $('.edit-save').unbind('click').bind('click',function(){
+         var system = $("#id_system").val();
+         var system_cpuarch = $("#id_system_cpuarch").val();
+         var sort = $("#id_sort").val();
+         if (!system || !system_cpuarch || !sort){
+             alert("内容不能为空");
+             return false;
+         }
+
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#form_data').serialize(), // 从表单中获取数据
+             dataType:'json',
+             success: function(msg){
+                 if (msg.status == false){
+                     $("#edit_result").html('<div class="alert alert-danger" role="alert">'+msg.msg+'<br><button onclick="window.location.reload();" class="btn btn-default">返回</button></div>');
+                 }else{
+                     window.location.reload();
+                 }
+             }
+         });
+      });
+ })
+</script>

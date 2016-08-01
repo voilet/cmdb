@@ -1,0 +1,93 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{#{% load bootstrap3 %}#}
+
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>{{ item }} 项目添加发布功能</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<style>
+    .wrapper{margin-top:10px;}
+    .wanghui{margin-top:10px;}
+    #id_node li{
+       list-style-type :none;line-height:25px;
+    }
+</style>
+<div class="wrapper ibox-content">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="result" >
+                <form id="from_data" role="form" action="" method="post">
+                    {% csrf_token %}
+                    {% include "config/active.html" %}
+                    {{ uf.swan_name |bootstrap }}
+                    {{ uf.swan_name |bootstrap }}
+                    {{ uf.script |bootstrap }}
+                    {{ uf.tgt |bootstrap }}
+                    {{ uf.node |bootstrap }}
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">保存</button>
+                        <button class="btn" type="reset">重置</button>
+                    </div>
+                </form>
+             </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 右侧菜单栏控制 -->
+<script type="text/javascript">
+
+
+</script>
+<script>
+
+ $(function(){
+     var three = document.location.pathname.split("/")[5];
+        if (str == "default"){
+            $("." + str).addClass('active');
+        }
+        $("." + three).addClass('active');
+{##}
+{#     $('#id_choose_1').unbind('click').bind('click',function(){#}
+{#         var url= "/conf/project/add/{{ item.uuid }}/?env=all";#}
+{#         location.href = url;#}
+{#         //   $.ajax({#}
+{#         //       type: "GET",#}
+{#         //       url: url }).done(function( data ) {#}
+{#         //       $("#result").html(data);#}
+{#         //   });#}
+{#      });#}
+{##}
+{#     $('#id_choose_0').unbind('click').bind('click',function(){#}
+{#         var url= "/conf/project/add/{{ item.uuid }}/?env=default";#}
+{#         location.href = url;#}
+{#         //   $.ajax({#}
+{#         //       type: "GET",#}
+{#         //       url: url }).done(function( data ) {#}
+{#         //       $("#result").html(data);#}
+{#         //   });#}
+{#      });#}
+{##}
+{#      $('.click-save').click(function(){#}
+{#          $.ajax({#}
+{#              type: "POST",#}
+{#              url: $(this).attr("href"),                  // 提交的页面#}
+{#              data: $('#from_data').serialize(), // 从表单中获取数据#}
+{#              dataType:'text',#}
+{#              success: function(msg){#}
+{#                  $("#data_ok").html(msg);                    // 设置表单提交完成使用方法#}
+{#              }#}
+{#          });#}
+{#       });#}
+ });
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,44 @@
+{% extends 'autoinstall/base_bak.html' %}
+{% block content %}
+<style>
+.setup_return{margin-top:8px;}
+</style>
+<div id="content-block" class="col-sm-11 col-md-10">
+<pre>可以推送的项目</pre>
+    {% for i in user_business %}
+         <a id="/auto/setup/list/{{ i.business.id }}/" class="btn btn-primary" onClick="showDetail(this)">{{ i.business }}</a>
+        {% empty %}
+        <p>没有项目要推送或者审核未通过</p>
+    {% endfor %}
+
+<div class="clearfix"></div>
+<div id="setup_install" class="setup_return">
+{% if  request.user.department == "op" %}
+    <div class="alert alert-dismissable alert-success">
+        <h4>
+            点击需要推送的项目
+        </h4> 会将saltstackw所有配置文件下发,没有安装相应业务服务则会安装并初始化服务器并启动相应服务
+    </div>
+    {% else %}
+ <div class="alert alert-dismissable alert-success">
+        <h4>
+            您无此功能权限
+        </h4> 会将saltstackw所有配置文件下发,没有安装相应业务服务则会安装并初始化服务器并启动相应服务
+    </div>
+{% endif %}
+</div>
+</div>
+<script>
+function showDetail(obj){
+  var id= obj.attributes["id"].nodeValue;
+    $.ajax({
+   type: "GET",
+   url: id })  .done(function( data ) {
+    $("#setup_install").html(data);
+  });
+}
+</script>
+{% endblock content %}
+
+
+

@@ -1,0 +1,8 @@
+{% extends 'saltstack/base.html' %}
+{% block content %}
+<div class="col-md-12 column" id="salt_cmd">
+<pre>所有saltstack主机列表</pre>
+<pre>{% for i in salt_key %}{{ i }}
+{% endfor %}</pre>
+</div>
+{% endblock %}

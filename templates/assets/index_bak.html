@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+<div></div>
+{%  if username %}
+    <li>welcom {{ username }}</li>
+    <li><a href ='/logout/' >logout</a></li>
+{% else %}
+    <li>您还未登录系统</li>
+{%  endif %}
+<li>name:{{ user.name }}</li>
+<li>age:{{ user.age }}</li>
+<li>sex:{{ user.sex }}</li>
+<li>the {{ user.name }} say: {{ user.say }}</li>
+<li>{{ user.voilet }}</li>
+<li>{{ book_list }}</li>
+
+{% for i in book_list %}
+    <li>{{ i }}</li>
+{% endfor %}
+{% if user %}
+    <li>{{ user.name }}</li>
+{% else %}
+    不存在user
+{% endif %}
+
+</body>
+</html>

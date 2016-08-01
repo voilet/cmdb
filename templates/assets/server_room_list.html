@@ -1,0 +1,72 @@
+{% extends 'assets/base.html' %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>IDC机房列表 | List IDC.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> IDC机房详细信息 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">未启用 1</a>
+                        </li>
+                        <li><a href="#">未启用 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="ibox-content">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>机房名称</th>
+                            <th>联系电话</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    {% for i in room_list %}
+                        <tbody>
+                            <tr>
+                                <td>{{ i.name }}</td>
+                                <td>{{ i.telphone }}</td>
+                                <td>{{ i.description }}</td>
+                                <td>
+                                    <div class="btn-group" data-toggle="buttons">
+                                      <a href="/assets/server/room/edit/{{ i.id }}/" class="btn btn-xs btn-success " data-toggle="modal">修改</a>
+                                      <a href="/assets/server/room/delete/{{ i.id }}/" class="btn btn-xs btn-danger" data-toggle="modal">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+
+
+

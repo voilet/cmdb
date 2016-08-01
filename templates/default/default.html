@@ -1,0 +1,98 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+
+{#    <style>#}
+{#    .voilet{float:right;}#}
+{#    .jumbotron{margin-top:10px;}#}
+{#    .wrapper{background:#ffffff;width:100%;}#}
+{##}
+{#    .voilet_idc{width:142px;height:439px;background:url("/static/images/jg.gif");float:left; margin:8px; 10px;}#}
+{#    .voilet_idc ul{width:142px;padding-top:35px;padding-right:30px;}#}
+{#    .voilet_idc li{background: url("/static/images/1u.gif"); margin:8px 8px 5px 0;height:12px;overflow:hidden;}#}
+{#    </style>#}
+
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        {% include "ztree/ztree_js.html" %}
+        <div id="edit_result">
+            <div class="col-lg-9 animated fadeInRight">
+                <div class="mail-box-header">
+                    <h2>
+                        风行网自动化运维系统
+                    </h2>
+                        <div class="mail-tools tooltip-demo m-t-md">
+                            <h3>
+                                欢迎使用saltstack集群管理系统
+                            </h3>
+                            <h5>
+                                <span class="pull-right font-noraml">2014年12月11日</span>
+                                需谨慎操作，不清楚选项请不要随意执行，以免造成重大事故<br/><br/>
+                                运维部宣
+                            </h5>
+                            <p>
+                                核心总服务器:{{ data.server_list_count }}
+                                {% for i in data.room %}
+                                {{ i.cabinet_name }}机房( {{ i.count_len }} 个机柜 ):<br/>
+                                {% for a in i.name %}{% if request.user.is_superuser or request.session.fun_auth.select %}<a href="{% url 'cabinet' %}?cabinet={{ a.cab_name }}&room_number={{ i.cabinet_name }}" >{{ a.cab_name }}</a>{% if a.cab_name %}({{ a.cab_num }}) {% endif %}{% else %}{% if a.cab_name %}{{ a.cab_name }}({{ a.cab_num }}){% endif %}   {% endif %}{% endfor %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+
+                <div class="mail-box"></div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="wrapper wrapper-content">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="ibox float-e-margins voilet-margins">
+                                        <div class="ibox-content">
+                                            {% for k,v in idc_data.items %}
+                                                <div>
+                                                    <h4><i class="fa fa-sitemap"></i> {{ k }}{{ v }}台<i class="fa fa-linux"></i>
+                                                    </h4>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="ibox float-e-margins voilet-margins">
+                                        <div class="ibox-content">
+                                            <div>
+                                                <div class="feed-activity-list">
+                                                    <strong><i class="fa fa-user"></i> 用户总数: {{ user_count }}人</strong><br/>
+                                                    <strong><i class="fa fa-group"></i> 部门: {{ department_count }}</strong>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="ibox float-e-margins voilet-margins">
+                                        <div class="ibox-content inspinia-timeline">
+                                            <div class="row">
+                                                <div class="col-xs-7 content no-top-border">
+                                                    <p class="m-b-xs"><strong>Meeting</strong></p>
+                                                    <p>Conference on the sales results for the previous</p>
+                                                    <p><span data-diameter="40" class="updating-chart">5,3,9,6,5,9,7,3,5,2,5,3,9,6,5,9,4,7,3,2,9,8,7,4,5,1,2,9,5,4,7,2,7,7,3,5,2</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock  %}
+

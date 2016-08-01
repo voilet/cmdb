@@ -1,0 +1,33 @@
+{% load bootstrap %}
+
+<div id="data_ok">
+<form class="form-horizontal" id="form_data"  method="post" role="form" autocomplete="off">
+    {% csrf_token %}
+     <div class="col-md-12 column">{{uf|bootstrap_inline}}</div>
+    <br>
+            <div class="col-sm-offset">
+                 <butten  href="{% url 'project_doc_edit' uuid %}" class="btn btn-success btn-block click-save" >提交</butten>
+            </div>
+</form>
+{#{% editor %}#}
+</div>
+
+
+<script>
+ $(function(){
+     $('.click-save').unbind('click').bind('click',function(){
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#form_data').serialize(), // 从表单中获取数据
+             dataType:'text',
+             success: function(msg){
+                 $("#data_ok").html(msg)                    // 设置表单提交完成使用方法
+             }
+         });
+      });
+
+ })
+
+</script>

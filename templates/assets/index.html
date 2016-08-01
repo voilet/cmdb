@@ -1,0 +1,7 @@
+{% if name != '' %}
+ 欢迎  {{ name }} 来到本网站
+<a href="/accounts/loginout/">注销</a>
+{% else %}
+<a href ="/accounts/login/?next=/"> 登录 </a>
+<a href ="/accounts/register/?next=/"> 注册 </a>
+{% endif %}

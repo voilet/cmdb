@@ -1,0 +1,98 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+
+{% block content %}
+    {{ data.media }}
+         <div class="wrapper wrapper-content">
+            <div class="row">
+            {% include 'malfunction/left.html' %}
+            <div class="col-lg-9 animated fadeInRight">
+            <div class="mail-box-header">
+
+                <h2>
+                    Incident add
+                </h2>
+            </div>
+                <form class="form-horizontal" method="POST" action="">{% csrf_token %}
+                <div class="mail-box">
+                <div class="mail-body">
+                        {{ data.title | bootstrap_horizontal }}
+                        {{ data.source | bootstrap_horizontal }}
+                        <div class="form-group">
+                        <label class="control-label col-sm-2 col-lg-2 " for="id_title">URL:</label>
+                            <div class=" col-sm-8 col-lg-8 ">
+                                <input class=" form-control" id="id_url" maxlength="256" name="url" value="{{ faul_data.url }}" type="text" />
+                            </div>
+                        </div>
+{#                        {{ data.url | bootstrap_horizontal }}#}
+                        {{ data.grade | bootstrap_horizontal }}
+                        {% if faul_data.source == "smokeping" %}
+                            <div hidden="hidden">{{ data.mailcomment | bootstrap_horizontal }}</div>
+                        {% else %}
+                            {{ data.mailcomment | bootstrap_horizontal }}
+                        {% endif %}
+                        {{ data.starttime | bootstrap_horizontal }}
+                        {{ data.scantime | bootstrap_horizontal }}
+                        {{ data.stoptime | bootstrap_horizontal }}
+                        {{ data.projectuser | bootstrap_horizontal }}
+                        {{ data.project_principal | bootstrap_horizontal }}
+{#                        <div class="form-group">#}
+{#                            <label class="control-label col-sm-2 col-lg-2 " for="id_mailcomment">处理过程</label>#}
+{#                            <div class=" col-sm-8 col-lg-8 ">#}
+{#                                <div class="mail-text h-200">#}
+{#                                {{ data.comment }}#}
+{#                                <div class="clearfix"></div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+                        <div class="hr-line-dashed"></div>
+                        {{ data.comment | bootstrap_horizontal }}
+                        <div class="hr-line-dashed"></div>
+                        {{ data.status | bootstrap_horizontal }}
+                        <div class="form-group">
+                                <div class=" col-sm-offset-2 col-sm-8 col-lg-offset-2 col-lg-8">
+                                    <div class="checkbox">
+{#                                            <label >#}
+{#                                                {% if status %}#}
+{#                                                <input id="id_status" class="checkbox-line" checked name="status" type="checkbox"  /> <span>关闭</span>#}
+{#                                                {% else %}#}
+{#                                                <input id="id_status" class="checkbox-line" name="status" type="checkbox"  /> <span>关闭</span>#}
+{#                                                {% endif %}#}
+{#                                            </label>#}
+                                            <label >
+                                                {% if classical %}
+                                                <input  id="id_classical" class="checkbox-line" checked name="classical" type="checkbox"  /> <span>设为案例</span>
+                                                {% else %}
+                                                <input  id="id_classical" class="checkbox-line" name="classical" type="checkbox"  /> <span>设为案例</span>
+                                                {% endif %}
+                                            </label>
+                                    </div>
+                                </div>
+                        </div>
+
+
+                </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group">
+                       <div class="col-sm-4 col-sm-offset-5">
+                           <button class="btn btn-white" type="submit"> 重置 </button>
+                           <button class="btn btn-primary" type="submit"> 提交 </button>
+                       </div>
+                   </div>
+
+
+                </div>
+                </form>
+            </div>
+        </div>
+     </div>
+
+    <script>
+        $(document).ready(function(){
+            $('.summernote').summernote({
+                height: 180
+            });
+        });
+    </script>
+
+{% endblock %}

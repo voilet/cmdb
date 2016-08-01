@@ -1,0 +1,53 @@
+<table class="table table-hover table-bordered" style="margin-top:8px">
+    <thead>
+        <tr>
+            <th>主机记录</th>
+            <th>记录类型</th>
+            <th>记录值</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <form class="form-horizontal" id="search_hostname"  method="post" name="horizontal" role="form">
+    <tbody>
+
+        <tr>
+            <td>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="主机或、域名">
+            </td>
+            <td>
+                <div>
+                <select class=" form-control" id="id_sort" name="sort">
+                <option value="A" selected="selected">A记录</option>
+                </select>
+                </div>
+            </td>
+            <td>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="ip">
+            </td>
+            <td> <button type="button" class="btn btn-success check_save" >保存</button></td>
+        </tr>
+
+    </tbody>
+    </form>
+</table>
+
+<script>
+$(function(){
+    //删除
+      $(document).on("click",".check_save",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#delete_node').serialize(), // 从表单中获取数据
+             dataType:'text',
+             success: function(msg){
+                 $("#save_ok").html(msg)
+                 setTimeout("window.location.reload();", 3000);
+        //       alert(msg);                       // 设置表单提交完成使用方法
+             }
+         });
+      });
+}
+</script>

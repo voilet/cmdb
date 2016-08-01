@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>运维管理系统</title>
+	<meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="/static/js/source/jquery-1.10.2.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+{#      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>#}
+    <![endif]-->
+	<!-- Add jQuery library -->
+	<!-- Add mousewheel plugin (this is optional) -->
+	<script type="text/javascript" src="/static/js/source/jquery.mousewheel.pack.js?v=3.1.3"></script>
+	<!-- Add fancyBox main JS and CSS files -->
+	<script type="text/javascript" src="/static/js/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+	<link rel="stylesheet" type="text/css" href="/static/js/source/jquery.fancybox.css?v=2.1.5" media="screen" />
+	<!-- Add Button helper (this is optional) -->
+	<link rel="stylesheet" type="text/css" href="/static/js/source/helpers/jquery.fancybox-buttons.css?v=1.0.5" />
+	<script type="text/javascript" src="/static/js/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+	<!-- Add Thumbnail helper (this is optional) -->
+	<link rel="stylesheet" type="text/css" href="/static/js/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" />
+	<script type="text/javascript" src="/static/js/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+	<!-- Add Media helper (this is optional) -->
+	<script type="text/javascript" src="/static/js/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+<script type="text/javascript" charset="utf-8">
+    window.UEDITOR_HOME_URL = "/static/js/ueditor/";
+</script>
+<script type="text/javascript" charset="utf-8" src="/static/js/ueditor/editor_config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/static/js/ueditor/editor_all_min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/js/ueditor/themes/default/ueditor.css"/>
+<script type="text/javascript" charset="utf-8" src="/static/js/bootstrap.min.js"></script>
+<style>
+.xdsoft{padding-top:14px;}
+</style>
+</head>
+  <body>
+	<!-- voilet start -->
+	<div class="container-fluid">
+	<div class="row-fluid clearfix">
+		<div class="col-md-12 column">
+			<nav class="navbar navbar-default navbar-inverse" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">运维管理系统</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+                        {% if "jumeiops" in request.user.department or "admin" in request.user.department %}
+                        <li>
+							<a href="/auto/">自动化运维</a>
+						</li>
+                        {% endif %}
+                        <li>
+							<a href="/salt/">saltstack</a>
+						</li>
+                        <li>
+							<a href="/assets/server/">资产管理</a>
+						</li>
+                         <li>
+							<a href="/conf/">配置系统</a>
+						</li>
+                        <li id="saltlockbox1" ></li>
+{#                        {% if user.is_superuser %}#}
+                        <li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理审计<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+                                <li>
+									<a href="/accounts/adduser/">添加用户</a>
+								</li>
+								<li>
+									<a href="/assets/server/edit/log/">资产管理操作日志</a>
+								</li>
+								<li>
+									<a href="/salt/logs/">saltstack操作日志</a>
+								</li>
+							</ul>
+						</li>
+{#                        {% endif %}#}
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+                        <li>
+{#                            <a class="fancybox fancybox.ajax" href="/accounts/user_edit/{{ request.user.username }}"> <strong>欢迎， {{  request.user.username }}</strong></a>#}
+                            
+                            <a><strong>欢迎，{% if request.user.first_name %} {{  request.user.first_name}}{% else %}{{ request.user.username }}{% endif    %}</strong></a>
+                        </li>
+                        <li>
+                            <a href="/accounts/loginout/"><strong>注销</strong></a>
+                        </li>
+					</ul>
+				</div>
+			</nav>
+			<!-- head end -->
+	 <script type="text/javascript">
+      $(document).ready(function() {
+                $('.fancybox').fancybox({
+                    maxWidth : 400,
+                    maxHeight : 200,
+                    fitToView : false,
+                    width : '70%',
+                    height : '100%',
+                    autoSize : false,
+                    closeClick : false,
+                    openEffect : 'none',
+                    closeEffect : 'none'
+                });
+      });
+     </script>

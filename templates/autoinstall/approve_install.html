@@ -1,0 +1,54 @@
+{% extends 'autoinstall/base_bak.html' %}
+{% block content %}
+<style>
+.setup_return{margin-top:8px;}
+#reject_reason_form{display: none;width:500px;height:400px;}
+#reject_reason_form textarea{height:150px;}
+</style>
+<pre>审批你需要通过的项目</pre>
+    <table class="table table-striped table-bordered">
+        {% for i in apply_list %}
+        <tr class="ddd">
+           <td>
+               {{ i.business }}
+        <td>{{ i.content }}</td>
+        <td>
+            <button  id="{{ i.id }}" class="btn btn-success approve ">通过</button>
+            <button href="#reject_reason_form" id="{{ i.id }}" class="btn btn-danger reject">拒绝</button>
+        </td>
+    </tr>
+     {% endfor %}
+    </table>
+    <form role="form"  id="reject_reason_form" action="/auto/reject_apply/" method="post">
+        {% csrf_token %}
+        <input type="hidden" value="" name="apply_id" id="apply_id">
+		  <div class="form-group">
+
+		    <label for="reject_reason">拒绝原因</label>
+		    <textarea  class="form-control" id="id_reject_reason" placeholder="输入拒绝原因" name="reject_reason"></textarea>
+		  </div>
+		  <button type="submit" class="btn btn-default">拒绝</button>
+	</form>
+
+<script>
+$(function(){
+    $('.approve').click(function(){
+        var self = $(this);
+        var id = $(this).attr('id');
+        $.get('/auto/approve/',{'apply_id':id},function(data){
+            if (data =='ok'){
+                self.closest("tr").hide();
+            }
+
+        })
+    });
+    $('.reject').click(function(event){
+        event.preventDefault();
+        apply_id = $(this).attr('id');
+        $('#apply_id').val(apply_id);
+        $.fancybox(this,{width:"500",height:"300"});
+    });
+
+});
+</script>
+{% endblock content %}

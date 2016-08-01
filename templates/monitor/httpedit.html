@@ -1,0 +1,70 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{% block content %}
+{% if data.monitor_type  %}
+<style>
+.PostData{display: none;}
+</style>
+{% endif %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>添加http监控 | Add http monitor.</h2>
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <form class="form-horizontal" action="" method="post" name="horizontal" role="form" autocomplete="off">
+                    {% csrf_token %}
+                    {{ uf.title|bootstrap_horizontal }}
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.url|bootstrap_horizontal }}
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.monitor_type|bootstrap_horizontal }}
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.monitor_ip|bootstrap_horizontal }}
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.result_code|bootstrap_horizontal }}
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.mail_status|bootstrap_horizontal }}
+                    {{ uf.mail|bootstrap_horizontal }}
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.weixin_status|bootstrap_horizontal }}
+                    {{ uf.weixin|bootstrap_horizontal }}
+
+                    <div class="form-group PostData">
+                        <label class="control-label col-sm-2 col-lg-2 " for="id_payload">Post数据</label>
+                        <div class=" col-sm-10 col-lg-10 ">
+                            <textarea class=" form-control" cols="40" id="id_payload" name="payload" rows="5">{{ data.payload }}</textarea>
+                            <p class="help-block">
+                                POST提交数据,需json格式
+                            </p>
+                        </div>
+                    </div>
+                    {{ uf.status|bootstrap_horizontal }}
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-5">
+                            <button class="btn btn-white" type="submit"> 重置</button>
+                            <button class="btn btn-primary" type="submit"> 提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+<script>
+$('#id_monitor_type_0').unbind('click').bind('click', function () {
+    $('.PostData').hide();
+});
+$('#id_monitor_type_1').unbind('click').bind('click', function () {
+    $('.PostData').show();
+});
+</script>
+{% endblock content %}
+
+

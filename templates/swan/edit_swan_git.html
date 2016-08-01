@@ -1,0 +1,44 @@
+{#{% extends 'user/base.html' %}#}
+{% load bootstrap %}
+{#{% load bootstrap3 %}#}
+
+
+{% block content %}
+<style>
+#id_node li{
+   list-style-type :none;line-height:25px;
+}
+</style>
+<div class="wrapper">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="result">
+                <h3>{{ item }} 项目添加发布功能</h3>
+                <form id="from_data" role="form" action="/conf/project/edit/{{ item.uuid }}/{{ swan_data.uuid }}/" method="post">
+                    {% csrf_token %}
+                        {{ uf|bootstrap }}
+                        </table>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">保存</button>
+                        <button class="btn" type="reset">重置</button>
+                    </div>
+                </form>
+             </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on("click","#select_all",function(e){
+       var selected = $("#select_all").prop("checked");
+       if(selected){
+         $("input[name='node']").prop('checked',true);
+       }else{
+         $("input[name='node']").prop("checked",false);
+       }
+     });
+</script>
+
+
+
+{% endblock content %}

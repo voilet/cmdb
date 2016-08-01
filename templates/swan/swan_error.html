@@ -1,0 +1,14 @@
+<div class="alert alert-dismissable alert-warning">
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4>
+        Alert!
+    </h4> <strong>Warning!</strong> 您未选择需要发布的服务器,5秒钟后自动关闭
+</div>
+<script>
+    $(document).ready(function(){
+        // $(".close").delay(5000).trigger("click");
+        // console.log("test");
+        $(".alert").delay(5000).hide(1);
+        // $(".close").trigger("click");
+    });
+</script>

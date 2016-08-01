@@ -1,0 +1,100 @@
+{% extends "default/base.html" %}
+
+{% load business_tag %}
+{% block content %}
+<div class="wrapper wrapper-content">
+        <div class="row">
+            {% include "ztree/ztree_js.html" %}
+            <div class="col-lg-9 animated fadeInRight">
+            {% if content_status %}
+                <div class="mail-box-header">
+                        <div class="row wrapper border-bottom white-bg page-heading">
+                            <div class="col-lg-10">
+                                <h2>{{ bus_data.service_name }}</h2>
+                                <ol class="breadcrumb">
+                                    <li>
+                                        <a href="/">首页</a>
+                                    </li>
+                                    <li>
+                                        {{ line_name.name }}  - <span style="color: #a81b10; font-weight: bold;">( {{ count }} 台服务器 )</span>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="col-lg-2">
+
+                            </div>
+                        </div>
+                        <br/>
+{#                        {% include "ztree/active.html" %}#}
+                        {% if request.user.is_superuser or request.session.fun_auth.select_host %}
+                        <div class="ibox float-e-margins">
+                            <div id="result">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> eth1  </th>
+                                        <th> 操作 </th>
+                                    </tr>
+                                </thead>
+
+                                {% for k,v in server_list.items %}
+                                <tbody>
+                                    <tr >
+                                        <td class="col-lg-9"> <a href="/assets/host_detail/?uuid={{ k }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ v }} </a></td>
+                                        <td>
+                                            <div class="tooltip-demo">
+                                            {% if request.user.is_superuser or request.session.fun_auth.edit_host %}
+                                            <a href="/assets/host_edit/?uuid={{ k }}" class="btn btn-xs btn-primary node-edit" data-toggle="tooltip" data-placement="bottom" title="修改"><i class="fa fa-edit"></i></a>
+                                            {% endif %}
+                                            {% if request.user.is_superuser or request.session.fun_auth.delete_host %}
+                                            <a href="/assets/host_del/?uuid={{ k }}" class="btn btn-xs btn-danger node-edit" data-toggle="tooltip" data-placement="bottom" title="删除"><i class="fa fa-trash-o"></i></a>
+                                            {% endif %}
+                                            {% if i.status == 1 and request.user.is_superuser or request.session.fun_auth.update_host %}
+                                            <a href="/assets/update_id/{{ k }}/" class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                            {% elif request.user.is_superuser or request.session.fun_auth.update_host %}
+                                                <a href="/assets/update_id/{{ k }}/" class="btn btn-xs btn-success disabled" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                            {% else %}
+                                            {% endif %}
+                                            {% if request.user.is_superuser or request.session.fun_auth.setup_system %}
+                {#                                        <button type="button" class="btn btn-xs" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Tooltip on bottom</button>#}
+                                                <a href="{% url 'host_edit' %}{{ k }}/" class="btn btn-xs btn-danger voilet_restart" data-toggle="tooltip" data-placement="bottom" title="重装系统"><i class="fa fa-desktop">装机</i></a>
+                                            {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
+                            </div>
+                            <div class="clearfix visible-xs-block"></div>
+                        </div>
+                        {% else %}
+                        <br>
+                        <div class="alert alert-dismissable alert-warning">
+
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                ×
+                            </button>
+                            <h4>
+                                Alert!
+                            </h4> <strong>Warning!</strong> 你没有权限查看,请联系管理员申请权限或发送邮件到op@fun.tv申请权限
+                        </div>
+                        {% endif %}
+                </div>
+                <div class="mail-box"></div>
+            </div>
+{#            </div>#}
+            {% else %}
+            <div class="alert alert-dismissable alert-danger">
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4>
+                    Alert!
+                </h4> <strong>Warning!</strong> 走错地方了吧，或许你的URL不应该是你有权限访问的哦
+            </div>
+            {% endif %}
+        </div>
+</div>
+
+{% include "ztree/edit_node.html" %}
+
+{% endblock %}

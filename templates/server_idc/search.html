@@ -1,0 +1,292 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+{% load pagination_tags %}
+{% autopaginate node_list 15 %}
+
+<style>
+	.col-sm-11 pre {
+		height: 40px;
+		overflow: hidden;
+	}
+	.row {
+		height: 35px;
+	}
+.btn-group .voilet_restart{margin-left:15px;}
+</style>
+
+<div class="clearfix"></div>
+<br>
+<div id="host_node_list"></div>
+<div id="host_list">
+{#        {% if "jumeiops" in request.user.department or "admin" in request.user.department %}#}
+            <button type="button" class="btn btn-primary" id="host_delete">批量删除</button>
+            <button type="button" class="btn btn-primary" id="select_business">指定业务</button>
+            <button type="button" class="btn btn-primary" id="update_cabinet">更改机柜</button>
+            <button type="button" class="btn btn-primary" id="update_system">更改系统</button>
+            <a href="/assets/default/?name=default" type="button" class="btn btn-primary" >真实机</a>
+            <a href="/assets/default/?name=cloud" type="button" class="btn btn-primary">云主机</a>
+            <a href="/assets/server/host_without_business/" type="button" class="btn btn-danger">空闲</a>
+            <br>
+            <br>
+{#        {% endif %}#}
+    <div id="edit_result">
+        <pre>总共有:{{server_list_count}}台  真实机:{{ server_node }} Centos: {{ centos }}台</pre>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select_all" />
+                    </th>
+                    <th>
+                        主机名
+                    </th>
+                    <th>
+                        机柜
+                    </th>
+                    <th>
+                        eth1
+                    </th>
+                    <th>
+                        业务
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                    <th>
+                        系统状态
+                    </th>
+                    <th> 删除 </th>
+                </tr>
+            </thead>
+        {#{{ test.node_name }}#}
+            {% for i in node_list %}
+            <tbody>
+                <tr >
+                    <td width="40">
+                        <input type="checkbox" name="node_name" value="{{i.node_name}}"/>
+                    </td>
+                    <td width="200">
+                        <a class="fancybox fancybox.ajax" href="/assets/server/node_id/{{ i.id }}/" title="主机: {{ i.node_name }}" >{{ i.node_name }}</a>
+                    </td>
+                    <td width="100"><a href="{% url 'cabinet' %}?cabinet={{ i.cabinet }}&room_number={% if i.room_number %}{{ i.room_number }}{% endif %}" > {% if i.room_number %}{{ i.room_number }} - {% endif %}{{ i.cabinet }}</a></td>
+                    <td width="150">
+                        {{ i.eth1 }}
+                    </td>
+
+                    <td width="100">
+                        {% for a in business_list %}
+                            {% for k,v in a.items %}
+                                {% if k == i.eth1 %}
+                                    {% for bc in v %}
+                                        <a href="/assets/server/server_type/?service_name={{ bc }}" class="btn btn-info btn-xs">{{ bc }}</a>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </td>
+        {#			<td>#}
+        {#				{{ i.number }}#}
+        {#			</td>#}
+                    <td width="120">
+                        {% if i.status == 1 %}
+                            <div class="btn-group" data-toggle="buttons" style="width: 80px;">
+                                <a href="/assets/edit_id/{{ i.id }}/" class="btn btn-xs btn-primary node-edit" >修改</a>
+                                <a href="/assets/update_id/{{ i.id }}/" class="btn btn-xs btn-success" >更新</a>
+                            </div>
+                        {% else %}
+                            <div class="btn-group" data-toggle="buttons">
+                                <a href="/assets/edit_id/{{ i.id }}/" class="btn btn-xs btn-primary node-edit" >修改</a>
+                                <a href="/assets/update_id/{{ i.id }}/" class="btn btn-xs btn-success disabled" >更新</a>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td width="50">
+                        <div class="btn-group" data-toggle="buttons">
+                            {% if i.status == 0 %}
+                            <label class="btn btn-xs btn-warning disabled"><input type="radio" name="options" id="option3"> setup system</label>
+                                {% elif i.status == 1 %}
+                                <label class="btn btn-xs btn-success disabled"><input type="radio" name="options" id="option3"> setup ok</label>
+                                {% else %}
+                                <label class="btn btn-xs btn-danger disabled"><input type="radio" name="options" id="option3"> setup error</label>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td width="100">
+
+                            <a href="/assets/server/node_del/{{ i.id }}/" class="btn btn-xs btn-primary node-edit">删除</a>
+                            <a href="/assets/server/restart/{{ i.id }}/" class="btn btn-xs btn-danger voilet_restart" >重置</a>
+                    </td>
+                </tr>
+            </tbody>
+            {% empty %}
+            <div class="alert alert-dismissable alert-danger">
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4>
+                    无此记录
+                </h4>
+            </div>
+            {% endfor %}
+            </table>
+            <div  class="oilet_page">
+                {% paginate %}
+            </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+    $('.selectpicker').selectpicker();
+
+})
+ </script>
+
+<script type="text/javascript">
+$(function(){
+      $(document).on("click",".btn-success",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             //$("#result").html(data);
+             //alert("数据更新完成");
+             //setTimeout("window.location.reload();", 3000);
+             window.location.reload();
+         });
+         return false;
+     });
+
+     $(document).on("click",".voilet_restart",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             //$("#result").html(data);
+             //alert("数据更新完成");
+             //setTimeout("window.location.reload();", 3000);
+             window.location.reload();
+         });
+         return false;
+     });
+
+     $(document).on("click",".node-edit",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#edit_result").html(data);
+         });
+         return false;
+     });
+
+     // 搜索
+     // $(document).ready(function(){
+     //      $('#node_search').click(function(){
+     //        jQuery.ajax({
+     //          url: "/assets/search/",                  // 提交的页面
+     //          data: $('#search_hostname').serialize(), // 从表单中获取数据
+     //          type: "POST",                       // 设置请求类型为"POST"，默认为"GET"
+     //          beforeSend: function(){             // 设置表单提交前方法
+     //            //alert('表单提交前');
+     //          },
+     //          error: function(request){           // 设置表单提交出错
+     //            alert("表单提交出错，请稍候再试");
+     //          },
+     //          dataType:'text',
+     //          success: function(msg){
+     //              $("#edit_result").html(msg)
+     //    //        alert(msg);                       // 设置表单提交完成使用方法
+     //          }
+     //        });
+     //      });
+     //      return false;
+     // });
+
+     $(document).on("click","#select_all",function(e){
+       var selected = $("#select_all").prop("checked");
+       if(selected){
+         $("input[name='node_name']").prop('checked',true);
+       }else{
+         $("input[name='node_name']").prop("checked",false);
+       }
+     });
+     function get_node_name(){
+       var a = new Array();
+       $(":checked[name='node_name']").each(function(){
+           a.push($(this).attr('value'));
+       });
+       if (a.length == 0){
+           alert('请先选择主机');
+           return false;
+       }
+
+       return a;
+     }
+     $(document).on("click","#host_delete",function(e){
+       e.preventDefault();
+       var a = get_node_name();
+       if (!a){return false;}
+       arg = "?node_name="+a.join(",");
+       url = "{% url 'server_delete' %}";
+       $.get(url+arg,{},function(data){
+         $("#edit_result").html(data);
+       });
+
+     });
+     $(document).on("click","#select_business",function(e){
+       e.preventDefault();
+       var a = get_node_name();
+       if (!a){return false;}
+       arg = "?node_name="+a.join(",");
+       url = "{% url 'select_business' %}";
+       $.get(url+arg,{},function(data){
+         $("#edit_result").html(data);
+       });
+
+     });
+     $(document).on("click","#update_cabinet",function(e){
+       e.preventDefault();
+       var a = get_node_name();
+       if (!a){return false;}
+       arg = "?node_name="+a.join(",");
+       url = "{% url 'update_cabinet' %}";
+       $.get(url+arg,{},function(data){
+         $("#edit_result").html(data);
+       });
+     });
+     $(document).on("click","#update_system",function(e){
+       e.preventDefault();
+       var a = get_node_name();
+       if (!a){return false;}
+       arg = "?node_name="+a.join(",");
+       url = "{% url 'update_system' %}";
+       $.get(url+arg,{},function(data){
+         $("#edit_result").html(data);
+       });
+     });
+
+     //空闲机器
+     $(document).on("click",".node_null",function(e){
+         e.preventDefault();
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#edit_result").html(data);
+         });
+         $("host_list > button").attr("class", "btn btn-primary btn-action click");
+         $(this).attr("class", "btn btn-success btn-action click");
+     });
+
+
+});
+</script>
+
+{% endblock  %}
+
+
+

@@ -1,0 +1,21 @@
+{% include 'default/header.html' %}
+{% include 'default/assets_left.html' %}
+{% load pagination_tags %}
+{% autopaginate list_server_type 20 %}
+<div id="content-block" class="col-sm-11 col-md-10">
+    <pre>业务列表</pre>
+    <div id="salt_type_list">
+    <pre>{% for i in list_server_type %}{{ i.server_type }}
+{% endfor %}
+    </pre>
+        <div  class="voilet_page">
+             {% paginate %}
+        </div>
+    </div>
+</div>
+{% include 'default/footer.html' %}
+{% include 'default/jquery.html' %}
+
+
+
+

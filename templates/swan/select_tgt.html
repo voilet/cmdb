@@ -1,0 +1,13 @@
+<select id="tgt_name" class="form-control" name="tgt">
+    <option value="" selected="selected">选择项目参数</option>
+    {% for i in rst_data %}
+        <option value="{{ i }}">{{ i }}</option>
+    {% endfor %}
+</select>
+
+<script>
+    $('#tgt_name').change(function() {
+       $("#update_log").show();
+        return false;
+   });
+</script>

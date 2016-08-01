@@ -1,0 +1,71 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load auth %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> 服务器授权信息 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">未启用 1</a>
+                        </li>
+                        <li><a href="#">未启用 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content">
+                    {% include "auth/active.html" %}
+                    <br/>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>姓名</th>
+                            <th>部门</th>
+                            <th>用户id</th>
+                            <th>主机数量</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    {% for i in uf %}
+                        <tbody>
+                            <tr>
+                                <td>{{ i.username }}</td>
+                                <td>{{ i.first_name }}</td>
+                                <td>
+                                    {% if i.department %}
+                                    {{ i.department }}
+                                    {% else %}
+                                    未指定部门
+                                    {% endif %}
+                                </td>
+                                <td>{{ i.id| add:30000 }}</td>
+                                <td>
+                                    <a href="{% url "node_count" i.uuid %}"> {{ i.username|node_count }}台</a>
+                                </td>
+                                <td>
+                                    <a href="/auth/host/add_host/{{ i.uuid }}/" class="btn btn-xs btn-success">添加权限</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

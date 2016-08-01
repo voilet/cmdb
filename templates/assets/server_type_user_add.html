@@ -1,0 +1,62 @@
+{% load bootstrap %}
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;padding-left:0}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+</style>
+<div class="row clearfix">
+    <div class="col-md-4 column">
+    <form class="form-horizontal" id="form_data"  method="post" role="form" autocomplete="off">
+        {% csrf_token %}
+    {{ user }}
+    <p>
+    {% for i in env %}
+        {% if i in env_in and form_user_status %}
+        <p><input type="checkbox" checked name="env" value="{{ i }}">  {{ i }}权限<p>
+        {% else %}
+        <p><input type="checkbox" name="env" value="{{ i }}">  {{ i }}权限<p>
+        {% endif %}
+    {% endfor %}
+    <input hidden="hidden" name="user_id" value="{{ user.id }}">
+    </p>
+        <div class="col-sm-offset">
+             <butten  href="/assets/server/type/edit/{{business_item.uuid}}/user/add/?user_id={{ one.id  }}" class="btn btn-success btn-block click_user_save" onclick="return false">提交</butten>
+        </div>
+    </form>
+    </div>
+    <div class="col-md-8 column">
+	</div>
+</div>
+
+<script>
+ $(function(){
+     $('.click_user_save').unbind('click').bind('click',function(){
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#form_data').serialize(), // 从表单中获取数据
+             dataType:'text',
+             success: function(msg){
+                 $("#status").html(msg)                    // 设置表单提交完成使用方法
+             }
+         });
+      });
+ })
+
+</script>

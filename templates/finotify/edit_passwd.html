@@ -1,0 +1,21 @@
+{% include 'op_header.html' %}
+
+
+<form class="form-horizontal" method="post" action="/accounts/edit_password/">
+    <div class="control-group"><label class="control-label">密码</label>
+
+    <div class="controls"><input id="newpassword" name="newpassword" type="password" /></div>
+    </div>
+
+    <div class="control-group"><label class="control-label">确认密码</label>
+
+    <div class="controls"><input id="renewpassword" name="renewpassword" type="password" /></div>
+    </div>
+
+    <div class="control-group">
+    <div class="controls"><button class="btn"  type="submit">修改</button></div>
+    </div>
+</form>
+
+
+{% include 'op_bottom.html' %}

@@ -1,0 +1,89 @@
+<div class="col-md-2 column">
+    <div class="panel-group" id="panel-349889"><!--  panel panel-primary -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-290449">项目配置文件管理</a></h3>
+            </div>
+            {% if "/conf/" ==  request.path  %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/conf/add/" in  request.path %}
+                <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% else %}
+                <div id="panel-element-290449" class="panel-collapse collapse">
+            {% endif %}
+                 <div class="panel-body">
+                    {% for i in server_type %}
+                        <p><a href="/conf/add/{{ i.id }}/" >{{ i }}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-85212785">默认配置文件</a></h3>
+            </div>
+                {% if "/conf/default" in  request.path  %}
+                    <div id="panel-element-85212785" class="panel-collapse collapse in">
+                    {% else %}
+                    <div id="panel-element-85212785" class="panel-collapse collapse">
+                {% endif %}
+                <div class="panel-body">
+                    <p><a href="/conf/default/jm-nginx/index" >jm-nginx</a></p>
+                    <p><a href="/conf/default/jm-user/index" >jm-user</a></p>
+                    <p><a href="/conf/default/jm-lvs/index" >jm-lvs</a></p>
+                    <p><a href="/conf/default/jm-haproxy/index" >jm-haproxy</a></p>
+                    <p><a href="/conf/default/jm-php/index" >jm-php</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <h3 class="panel-title"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-564813221">项目管理</a></h3>
+            </div>
+                {% if "/assets/server/type/add/" in  request.path  %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% elif "/assets/server/type/list/" in request.path %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% elif "/assets/server/type/edit/" in request.path %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% elif "/assets/server/edit/log/" in request.path %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% elif "/assets/server/type/notid/" in request.path %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse in">
+                    {% else %}
+                    <div id="panel-element-564813221" class="panel-collapse collapse">
+                {% endif %}
+                <div class="panel-body">
+                        <p><a href="/assets/server/type/list/" >项目列表</a></p>
+                        {% if "admin" in  request.user.department  %}
+                        <p><a href="/assets/server/type/add/" >添加项目</a></p>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <a class="panel-title " data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-5123789">安装包管理</a>
+            </div>
+             {% if "/salt/sls/list/" ==  request.path  %}
+             <div id="panel-element-5123789" class="panel-collapse collapse in">
+             {% elif "/salt/sls/add/" ==  request.path %}
+             <div id="panel-element-5123789" class="panel-collapse collapse in">
+             {% elif "/salt/sls/edit/" in  request.path %}
+             <div id="panel-element-5123789" class="panel-collapse collapse in">
+             {% else %}
+            <div id="panel-element-5123789" class="panel-collapse collapse">
+            {% endif %}
+                <div class="panel-body">
+                    <p><a href="/salt/sls/add/" >添加安装包</a></p>
+                    <p><a href="/salt/sls/list/" >安装名列表</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

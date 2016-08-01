@@ -1,0 +1,148 @@
+{% extends 'default/base.html' %}
+{% block content %}
+{% load auth %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> 服务器授权信息 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content">
+                {% include "auth/active.html" %}
+                <br/>
+                <div class="wrapper wrapper-content">
+                    <div class="row">
+                        {% include "auth/ztree_js.html" %}
+                        <div class="col-lg-9">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>{% if user_data.first_name %}{{ user_data.first_name }} {% else %} {{ user_data.username }}{% endif %}- 服务器总数({{ node_count }})台</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="col-md-6">
+                                        <h4>未分配权限主机</h4>
+                                        <form class="form-horizontal" action="" method="post" role="form" autocomplete="off">{% csrf_token %}
+                                        <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="select_all" /></th>
+                                                <th> eth1 </th>
+                                                <th> 状态 </th>
+                                            </tr>
+                                        </thead>
+
+
+                                            <tbody id="tab-add">
+                                                {% for i in server_list %}
+                                                    {% if i.eth1 not in ip_list %}
+                                                    <tr >
+                                                        <td width="40"><input type="checkbox" name="node_name" value="{{i.uuid}}" /></td>
+                                                        <td width="120"> <a href="{% url 'host_detail' %}?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                                        <td width="50">
+                                                        <div class="btn-group tooltip-demo" data-toggle="buttons">
+                                                            {% if i.status == 0 %}
+                                                                <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                                                            {% elif i.status == 1 %}
+                                                            <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                                                            {% else %}
+                                                            <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                                                            {% endif %}
+                                                        </div></td>
+                                                    </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </tbody>
+
+
+
+                                        </table>
+                                        <div class="col-lg">
+                                            <label>
+                                                <select name="auth" class="form-control m-b">
+                                                    <option selected value=0> 普通用户</option>
+                                                    <option value=1> 管理员</option>
+                                                </select>
+                                            </label>
+                                              <button class="btn btn-info">提交</button>
+{#                                            <button class="btn btn-info btn-block">保存</button>#}
+
+                                         </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h4>已分配权限主机</h4>
+                                        <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th> eth1 </th>
+                                                <th> 状态 </th>
+                                                <th> 操作 </th>
+                                            </tr>
+                                        </thead>
+
+
+                                        <tbody>
+                                        {% for i in server_list %}
+                                            {% if i.eth1 in ip_list %}
+                                            <tr id="{{ i.uuid }}">
+                                                <td width="120"> <a href="{% url 'host_detail' %}?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                                <td width="50">
+                                                <div class="btn-group tooltip-demo" data-toggle="buttons">
+                                                    {% if i.status == 0 %}
+                                                        <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                                                    {% elif i.status == 1 %}
+                                                    <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                                                    {% else %}
+                                                    <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                                                    {% endif %}
+                                                </div></td>
+                                                <td width="50"> <a class="save_delete" id="{{ i.uuid }}" value="{{ i.uuid }}" name="{{ i.eth1 }}" url="{% url 'host_detail' %}?uuid={{ i.uuid }}" href="{% url 'delete_auth' %}?uuid={{ i.uuid }}&auth_id={{ user_data.uuid }}" onclick="return false">删除</a></td>
+                                            </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </tbody>
+
+
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$('.save_delete').unbind('click').bind('click',function(){
+      $("tr[id='"+$(this).attr("id")+"']").remove();
+      var node_name_data= $(this).attr("name");
+      var node_name_uuid= $(this).attr("value");
+      var url= $(this).attr("url");
+      $.ajax({
+         type: "GET",
+         node_name_data: $(this).attr("name"),
+         url: $(this).attr("href") }).done(function( data ) {
+{#          $("#tab-add").append("<tr>"#}
+{#                               +"<td>"+"<input type=\"checkbox\" value=" + node_name_uuid + " name=\"node_name\">" + node_name_data + "</td>"#}
+{#                           +"</tr>");#}
+{#         return false;#}
+      });
+      $("#tab-add").append("<tr>"
+                               +"<td width='40'>"+"<input type=\"checkbox\" value=" + node_name_uuid + " name=\"node_name\"></td>"
+                                +'<td><i class="fa fa-linux" style="color:#080506"></i><a href='+ url +'>' + node_name_data + "</a></td>"
+                                +'<td><div class="btn-group tooltip-demo" data-toggle="buttons"><span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span></div></td>'
+                           +"</tr>");
+    });
+</script>
+{% endblock  %}

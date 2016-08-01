@@ -1,0 +1,64 @@
+{% extends 'config/base.html' %}
+{% block content %}
+<style>
+    .col-sm-10 ul{list-style-type:none;line-height:33px;}
+    .col-sm-10 li{float:left;margin-right:12px;text-align: left;}
+    .col-sm-10 select  {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+}
+</style>
+<div id="content-block" class="col-sm-11 col-md-10">
+    <pre>安装包列表</pre>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    包名
+                </th>
+                <th>
+                    自定义名包
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </thead>
+        {% for i in sls_name %}
+        <tbody>
+            <tr>
+                <td>
+                    {{ i.sls_name }}
+                </td>
+                <td>
+                    {{ i.sls_description }}
+                </td>
+                <td>
+                    <div class="btn-group" data-toggle="buttons">
+                      <a href="/salt/sls/edit/{{ i.id }}/" class="btn btn-xs btn-success " data-toggle="modal">修改</a>
+                      <a href="/salt/sls/del/{{ i.id }}/" class="btn btn-xs btn-danger" data-toggle="modal">删除</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+</div>
+{% endblock content %}
+
+
+
+
+

@@ -1,0 +1,96 @@
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" charset="utf-8" src="/static/js/bootstrap.min.js"></script>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>
+				主机名
+			</th>
+			<th>
+				机房
+			</th>
+			<th>
+				eth1
+			</th>
+			<th>
+				内存
+			</th>
+            <th>
+				核数
+			</th>
+            <th>
+				硬盘
+			</th>
+            <th>
+				型号
+			</th>
+			<th>
+				系统
+			</th>
+			<th>
+				业务
+			</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		<tr >
+			<td width="200">
+				{{ node.node_name }}
+			</td>
+			<td width="125">
+				{{ node.idc }}
+			</td>
+			<td width="150">
+				{{ node.eth1 }}
+			</td>
+			<td width="80">
+				{% widthratio node.memory 1024 1 %}G
+			</td>
+            <td width="100">
+				{% if node.core_num %}{{ node.core_num }}{% endif %}
+			</td>
+            <td width="100">
+                {% if node.hard_disk %}
+				{{ node.hard_disk }} G
+                    {% else %}
+                    无数据
+                {% endif %}
+			</td>
+            <td width="100">
+				{{ node.brand }}
+			</td>
+			<td width="160">
+				{{ node.system }} - {{ node.system_cpuarch }}
+			</td>
+			<td width="100">
+                   {% if node.business.id  %}<a href="{% url 'business_item_ajax' %}?id={{ node.business.id }}" class="fancybox fancybox.ajax">{{ node.business }}</a>{% endif %}
+			</td>
+		</tr>
+	</tbody>
+    </table>
+<pre style="height: 400px;">
+远控卡: {% if node.internal_ip %}{{ node.internal_ip }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+MAC: {% if node.mac %}{{ node.mac }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+eth2: {% if node.eth2 %}{{ node.eth2 }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+环境: {% if node.env %}{{ node.env }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+机房: {% if node.idc %}{{ node.idc }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+机柜: {% if node.cabinet %}{% if node.room_number %}{{ node.room_number }} - {% endif %}{{ node.cabinet }} - {{ node.server_cabinet_id }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+资产编号: {% if node.number %}{{ node.number }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+SN编号: {% if node.server_sn %}{{ node.server_sn }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+保修期: {% if node.guarantee_date %}{{ node.guarantee_date }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+快速服务编码: {% if node.Services_Code %}{{ node.Services_Code }}{% else %}<span style="color:#ff110a">未填写</span>{% endif %}
+创建日期: {{ node.create_time}}
+交换机接口: {{ node.switch_port }}
+
+上次修改人:{% if node.old_editname %}<button  class="btn btn-xs btn-primary" data-toggle="modal">{{ node.old_editname }}</button>{% endif %}
+上次修时间:{% if node.old_editdatetime %}<button  class="btn btn-xs btn-primary" data-toggle="modal">{{ node.old_editdatetime }}</button>{% endif %}
+本次修改人:{% if node.edit_username %}<button  class="btn btn-xs btn-success" data-toggle="modal">{{ node.edit_username }}</button>{% endif %}
+本次修时间:{% if node.edit_datetime  %}<button  class="btn btn-xs btn-success" data-toggle="modal">{{ node.edit_datetime }}</button>{% endif %}
+
+
+
+
+</pre>
+<h3>备注:</h3>
+<p>{% if node.editor %}{{ node.editor }}{% endif %}</p>

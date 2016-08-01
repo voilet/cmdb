@@ -1,0 +1,127 @@
+{% extends 'assets/base.html' %}
+{% load humanize %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>主机监控信息 | Monitoring Info.</h2>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> 主机 <span class="text-info">{{ eth1 }}</span>监控信息汇总 </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user"></ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ibox-content ibox-heading">
+                        <h3>主机所有监控项目</h3>
+                        <small><i class="fa fa-map-marker"></i> 此主机在zabbix上所有监控项目.</small>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <div class="text-left">
+                                <table class="table">
+                                    {% for item in items %}
+                                        <tr>
+                                            <td class="text-navy">{{ item }}</td>
+{#                                            <td><a href="/assets/host_detail/?uuid={{ h.uuid }}">详情</a></td>#}
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="ibox-content ibox-heading">
+                        <h3>有问题项目</h3>
+                        <small><i class="fa fa-map-marker"></i> 此主机现在所有问题记录.</small>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="feed-activity-list">
+                            {% if triggers %}
+                                {% for k,v in triggers.items %}
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="pull-right">历时: {{ k|naturaltime }}</small>
+{#                                            <strong class="text-navy">{{ r.user }}</strong>#}
+                                                    <div class="text-danger">{{ v }}</div>
+                                            <small class="text-success">上次修改时间: {{ k }}</small>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-center">(暂无告警信息)</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="ibox-content ibox-heading">
+                        <h3>报警历史</h3>
+                        <small><i class="fa fa-map-marker"></i> 此主机在24小时之内报警历史记录.</small>
+                    </div>
+                    <div class="ibox-content inspinia-timeline">
+                        {% if alerts %}
+                            {% for alert in alerts %}
+                                <div class="timeline-item">
+                                    <div class="row">
+                                        <div class="col-xs-4 date">
+                                            <i class="fa fa-repeat"></i>
+                                            <b><a>{{ alert.0 }}</a></b>
+                                            <br>
+                                            <small class="text-navy">{{ alert.1 }}</small>
+                                        </div>
+                                        <div class="col-xs-8 content no-top-border">
+                                            <p>
+                                                {{ alert.2 }}
+                                            </p>
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-center">(暂无告警历史)</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    {% for k,v in graphs.items %}
+                        <div class="col-xm-12">
+                            <h3 class="text-center text-success">{{ k }}</h3>
+                            <img src="http://192.168.111.47:8080/zabbix/chart2.php?graphid={{ v }}&period=43200" />
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+
+
+

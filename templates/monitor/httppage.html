@@ -1,0 +1,71 @@
+{% extends 'default/base.html' %}
+{% load bootstrap %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5> {{ data.title }} 监控 详情 </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user"></ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="mail-box-header">
+                        <div class="pull-right tooltip-demo">
+                            <a href="{% url 'HttpMonitorEdit' data.uuid %}" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Reply"><i class="fa fa-reply"></i> 修改</a>
+{#                            <a href="mailbox.html" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </a>#}
+                        </div>
+                        <h2>
+                            {{ data.title }}
+                        </h2>
+                        <div class="mail-tools tooltip-demo m-t-md">
+
+                            <h3>监控状态: {% if data.status %}监控中{% else %}停止监控{% endif %}</h3>
+                            <h5>
+                                <span class="font-noraml">微信联系人: </span>{{ data.weixin }}
+                            </h5>
+                            <h5><span class="font-noraml">From: </span>{{ data.mail }}</h5>
+                            <h5><span class="font-noraml">请求方式: </span>{% if data.monitor_type %}GET{% else %}POST{% endif %}</h5>
+                            {% if not data.monitor_type %}
+                            <h5><span class="font-noraml">提交数据: </span>  </h5>
+                            <pre>{{ data.payload }}</pre>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mail-box">
+                        <div class="mail-body">
+                            <p>
+                            {{ data.url | linebreaksbr }}
+                            </p>
+                            {% for i in log_data %}
+                            <p>状态: {{ i.code }}</p>
+                            <p>返回信息: {{ i.content }}</p>
+                            {% if i.status %}
+                            <p>报警状态: 已报警</p>
+                            {% endif %}
+                            <p>{{ i.createtime }}</p><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row wrapper border-bottom white-bg page-heading">
+
+    </div>
+
+{% endblock content %}
+
+

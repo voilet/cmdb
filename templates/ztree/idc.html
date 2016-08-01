@@ -1,0 +1,88 @@
+{% load business_tag %}
+    <div class="col-lg-9 animated fadeInRight">
+    {% if content_status %}
+        <div class="mail-box-header">
+                <div class="row wrapper border-bottom white-bg page-heading">
+                    <div class="col-lg-10">
+                        <h2>{{ business_name }}</h2>
+                        <ol class="breadcrumb">
+                            <li>
+                                <a href="/">首页</a>
+                            </li>
+                            <li>
+                                {{ business_name }}
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="col-lg-2">
+
+                    </div>
+                </div>
+                <br/>
+                <div class="ibox float-e-margins">
+                    <div id="result">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select_all" /></th>
+                                <th> eth1 </th>
+                                <th> 机房 </th>
+                                <th> 状态 </th>
+                                <th> 操作 </th>
+                            </tr>
+                        </thead>
+
+                        {% for i in server_list %}
+                        <tbody>
+                            <tr >
+                                <td width="40"><input type="checkbox" name="node_name" value="{{i.node_name}}" /></td>
+                                <td width="120"> <a href="/assets/server/node_id/{{ i.uuid }}/" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                <td width="100">{{ i.idc }}</td>
+                                <td width="50">
+                                <div class="btn-group tooltip-demo" data-toggle="buttons">
+                                    {% if i.status == 0 %}
+                                        <span class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="bottom" title="未安装系统" aria-hidden="true" style="color: #ff6846"></span>
+                                    {% elif i.status == 1 %}
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="已安装系统" style="color:#2ad49e"></span>
+                                    {% else %}
+                                    <span class="glyphicon glyphicon-saved" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="安装系统中..." style="color:#2d98d4"></span>
+                                    {% endif %}
+                                </div></td>
+                                <td width="160">
+                                    <div class="tooltip-demo">
+                                    {% if request.user.is_superuser or request.session.fun_auth.edit_host %}
+                                    <a href="/assets/edit_id/{{ i.uuid }}/" class="btn btn-xs btn-primary node-edit" data-toggle="tooltip" data-placement="bottom" title="修改" onclick="return false"><i class="fa fa-edit"></i></a>
+                                    {% endif %}
+                                    {% if request.user.is_superuser or request.session.fun_auth.delete_host %}
+                                    <a href="/assets/server/node_del/{{ i.uuid }}/" class="btn btn-xs btn-danger node-edit" data-toggle="tooltip" data-placement="bottom" title="删除"><i class="fa fa-trash-o"></i></a>
+                                    {% endif %}
+                                    {% if i.status == 1 and request.user.is_superuser or request.session.fun_auth.update_host %}
+                                    <a href="/assets/update_id/{{ i.uuid }}/" class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                    {% elif request.user.is_superuser or request.session.fun_auth.update_host %}
+                                        <a href="/assets/update_id/{{ i.uuid }}/" class="btn btn-xs btn-success disabled" data-toggle="tooltip" data-placement="bottom" title="自动上报硬件信息"><i class="fa fa-recycle">更新</i></a>
+                                    {% else %}
+                                    {% endif %}
+                                    {% if request.user.is_superuser or request.session.fun_auth.setup_system %}
+                                        <a href="/assets/server/restart/{{ i.uuid }}/" class="btn btn-xs btn-danger voilet_restart" data-toggle="tooltip" data-placement="bottom" title="重装系统"><i class="fa fa-desktop">装机</i></a>
+                                    {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                    </div>
+                    <div class="clearfix visible-xs-block"></div>
+                </div>
+        </div>
+    <div class="mail-box"></div>
+        {% else %}
+        <div class="alert alert-dismissable alert-danger">
+             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4>
+                Alert!
+            </h4> <strong>Warning!</strong> 走错地方了吧，或许你的URL不应该是你有权限访问的哦
+        </div>
+    {% endif %}
+</div>
+{% include "ztree/edit_node.html" %}

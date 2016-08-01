@@ -1,0 +1,62 @@
+{% extends 'default/base.html' %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>主机上报 | Assets List.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div id="status">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                主机名
+                            </th>
+                            <th>
+                                是否入库
+                            </th>
+                        </tr>
+                    </thead>
+                        {% for i in node_name_update %}
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {{ i|safe }}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success btn-xs update-node" href="/salt/update_node/?node_name={{ i }}" onclick="return false">上报资产</button>
+            {#                            <a class="fancybox fancybox.ajax" href="/assets/server/node_id/335/" >{{ i }}</a>#}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+ $(function(){
+    $('.update-node').unbind('click').bind('click',function(){
+      var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             // $("#status").html(data);
+             window.location.reload();
+         });
+    });
+
+ })
+
+</script>
+
+{% endblock %}
+
+

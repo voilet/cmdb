@@ -1,0 +1,261 @@
+{% extends 'assets/base.html' %}
+{% load bootstrap %}
+{% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>修改主机 | Edit Host.</h2>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-10">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5> 填写主机详细信息 </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user"></ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+
+            <div class="ibox-content">
+                <form class="form-horizontal" id="host_edit" method="post" name="horizontal" role="form" autocomplete="off">
+                    {% csrf_token %}
+                    {{ uf.node_name|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.eth1|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.eth2|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.mac|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.internal_ip|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.number|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.cpu|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.memory|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.hard_disk|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.status|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.env|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.idc|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">虚拟机父主机</label>
+                        <div class="col-sm-8"><input type="text" placeholder="如果主机为虚拟机, 请填写父主机IP, 真实机则不填写." name="physics" class="form-control" value="{{ host.vm.eth1 }}"></div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.brand|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.system|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.system_cpuarch|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="groups" class="col-lg-2 control-label">所属项目组</label>
+
+                        <div class="col-sm-3">
+                            <select id="groups" size="12" class="form-control m-b" multiple>
+                            {% for i in projects %}
+                                    <option value="{{ i.uuid }}">{{ i }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="btn-group" style="margin-top: 50px;">
+                                <button type="button" class="btn btn-white" onclick="move_right('groups', 'groups_selected')"><i class="fa fa-chevron-right"></i></button>
+                                <button type="button" class="btn btn-white" onclick="move_left('groups_selected', 'groups')"><i class="fa fa-chevron-left"></i> </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div>
+                                <select id="groups_selected" name="business" class="form-control m-b" size="12"  multiple>
+                                    {% for i in host.business.all %}
+                                        <option value="{{ i.uuid }}" selected>{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="services" class="col-lg-2 control-label">运行服务</label>
+
+                        <div class="col-sm-3">
+                            <select id="services" size="12" class="form-control m-b" multiple>
+                            {% for i in services %}
+                                <option value="{{ i.uuid }}">{{ i }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="btn-group" style="margin-top: 50px;">
+                                <button type="button" class="btn btn-white" onclick="move_right('services', 'services_selected')"><i class="fa fa-chevron-right"></i></button>
+                                <button type="button" class="btn btn-white" onclick="move_left('services_selected', 'services')"><i class="fa fa-chevron-left"></i> </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div>
+                                <select id="services_selected" name="service" class="form-control m-b" size="12"  multiple>
+                                    {% for i in host.service.all %}
+                                        <option value="{{ i.uuid }}" selected>{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.room_number|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.cabinet|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.server_cabinet_id|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.guarantee_date|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.server_sn|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.Services_Code|bootstrap_horizontal }}
+
+                    <div class="hr-line-dashed"></div>
+                    {{ uf.editor|bootstrap_horizontal }}
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group">
+                       <div class="col-sm-4 col-sm-offset-5">
+                           <button class="btn btn-white" type="submit"> 重置 </button>
+                           <button class="btn btn-primary" type="submit"> 提交 </button>
+                       </div>
+                   </div>
+                </form>
+             </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<script>
+    window.$ && $(function(){
+    //验证初始化
+        $('#host_edit').validator({
+            //stopOnError:true,
+            //timely: 2,
+            theme: "yellow_right_effect",
+            showOk: "",
+            //自定义规则（PS：建议尽量在全局配置中定义规则，统一管理）
+            rules: {
+                check_node: [/^((l|i)-){0,1}(n-[a-z0-9]+|[a-z0-9]{1,20}\.[a-z0-9]{1,20}\.({% for i in env %}{% if forloop.last %}{{ i }}{% else %}{{ i }}|{% endif %}{% endfor %}))\.({% for i in idc_list %}{% if forloop.last %}{{ i }}{% else %}{{ i }}|{% endif %}{% endfor %})$/, '主机名不正确'],
+                check_mac: [/^([0-9A-Fa-f]{2})(-[0-9A-Fa-f]{2}){5}|([0-9A-Fa-f]{2})(:[0-9A-Fa-f]{2}){5}$/, 'MAC不正确'], //验证mac
+                check_ip: [/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/, 'ip不正确']
+        },
+        fields: {
+            // "node_name": {
+            //     rule: "required;check_node;remote[/assets/select, node_name, csrfmiddlewaretoken]",
+            //     tip: "输入主机名",
+            //     ok: "",
+            //     msg: {required: "必须填写!"},
+            //     data: {'data-ok':"主机名可以使用", 'data-msg-required': '正确'}
+            // },
+
+            "eth1":{
+                rule: "required;check_ip",
+                tip: "输入ip地址",
+                ok:"",
+                msg:{required: "必须填写!"}
+            },
+            "brand":{
+                rule: "required;",
+                tip: "",
+                ok:"",
+                msg:{required: "必选!"}
+            },
+            "system":{
+                rule: "required;",
+                tip: "",
+                ok:"",
+                msg:{required: "必选!"}
+            },
+            "idc":{
+                rule: "required;",
+                tip: "",
+                ok:"",
+                msg:{required: "必选!"}
+            }
+        },
+        valid: function(form) {
+            form.submit();
+        }
+    });
+    });
+
+    function move_left(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+                $(this).attr("selected",'false');
+            }
+            $(this).attr("selected",'true');
+        });
+    }
+    function move_right(from, to) {
+        $("#"+from+" option").each(function(){
+            if ( $(this).prop("selected") == true ) {
+                $("#"+to).append(this);
+            }
+
+        });
+    }
+
+    function move_all(from, to){
+        $("#"+from).children().each(function(){
+            $("#"+to).append(this);
+        });
+    }
+
+</script>
+{% endblock content %}
+
+
+

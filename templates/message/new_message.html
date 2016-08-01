@@ -1,0 +1,317 @@
+{% extends "default/base.html" %}
+{% block content %}
+<style>
+.inliner {
+  height: 100%;
+}
+
+.inliner,
+.inliner + .inlined {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.inlined {
+  width: 90%;
+}
+
+.progress-meter {
+  margin: 20px auto 40px;
+  padding: 40px;
+}
+
+.progress-meter {
+  counter-reset: point;
+}
+.progress-meter .progress-point:before {
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -o-transition: all 1s;
+  transition: all 1s;
+  -webkit-border-radius: 24px;
+  -moz-border-radius: 24px;
+  -ms-border-radius: 24px;
+  -o-border-radius: 24px;
+  border-radius: 24px;
+  -webkit-box-shadow: 0 0 0 2px white;
+  -moz-box-shadow: 0 0 0 2px white;
+  box-shadow: 0 0 0 2px white;
+  content: "\2713";
+  display: block;
+  width: 24px;
+  margin: 0 auto 12px;
+  border: 4px solid #aaaaaa;
+  text-align: center;
+  background-color: white;
+  color: white;
+}
+.progress-meter .track {
+  position: relative;
+  height: 4px;
+  background: #dddddd;
+}
+.progress-meter .progress {
+  -webkit-transition: width 1s;
+  -moz-transition: width 1s;
+  -o-transition: width 1s;
+  transition: width 1s;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 4px;
+  background: red;
+}
+.progress-meter .progress-points {
+  position: relative;
+  margin: -14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.progress-meter .progress-points [data-point='1'] {
+  left: 0%;
+}
+.progress-meter .progress-points [data-point='2'] {
+  left: 25%;
+}
+.progress-meter .progress-points [data-point='3'] {
+  left: 50%;
+}
+.progress-meter .progress-points [data-point='4'] {
+  left: 75%;
+}
+.progress-meter .progress-points [data-point='5'] {
+  left: 100%;
+}
+.progress-meter .progress-point {
+  -webkit-transition: color 1s;
+  -moz-transition: color 1s;
+  -o-transition: color 1s;
+  transition: color 1s;
+  position: absolute;
+  display: block;
+  width: 100px;
+  margin-left: -50px;
+  text-align: center;
+  cursor: pointer;
+  color: #999;
+}
+.progress-meter .progress-point.completed, .progress-meter .progress-point.active {
+  color: #777777;
+}
+.progress-meter .progress-point.completed:before {
+  border-color: #777777;
+  background-color: #777777;
+}
+.progress-meter .progress-point.active:before {
+  -webkit-transition-delay: 1s;
+  -moz-transition-delay: 1s;
+  -o-transition-delay: 1s;
+  transition-delay: 1s;
+  border-color: #777777;
+}
+.progress-meter .progress-point .label:before {
+  counter-increment: point;
+  content: counter(point) ". ";
+  /* Display the counter */
+}
+
+.controls {
+  text-align: center;
+  font-size: 12px;
+}
+
+.trigger {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  padding: 6px 8px;
+  border: none;
+  font: 14px inherit;
+  text-shadow: 0px 1px 1px rgba(251, 251, 251, 0.75);
+  color: #626262;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #bbbbbb), color-stop(100%, #959595));
+  background-image: -webkit-linear-gradient(#bbbbbb, #959595);
+  background-image: -moz-linear-gradient(#bbbbbb, #959595);
+  background-image: -o-linear-gradient(#bbbbbb, #959595);
+  background-image: linear-gradient(#bbbbbb, #959595);
+}
+</style>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div id="ibox-content" class="ibox-title">
+                    <h5> 用户日志详细信息列表 </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">未启用 1</a>
+                            </li>
+                            <li><a href="#">未启用 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="panel-options">
+                        <ul class="nav nav-tabs">
+                            <li class="active" ><a href="/message/news/" class="text-center"><i class="fa fa-laptop"></i> 当前任务 </a></li>
+                            <li ><a href="/message/oldnew/" class="text-center"><i class="fa fa-bar-chart-o"></i> 历史记录 </a></li>
+                            <li style="float: right">
+                                <form id="search_form" method="get" action="" class="pull-right mail-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control input-sm" id="search_input" name="keyword" placeholder="Search">
+                                        <input type="text" style="display: none">
+                                        <div class="input-group-btn">
+                                            <button id='search_btn' type="button" class="btn btn-sm btn-primary" onclick="log_search()">
+                                                Search
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div class="tab-content">
+                        <table class="table table-striped table-bordered table-hover ">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"> 申请人 </th>
+                                    <th class="text-center"> 项目名称 </th>
+                                    <th class="text-center"> 模块名称 </th>
+                                    <th class="text-center"> 测试人员 </th>
+                                    <th class="text-center"> 运维人员 </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in user_message %}
+                                <tr class="gradeX">
+                                    <td class="text-center" id="username"> {{ i.applyer }} </td>
+                                    <td class="text-center" id="ip"> {{ i.project_name }} </td>
+                                    <td class="text-center">{{ i.module_name }} </td>
+                                    <td class="text-center" id="start_time"> {{ i.qa }} </td>
+                                    <td class="text-center" id="end_time"> {{ i.op }} </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="row">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{#<div class="inliner"></div>#}
+{#<div class="inlined">#}
+{#  <div class="progress-meter">#}
+{#    <div class="track">#}
+{#      <span class="progress"></span>#}
+{#    </div>#}
+{#    <ol class="progress-points" data-current="4">#}
+{#      <li class="progress-point" data-point="1">#}
+{#        <span class="label">需求</span>#}
+{#      </li>#}
+{#      <li class="progress-point" data-point="2">#}
+{#        <span class="label">设计</span>#}
+{#      </li>#}
+{#      <li class="progress-point" data-point="3">#}
+{#        <span class="label">开发</span>#}
+{#      </li>#}
+{#      <li class="progress-point" data-point="4">#}
+{#        <span class="label">测试</span></li>#}
+{#      <li class="progress-point" data-point="5">#}
+{#        <span class="label">发布</span>#}
+{#      </li>#}
+{#    </ol>#}
+{#  </div>#}
+{#</div>#}
+
+<script>(function() {
+  var $point_arr, $points, $progress, $trigger, activate, active, max, tracker, val;
+
+ $trigger = $('.trigger').first();
+
+  $points = $('.progress-points').first();
+
+  $point_arr = $('[data-point]');
+
+  $progress = $('.progress').first();
+
+  val = parseInt($points.data('current')) - 1;
+
+  max = $point_arr.length - 1;
+
+  tracker = active = 0;
+
+  activate = function(index) {
+    if (index !== active) {
+      active = index;
+      $point_arr.removeClass('completed active');
+      $point_arr.slice(0, index).addClass('completed');
+      $point_arr.eq(active).addClass('active');
+      return $progress.css('width', (index / max * 100) + "%");
+    }
+  };
+
+  $points.on('click', 'li', function(event) {
+    var _index;
+    _index = $point_arr.index(this);
+    tracker = _index === 0 ? 1 : _index === val ? 0 : tracker;
+    return activate(_index);
+  });
+
+  $trigger.on('click', function() {
+    return activate(tracker++ % 2 === 0 ? 0 : val);
+  });
+
+  setTimeout((function() {
+    return activate(val);
+  }), 1000);
+
+}).call(this);
+</script>
+
+<!-- Generated by RunJS (Wed Feb 11 13:55:43 CST 2015) 1ms -->
+
+<script>
+
+
+    function log_search(){
+        $.ajax({
+            type: "GET",
+            url: "/jlog/search/?env=offline",
+            data: $("#search_form").serialize(),
+            success: function (data) {
+                $(".tab-content").html(data);
+            }
+        });
+    }
+
+    $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+            log_search()
+            }
+    });
+//-----------------------------------
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,46 @@
+{#<h1>{{ item }}</h1>#}
+<p>主要联系人: {{ item.project_contact }} 第二联系人: {{ item.project_contact_backup }}</p>
+<ul class="nav nav-pills">
+    <li ><button href="{% url 'business_host_list' item.id %}" class="btn btn-primary btn-action click" >项目环境</button></li>
+    <li>  <button href="{% url 'business_user_edit' item.id %}" class="btn btn-primary btn-action click" >权限管理</button> </li>
+    <li ><button href="{% url 'project_doc' item.id %}" class="btn btn-primary btn-action click">维护文档</button></li>
+    <li ><button href="{% url 'project_edit_ajax' item.id %}" class="btn btn-primary btn-action click">项目修改</button></li>
+</ul>
+<p></p>
+<div id="status">
+
+</div>
+
+<script>
+ $(function(){
+    $('.click').unbind('click').bind('click',function(){
+      var url= $(this).attr("href");
+         $.ajax({
+             type: "GET",
+             url: url }).done(function( data ) {
+             $("#status").html(data);
+         });
+         $(".nav-pills >li > button").attr("class", "btn btn-primary btn-action click");
+         $(this).attr("class", "btn btn-success btn-action click");
+    });
+
+     $('.click-save').unbind('click').bind('click',function(){
+         var url= $(this).attr("href");
+         $.ajax({
+             type: "POST",
+             url: $(this).attr("href"),                  // 提交的页面
+             data: $('#form_data').serialize(), // 从表单中获取数据
+             dataType:'text',
+             success: function(msg){
+                 $("#data_ok").html(msg)                    // 设置表单提交完成使用方法
+             }
+         });
+      });
+
+ })
+
+</script>
+
+
+
+

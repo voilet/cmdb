@@ -1,0 +1,6 @@
+<select id="swan_name" class="form-control" name="project_all_tag">
+    <option value="" selected="selected">选择发布分支或参数</option>
+    {% for k,v in data.items %}
+        <option value="{{ k }}">{{ v }}</option>
+    {% endfor %}
+</select>

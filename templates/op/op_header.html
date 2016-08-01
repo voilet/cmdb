@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{ title }}</title>
+    <meta name="keywords" content="{{ keywords }}"/>
+    <meta name="description" content="{{ description }}"/>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script src="/static/js/jquery.js"></script>
+    <script src="/static/js/ajax.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src='/static/js/jscalendar/calendar.js'></script>
+    <script type='text/javascript' src='/static/js/jscalendar/language.js'></script>
+    <script type='text/javascript' src='/static/js/jscalendar/calendar-setup.js'></script>
+    <link rel="stylesheet" type="text/css" media="all" href="/static/js/jscalendar/calendar-blue.css" />
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="navbar">
+				<div class="navbar-inner">
+					<div class="container-fluid">
+						 <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a> <a href="#" class="brand">资产管理</a>
+						<div class="nav-collapse collapse navbar-responsive-collapse">
+							<ul class="nav">
+								<li class="active">
+									<a href="/server/">服务器列表</a>
+								</li>
+                                <li class="dropdown">
+									 <a data-toggle="dropdown" class="dropdown-toggle" href="#" >业务分类<strong class="caret"></strong></a>
+									<ul class="dropdown-menu">
+                                        {% for i in Project %}
+										<li>
+											<a href="/business/list/{{ i.id }}">{{ i }}</a>
+										</li>
+                                        {% endfor %}
+									</ul>
+								</li>
+{#								<li>#}
+{#									<a href="#">机房管理</a>#}
+{#								</li>#}
+								<li>
+									<a href="/server_add/">添加资产</a>
+								</li>
+								<li>
+								    <a href="/hack/list/">文件监控</a>
+								</li>
+{#                                <li>#}
+{#								    <a href="/hack/scan/list/">nginx waf</a>#}
+{#								</li>#}
+                                <li class="dropdown">
+									 <a data-toggle="dropdown" class="dropdown-toggle" href="#">nginx防火墙<strong class="caret"></strong></a>
+									<ul class="dropdown-menu">
+{#										<li>#}
+{#											<a href="{% url 'tuxing' %}">图形报表</a>#}
+{#										</li>#}
+{#										<li>#}
+{#											<a href="{% url 'naxsi_list' %}">拦截列表</a>#}
+{#										</li>#}
+									</ul>
+								</li>
+								<li class="dropdown">
+									 <a data-toggle="dropdown" class="dropdown-toggle" href="#" style="color:red;font-weight:bold">报障系统<strong class="caret"></strong></a>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="/opadd/">报障</a>
+										</li>
+										<li>
+											<a href="/op">报障列表</a>
+										</li>
+{#										<li>#}
+{#											<a href="#">其他</a>#}
+{#										</li>#}
+{#										<li class="divider">#}
+{#										</li>#}
+{#										<li class="nav-header">#}
+{#											标签#}
+{#										</li>#}
+{#										<li>#}
+{#											<a href="#">链接1</a>#}
+{#										</li>#}
+{#										<li>#}
+{#											<a href="#">链接2</a>#}
+{#										</li>#}
+									</ul>
+								</li>
+							</ul>
+							<ul class="nav pull-right">
+                                <li>
+
+                                    {% if user != "" %}
+									   <a > {{ user }}</a>
+                                    {% elif name != "" %}
+                                        <a > {{ name }} </a>
+                                    {% else %}
+                                        <a href="/accounts/login/?next=/" >您还未登录系统</a>
+                                    {% endif %}
+								</li>
+                                {% if user != "" %}
+                                <li class="divider-vertical">
+								</li>
+                                <li>
+									<a href="/accounts/loginout/?next=/">注销</a>
+								</li>
+                               {% elif name != "" %}
+                                    <li class="divider-vertical">
+                                    </li>
+                                    <li>
+                                        <a href="/accounts/loginout/?next=/">注销</a>
+                                    </li>
+                                {% endif %}
+								<li class="divider-vertical">
+								</li>
+								<li class="dropdown">
+									 <a data-toggle="dropdown" class="dropdown-toggle" href="#">下拉菜单<strong class="caret"></strong></a>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="#">下拉导航1</a>
+										</li>
+										<li>
+											<a href="#">下拉导航2</a>
+										</li>
+										<li>
+											<a href="#">其他</a>
+										</li>
+										<li class="divider">
+										</li>
+										<li>
+											<a href="#">链接3</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+
+			</div>

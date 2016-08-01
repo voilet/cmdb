@@ -1,0 +1,75 @@
+{% load business_tag %}
+<SCRIPT type="text/javascript">
+
+        var setting = {
+
+            data: {
+                key: {
+                    title:"t"
+                },
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                beforeClick: beforeClick
+            }
+        };
+
+        var zNodes =[
+{#            {% for k,v in ztree_data.items %}#}
+{#                { id: {{ v.tree_id }}, pId:0, name:"{{ k }}", t:"{{ k }}", status:false, token:"{{ s.token }}", open:true},#}
+{#                {% for s in v.business %}#}
+{#                { id: {{ s.uuid }}, pId: {{ v.tree_id }}, status:true, t: "{{ s.name|business_service }}", name:"{{ s.name }}", token:"{{ s.token }}"},#}
+{#                {% endfor %}#}
+{#            {% endfor %}#}
+                {% for k,v in ztree_data.items %}
+                { name:"{{ k }}", open:true, t:"{{ k }}", status:0, token:"{{ s.token }}",
+                    children: [
+                        {% for s in v.business %}
+                        {% if ztree_open == s.name %}
+                        { name:"{{ s.name }}", open:true, id: {{ s.uuid }}, status:1, t: "{{ s.name }}", token:"{{ s.token }}",
+                        {% else %}
+                        { name:"{{ s.name }}", id: {{ s.uuid }}, status:1, t: "{{ s.name }}", token:"{{ s.token }}",
+                        {% endif %}
+                            children: [
+                                {% for i in s.name|business_service %}
+                                { name:"{{ i }}", business: "{{ s.name }}", status: 2, token:"{{ s.token }}", t: "{{ i }}"},
+                                {% endfor %}
+                            ]},
+                            {% endfor %}
+                    ]},
+                {% endfor %}
+        ];
+
+
+
+
+        function beforeClick(treeId, treeNode, clickFlag) {
+            var status = treeNode.status;
+            if (status == 0){
+                project_line(treeNode.name ,treeNode.token );
+            }
+            else if(status == 1){
+                business(treeNode.name, treeNode.token);
+            }
+            else{
+                service_jquery(treeNode.name, treeNode.token, treeNode.business);
+            }
+
+        }
+
+        function business(str, token) {
+            location.href = "/assets/ztree/business/?name=" + str + "&options=cmdb&token=" + token;
+        }
+
+        function service_jquery(str, token, business) {
+            location.href = "/assets/ztree/service/?name=" + business + "&service=" + str + "&token=" + token;
+        }
+
+        $(document).ready(function(){
+            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        });
+
+
+    </SCRIPT>

@@ -1,0 +1,53 @@
+{% include 'op_header.html' %}
+
+
+<div class="hero-unit">
+    <h3>
+        <li style="color:#FD0301">服务器详细配置：</li>
+    </h3></br>
+    <table class="table" contenteditable="true">
+        <thead>
+            <tr>
+                <th>资产编号</th>
+                <th>网卡1</th>
+                <th>网卡2</th>
+                <th>远控卡</th>
+                <th>所属机房</th>
+                <td>内存硬盘</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ id.Server_Asset_number }}</td>
+                <td>{{ id.Server_eth1 }}</td>
+                <td>{{ id.Server_eth2 }}</td>
+                <td>{{ id.Server_Remote_control_card }}</td>
+                <td>{{ id.Server_engine_room }}</td>
+                <td>{{ id.Server_Memory }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        业务：{% for i in  Business_over %} {{ i }}  {% endfor %}
+    </p>
+    <p>
+        服务器型号：{{ id.Server_Model }}
+    </p>
+    <p>
+        服务器编码：{{ id.Server_number }}
+    </p>
+     <p>
+        快速服务代码：{{ id.Server_number_code }}
+    </p>
+    <p>
+        机柜：{{ id.Server_number_Location }} －{{ id.Server_cabinet_id }}
+    </p>
+    <p>
+        cacti：{{ id.Server_cacti }}
+    </p>
+     <p>
+        备注：{{ id.Server_number_Remark|safe }}
+    </p>
+</div>
+
+{% include 'op_bottom.html' %}

@@ -1,0 +1,72 @@
+<div class="col-md-2 column">
+    <div class="panel-group" id="panel-349889"><!--  panel panel-primary -->
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                 <h3 class="panel-title glyphicon glyphicon-pushpin"><a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-290449">主机列表</a></h3>
+            </div>
+            {% if "/salt/" ==  request.path  %}
+            <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/salt/1/" ==  request.path %}
+            <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% elif "/salt/2/" ==  request.path %}
+            <div id="panel-element-290449" class="panel-collapse collapse in">
+            {% else %}
+            <div id="panel-element-290449" class="panel-collapse collapse">
+            {% endif %}
+                <div class="panel-body">
+                    <p><a href="/salt/1/" >主机状态</a></p>
+                    <p><a href="/salt/2/" >主机列表</a></p>
+{#                    <p><a href="/salt/key/" >未认证主机</a></p>#}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                 <a class="panel-title " data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-50498">salt命令执行</a>
+            </div>
+            <div id="panel-element-50498" class="panel-collapse collapse ">
+                <div class="panel-body">
+                    <p><a  style="cursor:pointer" id="btn_cmd">cmd</a></p>
+                    <p><a  href="/salt/help/"  style="cursor:pointer" >salt帮助文件</a></p>
+                </div>
+            </div>
+        </div>
+{#        <div class="panel panel-default">#}
+{#            <div class="panel-heading">#}
+{#                 <a class="panel-title " data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-50499">业务部署</a>#}
+{#            </div>#}
+{#             {% if "/salt/check_install/" ==  request.path  %}#}
+{#             <div id="panel-element-50499" class="panel-collapse collapse in">#}
+{#             {% elif "/salt/node_server/" ==  request.path %}#}
+{#             <div id="panel-element-50499" class="panel-collapse collapse in">#}
+{#             {% else %}#}
+{#            <div id="panel-element-50499" class="panel-collapse collapse">#}
+{#            {% endif %}#}
+{#                <div class="panel-body">#}
+{#                    <p><a href="/salt/check_install/" >系统初始化</a></p>#}
+{#                    <p><a href="/salt/node_server/" >业务部署</a></p>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                 <a class="panel-title" data-toggle="collapse" data-parent="#panel-349889" href="#panel-element-45621859">日志记录</a>
+            </div>
+            {% if "/salt/logs/" ==  request.path  %}
+             <div id="panel-element-45621859" class="panel-collapse collapse in">
+            {% else %}
+            <div id="panel-element-45621859" class="panel-collapse collapse">
+            {% endif %}
+                <div class="panel-body">
+{#                    <p><a href="/salt/check_install/" >系统初始化</a></p>#}
+                    <p><a href="/salt/logs/" >日志记录</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>风行网 | 运维自动化平台</title>
+
+    <link rel="shortcut icon" href="/static/img/facio.ico" type="image/x-icon">
+    {% include 'link_css.html' %}
+
+</head>
+
+<body class="skin-1">
+
+    <div id="wrapper">
+        {% include 'nav.html' %}
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                {% include 'nav_bar_header.html' %}
+            </div>
+            {% block content %}{% endblock %}
+            {% include 'footer.html' %}
+        </div>
+    </div>
+
+    {% include 'script.html' %}
+</body>
+
+</html>

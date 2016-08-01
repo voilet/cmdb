@@ -1,0 +1,226 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            {% include 'nav_li_profile.html' %}
+            <li class="default">
+               <a href="/"><i class="fa fa-th-large"></i> <span class="nav-label">仪表盘</span><span class="label label-info pull-right"></span></a>
+              <!--<a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">仪表盘</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="index.html">Dashboard v.1</a></li>
+                    <li ><a href="dashboard_2.html">Dashboard v.2</a></li>
+                    <li ><a href="dashboard_3.html">Dashboard v.3</a></li>
+                </ul>-->
+            </li>
+
+            <li class="assets">
+                <a href="#"><i class="fa fa-rebel"></i> <span class="nav-label">资产管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="server host_list host_add host_add_batch ip_list zabbix">
+                        <a href="#">服务器管理 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            {% if request.user.is_superuser or request.session.fun_auth.select_host %}
+                                <li class="host_list"><a href="/assets/host_list/">服务器列表</a></li>
+                            {% endif %}
+                            {% if request.user.is_superuser or request.session.fun_auth.add_host %}
+                                <li class="host_add"><a href="/assets/host_add/">添加主机</a></li>
+                            {% endif %}
+                            {% if request.user.is_superuser or request.session.fun_auth.bat_add_host %}
+                                <li class="host_add_batch"><a href="/assets/host_add_batch/" >批量添加主机</a></li>
+                                <li class="ip_list"><a href="/assets/ip_list/" >IP列表</a></li>
+                                <li class="zabbix"><a href="/assets/zabbix/" >zabbix信息</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li class="room idc_add idc_list">
+                        <a href="#">机房管理 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            {% if request.user.is_superuser or request.session.fun_auth.select_idc %}
+                            <li class="idc_list"><a href="/assets/idc_list/">机房列表</a></li>
+                            {% endif %}
+                            {% if request.user.is_superuser or request.session.fun_auth.add_idc %}
+                            <li class="idc_add"><a href="/assets/idc_add/">添加机房</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li class="salt">
+                        <a href="#">系统管理<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            {% if request.user.is_superuser or request.session.fun_auth.setup_system %}
+                            <li><a href="/salt/install/">安装系统</a></li>
+                            {% endif %}
+                            {% if request.user.is_superuser or request.session.fun_auth.upload_system %}
+                            <li><a href="/salt/status/">主机上报</a></li>
+                            {% endif %}
+                            {% if request.user.is_superuser or request.session.fun_auth.salt_keys %}
+                            <li><a href="/salt/key_list/">Salt认证管理</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li class="project service_add service_list">
+                        <a href="#">项目管理<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            {% if request.user.is_superuser or request.session.fun_auth.project_auth %}
+                            <li><a href="/assets/server/type/list/" >项目列表</a></li>
+                            {% endif %}
+                            {% if request.user.is_superuser or request.session.fun_auth.add_project %}
+                            <li><a href="/assets/server/type/add/" >添加项目</a></li>
+                            <li class="service_add"><a href="/assets/service_add/" >添加服务</a></li>
+                            <li class="service_list"><a href="/assets/service_list/" >服务列表</a></li>
+                            {% endif %}
+                            {% if request.user.is_superuser or request.session.fun_auth.add_line_auth %}
+                            <li><a href="/assets/product/add/" >添加产品线</a></li>
+                            <li><a href="/assets/product/list/" >产品线列表</a></li>
+                            {% endif %}
+                            {% if request.user.is_superuser %}
+                            <li><a href="{% url 'add_code' %}" > 添加代码仓库</a></li>
+                            {% endif %}
+                            <li><a href="/assets/server/host_without_business/" > 未分配项目主机</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            {% if request.user.username %}
+            <li class="swan auto">
+                <a href="###"><i class="fa fa-cube"></i> <span class="nav-label">自动化运维</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+
+                    <li><a href="/swan/apply/{{ request.user.uuid }}/">发布申请</a></li>
+                </ul>
+            </li>
+
+            <li class="monitor">
+                <a href="###"><i class="fa fa-cube"></i> <span class="nav-label">业务监控</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="http">
+                        <a href="#">http类型监控<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li><a href="{% url 'HttpMonitor' %}">添加监控</a></li>
+                            <li><a href="{% url 'httpmonitorlist' %}">监控列表</a></li>
+                        </ul>
+                    </li>
+                    <li class="mysql">
+                        <a href="#">数据库监控<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li><a href="{% url 'HttpMonitor' %}">添加监控</a></li>
+                            <li><a href="{% url 'httpmonitorlist' %}">监控列表</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="incident">
+                <a href="###"><i class="fa fa-bomb"></i> <span class="nav-label">故障管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="/incident/add/">添加故障</a></li>
+                    <li><a href="/incident/nodone/">待处理故障</a></li>
+                    <li><a href="/incident/my/">我的故障</a></li>
+                    <li><a href="/incident/classical/">精典案例</a></li>
+                    <li><a href="/incident/done/">已处理故障</a></li>
+                </ul>
+            </li>
+            {% endif %}
+            {% if request.user.is_superuser or request.session.fun_auth.add_user or request.session.fun_auth.edit_user or request.session.fun_auth.add_department%}
+            <li class="accounts">
+                <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    {% if request.user.is_superuser or request.session.fun_auth.add_user %}
+                    <li><a href="/accounts/user_list/">查看用户</a></li>
+                    {% endif %}
+                    {% if request.user.is_superuser or request.session.fun_auth.edit_user %}
+                    <li><a href="/accounts/adduser/">添加用户</a></li>
+                    {% endif %}
+                    {%  if request.user.is_superuser or request.session.fun_auth.add_department %}
+                    <li><a href="/accounts/list_department/">查看部门</a></li>
+                    <li><a href="/accounts/add_department/">添加部门</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
+            {% if request.user.is_superuser or request.session.fun_auth.cmdb_log or request.session.fun_auth.auth_log or request.session.fun_auth.server_audit%}
+            <li class="logs">
+                <a href="#"><i class="glyphicon glyphicon-eye-open"></i> <span class="nav-label">日志审计</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+{#                    {% if request.user.is_superuser or request.session.fun_auth.cmdb_log %}#}
+{#                    <li><a href="/logs/idc/"><i class="glyphicon glyphicon-eye-open"></i>资产操作日志</a></li>#}
+{#                    {% endif %}#}
+{#                    {% if request.user.is_superuser or request.session.fun_auth.auth_log %}#}
+{#                    <li><a href="/logs/salt/"><i class="fa fa-files-o"></i>自动化操作记录</a></li>#}
+{#                    {% endif %}#}
+                    {% if request.user.is_superuser or request.session.fun_auth.server_audit %}
+                    <li><a href="/logs/host/"><i class="glyphicon glyphicon-tint"></i>服务器操作记录</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
+
+            {% if request.user.is_superuser %}
+            <li class="auth">
+                <a href="#"><i class="glyphicon glyphicon-briefcase"></i> <span class="nav-label">权限系统</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="/auth/cmdb/"><i class="glyphicon glyphicon-user"></i>权限分配</a></li>
+                    <li><a href="/auth/cmdb/add/"><i class="fa fa-laptop"></i>添加角色</a></li>
+                    <li><a href="/auth/swan_auth/push_auth/"><i class="fa fa-bar-chart-o"></i> 发布权限 </a></li>
+                    <li><a href="/auth/host/user_list/"><i class="fa fa-linux" ></i> 服务器授权 </a></li>
+                </ul>
+            </li>
+            {% endif %}
+            <li class="landing_link">
+                <a  href="/ops/doc/"><i class="fa fa-star"></i> <span class="nav-label">运维规范</span> <span class="label label-warning pull-right">NEW</span></a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+<!-- 右侧菜单栏控制 -->
+<script type="text/javascript">
+    var str = document.location.pathname.split("/")[1];
+    var two = document.location.pathname.split("/")[2];
+    var three = document.location.pathname.split("/")[3];
+
+    if (str == "swan"){
+        $("." + str).addClass('active');
+    }
+
+    if (str == "salt"){
+        $(".assets").addClass('active');
+        $("." + str).addClass('active');
+    }
+     else if (str == "assets"  && three == "room"){
+        $("." + str).addClass('active');
+        $("." + three).addClass('active');
+     }
+     else if (str == "assets" && two == "server" && three == "type"){
+        $("." + str).addClass('active');
+        $(".project").addClass('active');
+     }
+     else if (str == "assets" && two == "server" && three == "host_without_business"){
+        $("." + str).addClass('active');
+        $(".project").addClass('active');
+     }
+      else if (str == "assets" && two == "product"){
+         $("." + str).addClass('active');
+         $(".project").addClass('active');
+      }
+     else if (str == "assets" && two == "server"){
+        $("." + str).addClass('active');
+        $("." + two).addClass('active');
+     }
+     else if (str == "conf" && two == "server"){
+        $("." + str).addClass('active');
+        $("." + two).addClass('active');
+     }
+     else if (two == "install" || two == "project"  && three == "add"){
+        $(".assets").addClass('active');
+        $("." + str).addClass('active');
+        $("." + two).addClass('active');
+     }
+     else {
+        try {
+             $("." + str).addClass('active');
+             $("." + two).addClass('active');
+        }
+        catch(err) {
+
+            }
+     }
+
+</script>
