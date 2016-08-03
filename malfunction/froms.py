@@ -13,11 +13,15 @@ BOOL_STATUS = ((True, '是'), (False, '否'))
 class inclident_from(UEditorModelForm):
     """
     """
-    op_group = department_Mode.objects.get(desc_gid=1001)
-    op_user = CustomUser.objects.filter(department=op_group)
     op = [("--------------", "--------------")]
-    for i in op_user:
-        op.append((i.first_name, i.first_name))
+    try:
+        op_group = department_Mode.objects.get(desc_gid=1001)
+        op_user = CustomUser.objects.filter(department=op_group)
+
+        for i in op_user:
+            op.append((i.first_name, i.first_name))
+    exception:
+        pass
 
     project_status = forms.ChoiceField(widget=forms.RadioSelect, choices=BOOL_STATUS, required=True, initial=True,
                                label=u"是否通知项目负责人")
