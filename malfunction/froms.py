@@ -20,7 +20,7 @@ class inclident_from(UEditorModelForm):
 
         for i in op_user:
             op.append((i.first_name, i.first_name))
-    exception:
+    except:
         pass
 
     project_status = forms.ChoiceField(widget=forms.RadioSelect, choices=BOOL_STATUS, required=True, initial=True,
