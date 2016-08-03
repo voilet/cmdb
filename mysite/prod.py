@@ -15,6 +15,7 @@
 import os
 
 DEBUG = True
+website = "http://127.0.0.1"
 # salt api config
 salt_api_url = "https://127.0.0.1/"
 # salt_api_url = "https://salt-api.int.fun.tv/"

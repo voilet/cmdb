@@ -234,7 +234,7 @@ ops_mail = "songxs@fun.tv"
 if os.path.isfile(localhost_path):
     from localhost import *
 else:
-    from salt_webconfig import *
+    from prod import *
 
 # BOOTSTRAP3 = {
 #     'horizontal_label_class': 'col-md-3',
