@@ -1,0 +1,103 @@
+git clone  https://github.com/voilet/cmdb
+mv cmdb /data
+cd  /data/cmdb
+pip install -r requirements.txt --index https://pypi.mirrors.ustc.edu.cn/simple/  
+可能有些没有安装数据库组建的需要
+pip install MySQL-python
+2、建立mysql 数据库并且授权账号登录：
+	Ø create database cmdb_v2 default charset=utf8;
+3丶导入数据库表文件：
+doc/cmdb.sql
+插入数据：
+INSERT INTO `users_department_mode` VALUES (1,'运维部','',1001);
+
+insert into `users_customuser` (`id`, `password`, `last_login`, `is_superuser`, `email`, `username`, `first_name`, `last_name`, `department_id`, `mobile`, `session_key`, `user_key`, `menu_status`, `user_active`, `uuid`, `is_staff`, `is_active`, `date_joined`) values('1','pbkdf2_sha256$15000$uM1f5HMxHOqE$zPzKtNJMheQe62Q592V5l0m60nq/5Vj4rgzlVf5nXYs=','2016-08-04 14:12:56','1','voilet@qq.com','admin','','',NULL,'','ff3a3s4vj7ivjl7km1teqhxrizwbdrek',NULL,'1','0','3eceb1e9-df90-38ed-9960-03183bc85cce','0','1','2015-12-29 14:05:50');
+
+4、修改配置文件mysite/settings.py：（这里可以以后修改）
+EMAIL_HOST = 'mail.qq.com'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'devops'
+EMAIL_HOST_PASSWORD = '123456'
+EMAIL_USE_TLS = False
+EMAIL_PUSH = True
+# 发送邮件帐号
+SendMail = "ops@xxx.com"
+REDIS_HOST = "127.0.0.1"
+REDIS_PORT = 6379
+REDIS_DB = 0
+
+
+# salt api info
+salt_cdn_url = 'https://192.168.111.142/'
+salt_center_url = 'https://192.168.111.101/'
+salt_user = 'salt'
+salt_passwd = '992a15aecbcf5727df775c45a35738cf'
+
+# zabbix api info
+zabbix_on = False
+zabbix_url = 'http://192.168.111.47:8080/zabbix'
+zabbix_user = 'admin'
+zabbix_passwd = 'zabbix'
+
+修改配置文件 mysite/prod.py：（数据库相关，必须修改）
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        # 'NAME': 'voilet_cmdb_v1',  # Or path to database file if using sqlite3.
+        'NAME': 'cmdb_v2',  # Or path to database file if using sqlite3.
+         'USER': 'root',
+         'PASSWORD': '123456',  # Not used with sqlite3.
+        'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '3306',  # Set to empty string for default. Not used with sqlite3.
+        "OPTIONS": {
+            "init_command": "SET foreign_key_checks = 0;",
+        },
+    },
+修改启动配置文件uwsgi：（必须修改，其中/home/jm/uwsgi修改为实际的路径）
+DESC="uwsgi daemon"
+NAME=uwsgi
+DAEMON=/usr/bin/uwsgi
+CONFIGFILE=/data/cmdb/mysite_uwsgi.ini  
+PIDFILE=/data/cmdb/mysite.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+修改站点配置文件mysite_uwsgi.ini：（修改为实际地址）
+chdir           = /data/cmdb
+
+5丶然后拷贝程序到/etc/init.d/
+cp uwsgi /etc/init.d/uwsgi
+
+6丶添加nginx主机配置cmdb.conf（其中/data/cmdb实际地址）
+server {
+        listen 80;
+        server_name cmdb.com;
+        proxy_buffer_size 64k;
+        proxy_buffers   32 32k;
+        proxy_busy_buffers_size 128k;
+
+        location /static {
+            alias /data/cmdb/static;
+        }
+        location /static/admin {
+        alias /usr/local/python2.7/lib/python2.7/site-packages/django/contrib/admin/static/admin;
+        }
+        location  /static/ueditor {
+        expires 30d;
+        alias /data/cmdb/DjangoUeditor/static/ueditor;
+        }
+        location / {
+                include uwsgi_params;
+                proxy_pass http://127.0.0.1:8100;
+        }
+
+}
+
+7丶启动
+service nginx reload
+/etc/init.d/uwsgi start
+打开网页访问
+默认账号密码admin: Admin_147258
+8丶登陆之后：咖啡大神叮嘱：
+先创建产品线，然后在创建项目，在建机房
+然后添加服务
+
