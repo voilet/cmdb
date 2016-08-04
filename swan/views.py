@@ -31,7 +31,7 @@ from assets.models import Project
 from swan.models import Apply, SwanLog
 from assets.models import project_swan
 from assets.models import Host
-from mysite.salt_webconfig import auth_key
+from mysite.settings import auth_key
 from cmdb_auth.no_auth import check_auth
 import ast
 import hashlib
