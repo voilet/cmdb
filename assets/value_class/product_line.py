@@ -16,7 +16,7 @@ from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from assets.models import Project, System_usage, Service, Line,ProjectUser
+from assets.models import Project, System_usage, Service, Line,ProjectUser, IDC
 
 
 #登录
@@ -39,6 +39,7 @@ def product_add(request):
     """
     添加产品线
     """
+    init = request.GET.get("init", False)
     status = check_auth(request, "add_line_auth")
     if not status:
         return render_to_response('default/error_auth.html', locals(), context_instance=RequestContext(request))
@@ -53,7 +54,14 @@ def product_add(request):
         if uf.is_valid():
             zw = uf.save(commit=False)
             zw.save()
-            return HttpResponseRedirect('/assets/server/')
+            if not init:
+                return HttpResponseRedirect('/assets/server/')
+            else:
+                idc_count = IDC.objects.all().count()
+                if idc_count == 0:
+                    return HttpResponseRedirect('/assets/idc_add/?init=True')
+                else:
+                    return HttpResponseRedirect('/assets/host_add/')
 
     else:
         uf = product_from()

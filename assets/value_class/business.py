@@ -353,7 +353,7 @@ def server_type_add(request):
 
     if request.method == 'POST':  # 验证post方法
         uf = business_form(request.POST)  # 绑定POST动作
-        print uf.is_valid()
+        init = request.GET.get("init", False)
         if uf.is_valid():
             uf.save()
             project_name = uf.cleaned_data['service_name']
@@ -361,7 +361,10 @@ def server_type_add(request):
                 ret = zabbix_group_add(project_name)
                 if ret == 0:
                     pass
-            return HttpResponseRedirect("/assets/server/type/list/")
+            if not init:
+                return HttpResponseRedirect("/assets/server/type/list/")
+            else:
+                return HttpResponseRedirect("/assets/host_add/")
     else:
         uf = business_form()
         try:

@@ -459,6 +459,8 @@ def host_add_batch(request):
 def idc_add(request):
     """ 添加IDC """
     if request.method == 'POST':
+        init = request.GET.get("init", False)
+
         uf = IdcForm(request.POST)
         if uf.is_valid():
             idc_name = uf.cleaned_data['name']
@@ -471,7 +473,10 @@ def idc_add(request):
                 if ret != 1:
                     emg = u'添加zabbix主机组 %s 失败!' % idc_name
                     return my_render('assets/idc_add.html', locals(), request)
-            return HttpResponseRedirect("/assets/idc_list/")
+            if not init:
+                return HttpResponseRedirect("/assets/idc_list/")
+            else:
+                return HttpResponseRedirect('/assets/server/type/add/?init=true')
 
     else:
         uf = IdcForm()

@@ -71,11 +71,21 @@ def salt_index(request):
 @login_required
 def salt_index_new(request):
     line_list = Line.objects.all()
+    if line_list.count() == 0:
+        return HttpResponseRedirect('/assets/product/add/?init=true')
+
     ztree_data = ztree_tag(request.user.username)
     users = CustomUser.objects.count()
     hosts = Host.objects.count()
     problems = Incident.objects.count()
     project = Project.objects.count()
+    idc_count = IDC.objects.all().count()
+    if idc_count == 0:
+        return HttpResponseRedirect('/assets/idc_add/?init=true')
+    if project == 0:
+        return HttpResponseRedirect('/assets/server/type/add/?init=true')
+    if hosts == 0:
+        return HttpResponseRedirect('/assets/host_add/?init=true')
     swan_count = project_swan.objects.count()
     swan_log_data = SwanLog.objects.all().order_by("-swan_datetime")
     swan_log = swan_log_data[:10]
