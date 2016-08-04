@@ -225,7 +225,7 @@ REDIS_DB = 0
 
 django_path = os.getcwd()
 localhost_path = "%s/mysite/%s" % (django_path, "localhost.py")
-salt_config = "%s/mysite/%s" % (django_path, "salt_webconfig.py")
+salt_config = "%s/mysite/%s" % (django_path, "prod.py")
 
 # from mongoengine import *
 # connect('config_center')
