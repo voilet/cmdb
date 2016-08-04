@@ -16,9 +16,9 @@ INSERT INTO `users_customuser` VALUES (1,'pbkdf2_sha256$15000$uM1f5HMxHOqE$zPzKt
 
 安装手册:
 ===
-查看doc/help.txt
-初始化数据
-doc/cmdb.sql
+* 查看doc/help.txt
+* 初始化数据
+* doc/cmdb.sql
 
 登录帐号密码
 ===
