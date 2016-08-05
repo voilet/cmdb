@@ -8,6 +8,7 @@
 * 张磊 (python开发大神，指点用了很多django优秀扩展)
 
 ## Install guideline:
+* 需要python2.7环境
 * 查看doc/help.txt
 * 初始化数据
 * doc/cmdb.sql

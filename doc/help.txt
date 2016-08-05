@@ -1,3 +1,4 @@
+需要python2.7环境
 git clone  https://github.com/voilet/cmdb
 mv cmdb /data
 cd  /data/cmdb
