@@ -88,7 +88,7 @@ server {
         }
         location / {
                 include uwsgi_params;
-                uwsgi_pass http://127.0.0.1:8100;
+                uwsgi_pass 127.0.0.1:8100;
         }
 
 }
