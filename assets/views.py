@@ -59,8 +59,8 @@ def get_diff(obj1, obj2):
             else:
                 v = u''
         if isinstance(v,list):
-            v = v.sort()
-            d2_value = d2_value.sort()
+            v.sort()
+            d2_value.sort()
             if v != d2_value:
                 info.update({k: [v, d2_value]})
         else:
