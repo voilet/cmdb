@@ -102,3 +102,5 @@ service nginx reload
 先创建产品线，然后在创建项目，在建机房
 然后添加服务
 
+9、发布接口地址
+https://github.com/voilet/push_api

@@ -14,7 +14,7 @@
 import urllib2, cookielib, urllib, yaml, json
 import requests
 
-requests.packages.urllib3.disable_warnings()
+#requests.packages.urllib3.disable_warnings()
 
 
 class salt_api_token(object):
