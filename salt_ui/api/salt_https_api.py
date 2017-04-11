@@ -14,7 +14,8 @@
 import urllib2, cookielib, urllib, yaml, json
 import requests
 
-#requests.packages.urllib3.disable_warnings()
+
+# requests.packages.urllib3.disable_warnings()
 
 
 class salt_api_token(object):
@@ -24,16 +25,17 @@ class salt_api_token(object):
                                       salt_api_url, {'X-Auth-Token' : token_api_id})
     """
 
-    def __init__(self, data, url, token=None):
+    def __init__(self, data, url, token=None, swheel=True):
         self.data = data
         self.url = url
         self.headers = {
             'CustomUser-agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)',
             "Accept": "application/x-yaml",
         }
-        s = {'expr_form': 'list', "client": "local_async"}
+        if swheel:
+            s = {'expr_form': 'list', "client": "local_async"}
+            self.data.update(s)
         self.headers.update(token)
-        self.data.update(s)
 
     def run(self):
         req = requests.post(self.url, headers=self.headers, data=self.data, verify=False)
