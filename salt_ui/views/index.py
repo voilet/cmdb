@@ -216,7 +216,8 @@ def status(request):
             'fun': 'key.list_all',
         },
         salt_api_url,
-        {"X-Auth-Token": token_api_id}
+        {"X-Auth-Token": token_api_id},
+        swheel=False
     )
     list_all = list_all.run()
     print list_all
