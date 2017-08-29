@@ -217,7 +217,7 @@ def status(request):
         },
         salt_api_url,
         {"X-Auth-Token": token_api_id},
-        swheel=False
+        False
     )
     list_all = list_all.run()
     print list_all
