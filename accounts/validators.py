@@ -8,8 +8,11 @@ username_re = re.compile(r'^([\w]{9}|[a-zA-Z]{1}[\w]+?)$')
 username = RegexValidator(username_re, u'学生:您的学号,管理员:4-12位,由字母数字下划线组成,首字母为字母', 'invalid')
 
 
-password_re = re.compile(r'([^a-z0-9A-Z])+')
-# password_re = re.compile(r'^[\w]+?$')
+# password_re = re.compile(r'([^a-z0-9A-Z])+')
+
+# password_re = re.compile(r'^[0-9a-zA-Z~!@#$%^&*()_+.]{6,16}$')
+password_re = re.compile(r'^(?=.*\d)(?=.*[a-zA-Z])(?=.*[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;\'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、])[\da-zA-Z`~!@#$%^&*()_\-+=<>?:"{}|,.\/;\'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]{8,16}$')
+
 password = RegexValidator(password_re, u'密码由字母数字特殊符号组成的字符串，最少为6位', 'invalid')
 
 
@@ -45,7 +48,7 @@ def checkContainLower(pwd):
 
 
 def checkSymbol(pwd):
-    pattern = re.compile('([^a-z0-9A-Z])+')
+    pattern = re.compile('([^a-z0-9A-Z~!@#$%^&*()_+.])+')
     match = pattern.findall(pwd)
     if match:
         return True
