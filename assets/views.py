@@ -452,11 +452,12 @@ def host_add_batch(request):
         for host in multi_hosts:
             if host == '':
                 break
-            number, brand, hard_info, eth1, eth2, internal_ip, idc, comment = host.split('!@')
-            hard_info = ast.literal_eval(hard_info)
-            cpu, memory, hard_disk = hard_info[0:3]
-            idc = IDC.objects.get(name=idc)
-            asset = Host(number=number, brand=brand, idc=idc, cpu=cpu,
+            print host
+            print len(host.split("@"))
+            print host.split("@")
+            node_name, cpu, memory, hard_disk, number, brand,  eth1, eth2, internal_ip, idc, comment,  = host.split('@')
+            print idc
+            asset = Host(node_name=node_name, number=number, brand=brand,  cpu=cpu,
                          memory=memory, hard_disk=hard_disk, eth1=eth1,
                          eth2=eth2, internal_ip=internal_ip, editor=comment)
             asset.save()
@@ -735,6 +736,7 @@ def host_update(request):
     host.eth1 = eth1
     host.mac = mac
     host.cpu = cpu
+    # host.raid = raid
     host.hard_disk = hard_disk
     host.memory = memory
     host.brand = brand
