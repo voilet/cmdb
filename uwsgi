@@ -5,8 +5,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DESC="uwsgi daemon"
 NAME=uwsgi
 DAEMON=/usr/bin/uwsgi
-CONFIGFILE=/home/jm/uwsgi/mysite_uwsgi.ini
-PIDFILE=/home/jm/uwsgi/mysite.pid
+CONFIGFILE=/data/cmdb/mysite_uwsgi.ini
+PIDFILE=/data/cmdb/mysite.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
 
