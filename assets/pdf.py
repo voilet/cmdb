@@ -135,7 +135,7 @@ def excel_output(data):
             table.write(s, 7, node_data)
         else:
             table.write(s, 7, "")
-        if i.type:
+        if i.type == 1:
             table.write(s, 8, u'物理机')
         else:
             table.write(s, 8, u'虚拟机')
