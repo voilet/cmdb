@@ -42,10 +42,11 @@ def register(request):
                                          time.strftime('%Y-%m-%d', time.localtime(time.time()))).hexdigest())
                 #
                 url = u'http://%s/accounts/newpasswd/?uuid=%s&token=%s' % (request.get_host(), new_user.uuid, token)
-                mail_title = u'运维自动化初始密码'
+                mail_title = u'运维自动化初始密码,注意密码设置需符合8位以上,字母+数字+特殊符合组合的形式'
                 mail_msg = u"""
                 Hi,%s:
-                    请点击以下链接初始化运维自动化密码,此链接当天有效:
+                    请点击以下链接初始化运维自动化密码,此链接当天有效
+                    注意密码设置需符合8位以上，字母+数字+特殊符合组合的形式，否则无法登录::
                         %s
                     有任何问题，请随时和运维组联系。
                 """ % (new_user.first_name, url)

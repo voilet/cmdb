@@ -48,7 +48,7 @@ def checkContainLower(pwd):
 
 
 def checkSymbol(pwd):
-    pattern = re.compile('([^a-z0-9A-Z~!@#$%^&*()_+.])+')
+    pattern = re.compile('([^a-z0-9A-Z])+')
     match = pattern.findall(pwd)
     if match:
         return True
