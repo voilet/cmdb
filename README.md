@@ -25,7 +25,7 @@ INSERT INTO `users_customuser` VALUES (1,'pbkdf2_sha256$15000$uM1f5HMxHOqE$zPzKt
 * user: admin
 * password: Admin_147258
 
-### cmdb系统模块功能能简介	
+### cmdb系统功能模块简介
 ```
 Accounts：用户权限管理、项目管理
 Api：用户所使用api模块
