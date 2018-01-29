@@ -43,10 +43,10 @@
                                 {% endif %}
                                 <p>请严格按照文本框内主机信息格式填写, 多台主机回车换行, 具体格式如下: </p>
                                 <p class="text-info">
-主机名 @ cpu @ 内存 @ 硬盘 @ 序列号 @ 品牌型号 @ eth1 @ eth2 @ 远程控制卡 @ 所属机房 @ 备注说明 </p>
+主机名@cpu@内存@硬盘@序列号@品牌型号@eth1@eth2@远程控制卡@所属机房@备注说明 </p>
                                     <form id="assetMulti" method="post" class="form-horizontal">
                                         {% csrf_token %}
-                                        <div><textarea id="batch" name="batch" type="text" placeholder="OBD数据接收1(lbsnew1) @ Intel® Xeon E5-2620v4 2.1GHz 8核 @ 32G @ 300G*3 @ 6CU625WRKA @ HPE DL360G9  @ 172.16.20.120 @ 172.16.20.120 @ 172.16.20.120 @ 新网 @ lbsnew服务器1" class="form-control" style="width:700px;height:500px">OBD数据接收1(lbsnew1) @ Intel® Xeon E5-2620v4 2.1GHz 8核 @ 32G @ 300G*3 @ 6CU625WRKA @ HPE DL360G9  @ 172.16.20.120 @ 172.16.20.120 @ 172.16.20.120 @ 新网 @ lbsnew服务器1</textarea></div>
+                                        <div><textarea id="batch" name="batch" type="text" placeholder="OBD数据接收1(lbsnew1)@Intel® Xeon E5-2620v4 2.1GHz 8核@32G@300G*3@6CU625WRKA@HPE DL360G9  @172.16.20.120@172.16.20.120@172.16.20.120@新网@lbsnew服务器1" class="form-control" style="width:700px;height:500px">OBD数据接收1(lbsnew1)@Intel® Xeon E5-2620v4 2.1GHz 8核@32G@300G*3@6CU625WRKA@HPE DL360G9@172.16.20.120@ 172.16.20.120@172.16.20.120@新网@lbsnew服务器1</textarea></div>
                                         <div class="hr-line-dashed"></div>
                                         <div class="form-group">
                                             <div class="col-sm-4 col-sm-offset-4">
