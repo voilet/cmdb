@@ -24,3 +24,4 @@ pika
 django-summernote
 DjangoUeditor
 xlrd
+uwsgi
