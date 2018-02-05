@@ -47,13 +47,6 @@ from salt_ui.views.api_log_class import salt_log
 from django.contrib.auth.decorators import login_required
 
 
-class Host_from(forms.ModelForm):
-
-    class Meta:
-        model = Host
-        fields = "__all__"
-
-
 def select_node(ip):
     """
     查询主机是否在数据库中
@@ -83,13 +76,13 @@ def salt_update_node(request):
                 business = Project.objects.get(id=business_id)
                 zw.business = business
             zw.save()
-            uf = Host_from()
+            uf = HostForm()
             context['uf'] = uf
             context.update(csrf(request))
             return HttpResponseRedirect("/salt/status/")
             # return render_to_response('assets/host_list.html',context,context_instance=RequestContext(request))
         else:
-            uf = Host_from()
+            uf = HostForm()
             context["server_type"] = Project.objects.all()
             context['uf'] = uf
             context.update(csrf(request))
@@ -106,7 +99,7 @@ def salt_update_node(request):
         #执行模块
         list = salt_api_token({'client': 'local', 'fun': 'grains.items', 'tgt': update_name, 'timeout': 100}, salt_api_url, {"X-Auth-Token": token_api_id}, False)
         master_status = list.run()
-        uf = Host_from()
+        uf = HostForm()
         for i in master_status["return"]:
             system_os = i[update_name]["os"]
             osarch = i[update_name]["osarch"]
