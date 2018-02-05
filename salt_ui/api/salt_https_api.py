@@ -40,6 +40,7 @@ class salt_api_token(object):
     def run(self):
         req = requests.post(self.url, headers=self.headers, data=self.data, verify=False)
         context = req.text
+        print self.url
         return yaml.load(context)
 
     def CmdRun(self):

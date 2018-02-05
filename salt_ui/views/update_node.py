@@ -38,6 +38,7 @@ from salt_ui.api.salt_token_id import *
 from salt_ui.api.salt_https_api import salt_api_jobs
 from mysite.settings import  salt_api_pass,salt_api_user,salt_api_url,pxe_url_api
 from django.http import HttpResponse,HttpResponseRedirect
+from assets.forms import HostForm
 
 #日志记录
 from salt_ui.views.api_log_class import salt_log
@@ -51,6 +52,7 @@ class Host_from(forms.ModelForm):
     class Meta:
         model = Host
         fields = "__all__"
+
 
 def select_node(ip):
     """
@@ -70,25 +72,23 @@ def salt_update_node(request):
     context = {}
     update_name = request.GET['node_name']
     if request.method == 'POST':    
-        uf = Host_from(request.POST)
+        uf = HostForm(request.POST)
         if uf.is_valid():   
             # 查询数据库中是否有此数据
             zw = uf.save(commit=False)
             zw.edit_username = request.user.username
             zw.status = 1
-            zw.vm = int(request.POST["vm"])
             business_id = request.POST.get('business')
             if business_id:
                 business = Project.objects.get(id=business_id)
                 zw.business = business
-            # zw.save()
+            zw.save()
             uf = Host_from()
             context['uf'] = uf
             context.update(csrf(request))
             return HttpResponseRedirect("/salt/status/")
             # return render_to_response('assets/host_list.html',context,context_instance=RequestContext(request))
         else:
-            print "save error"
             uf = Host_from()
             context["server_type"] = Project.objects.all()
             context['uf'] = uf
@@ -104,7 +104,7 @@ def salt_update_node(request):
         salt_garins_reload = salt_api_token({'fun': 'sys.reload_modules', 'tgt': update_name, 'client': 'local'}, salt_api_url, {"X-Auth-Token": token_api_id})
         salt_garins_reload.run()
         #执行模块
-        list = salt_api_token({'client': 'local', 'fun': 'grains.items', 'tgt': update_name, 'timeout': 100}, salt_api_url, {"X-Auth-Token": token_api_id})
+        list = salt_api_token({'client': 'local', 'fun': 'grains.items', 'tgt': update_name, 'timeout': 100}, salt_api_url, {"X-Auth-Token": token_api_id}, False)
         master_status = list.run()
         uf = Host_from()
         for i in master_status["return"]:
@@ -118,12 +118,14 @@ def salt_update_node(request):
                 context["eth0"] = i[update_name]["ip_interfaces"]["em1"][0]
             else:
                 context["eth0"] = "127.0.0.1"
+            print i[update_name]["ip_interfaces"]
             if "eth1" in i[update_name]["ip_interfaces"]:
             # try:
-                context["eth1"] = i[update_name]["ip_interfaces"]["eth1"][0]
+                if len(i[update_name]["ip_interfaces"]["eth1"]) > 0:
+                    context["eth1"] = i[update_name]["ip_interfaces"]["eth1"][0]
             # except IndexError:
             else:
-                context["eth1"] = False
+                context["eth1"] = ""
             # ip = request.POST.get("eth1")
             # data = select_node(context["eth0"])
             try:
@@ -157,6 +159,7 @@ def salt_update_node(request):
                 context["server_type"] = Project.objects.all()
                 # print context
                 context.update(csrf(request))
+
         return render_to_response('saltstack/node_add.html', context, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect("/salt/status/")
