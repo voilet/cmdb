@@ -25,3 +25,4 @@ django-summernote
 DjangoUeditor
 xlrd
 uwsgi
+twisted
