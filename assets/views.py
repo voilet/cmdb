@@ -773,14 +773,14 @@ def zabbix_host(request):
 def ip_list(request):
     """ ip列表 """
     idcs = IDC.objects.all()
-    yizhuang_idc = get_object_or_404(IDC, name='亦庄电信')
-    active_111 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.111.0/24', status=1)
-    unactive_111 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.111.0/24', status=1)
-    active_112 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.112.0/24', status=1)
-    unactive_112 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.112.0/24', status=1)
-    active_113 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.113.0/24', status=1)
-    unactive_113 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.113.0/24', status=1)
-    return my_render('assets/ip_list.html', locals(), request)
+    # yizhuang_idc = get_object_or_404(IDC, name='亦庄电信')
+    # active_111 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.111.0/24', status=1)
+    # unactive_111 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.111.0/24', status=1)
+    # active_112 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.112.0/24', status=1)
+    # unactive_112 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.112.0/24', status=1)
+    # active_113 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.113.0/24', status=1)
+    # unactive_113 = IpList.objects.filter(idc=yizhuang_idc, network='192.168.113.0/24', status=1)
+    return render_to_response('assets/ip_list.html', locals(), context_instance=RequestContext(request))
 
 
 @login_required
