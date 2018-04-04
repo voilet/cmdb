@@ -105,5 +105,12 @@ service nginx reload
 9、发布接口地址
 https://github.com/voilet/push_api
 
+10、salt官方安装地址
+http://docs.saltstack.cn/topics/installation/index.html
+
+所有测试和使用全在centos下
+centos源地址
+http://docs.saltstack.cn/topics/installation/rhel.html
+
 
 10 salt api配置文件 /doc/salt-api下放到/etc/salt/master.d下即可
