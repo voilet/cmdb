@@ -104,3 +104,6 @@ service nginx reload
 
 9、发布接口地址
 https://github.com/voilet/push_api
+
+
+10 salt api配置文件 /doc/salt-api下放到/etc/salt/master.d下即可

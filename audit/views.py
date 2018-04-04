@@ -41,9 +41,7 @@ def audit_save(request):
         ssh_audit_data = ssh_audit(user_name=user_name, bash_shell=bash_shell, audit_data_time=audit_data_time,
                                    server_ip=server_ip)
         s = ssh_audit_data.save()
-        if s:
-            return HttpResponse(json.dumps({"status": 200, "result": u"已入库"}, ensure_ascii=False, indent=4, ))
-    return HttpResponse(json.dumps({"status": 403, "result": u"error"}, ensure_ascii=False, indent=4, ))
+    return HttpResponse(json.dumps({"status": 200, "result": u"已入库"}, ensure_ascii=False, indent=4, ))
 
 
 @csrf_exempt

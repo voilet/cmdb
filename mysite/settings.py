@@ -243,7 +243,8 @@ else:
 #
 # BOOTSTRAP_COLUMN_COUNT = 10
 
-# salt api info
+# salt cdn api info
+# 如机房有核心 或 cdn则会调用此处使用
 salt_cdn_url = 'https://192.168.111.142/'
 salt_center_url = 'https://192.168.111.101/'
 salt_user = 'salt'
