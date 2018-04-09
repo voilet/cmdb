@@ -179,10 +179,10 @@
                          url: url }).done(function( data ) {
                          $("#result_Parameters").html(data);
                     });
-                    // console.log('/swan/swan_select_botton/?project=' + pname + "&swan_name=" + $(this).val());
+                    // console.log('/swan/swan_select_button/?project=' + pname + "&swan_name=" + $(this).val());
                     $.ajax({
                          type: "GET",
-                         url: '/swan/swan_select_botton/?project=' + pname + "&swan_name=" + $(this).val() }).done(function( data ) {
+                         url: '/swan/swan_select_button/?project=' + pname + "&swan_name=" + $(this).val() }).done(function( data ) {
                          $("#host_rest").html(data);
                     });
                 });

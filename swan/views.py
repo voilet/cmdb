@@ -271,7 +271,7 @@ def swan_select(request):
     user_info = CustomUser.objects.get(first_name=request.user.first_name)
 
     swan_project_name = request.GET.get("project_name")
-    myform_rst = Project.objects.get(pk=swan_project_name)
+    myform_rst = Project.objects.get(service_name=swan_project_name)
 
     rst = project_swan.objects.filter(project_name=myform_rst)
     """
@@ -302,7 +302,7 @@ def swan_select_myfrom(request):
     """
 
     swan_project_name = request.GET.get("project_name")
-    myform_rst = Project.objects.get(pk=swan_project_name)
+    myform_rst = Project.objects.get(service_name=swan_project_name)
     rst_data = []
     rst = project_swan.objects.filter(project_name=myform_rst)
     data = {}
@@ -327,7 +327,7 @@ def swan_select_button(request):
     swan_project_name = request.GET.get("project", False)
     swan_name = request.GET.get("swan_name", False)
 
-    myform_rst = Project.objects.get(uuid=swan_project_name)
+    myform_rst = Project.objects.get(service_name=swan_project_name)
 
     rst_data = []
 
@@ -352,7 +352,7 @@ def swan_select_tgt(request):
     swan_project_name = request.GET.get("project", False)
     swan_name = request.GET.get("tgt", False)
     type = request.GET.get('type', False)
-    myform_rst = Project.objects.get(pk=swan_project_name)
+    myform_rst = Project.objects.get(service_name=swan_project_name)
     result = project_swan.objects.get(pk=swan_name)
 
     rst_data = result.tgt.split()

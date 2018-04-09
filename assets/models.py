@@ -125,6 +125,7 @@ class Project(models.Model):
     project_doc = models.TextField(blank=True, null=True, verbose_name=u'业务维护说明')
     project_user_group = models.TextField(blank=True, null=True, verbose_name=u'组成员', help_text=u"只有项目组成员才能申请发布")
     sort = models.IntegerField(max_length=100, blank=True, null=True, default=0, verbose_name=u"排序")
+
     def __unicode__(self):
         return self.service_name
 
@@ -155,7 +156,7 @@ class IDC(models.Model):
         app_label = 'assets'
 
 
-class Publishing_System(models.Model):
+class PublishingSystem(models.Model):
     uuid = UUIDField(auto=True, primary_key=True)
     project_name = models.IntegerField(max_length=20, verbose_name=u"项目名称")
     push_url = models.CharField(max_length=100, blank=True, null=True, verbose_name=u"发布按钮名称")
