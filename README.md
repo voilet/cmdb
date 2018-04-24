@@ -5,6 +5,7 @@
 
 ## Contributors
 * 王墉 (halcyon) jumpserver开发者之一
+* 田宁 (tianning2011@163.com)
 * 张磊 (python开发大神，指点用了很多django优秀扩展)
 * 祁成 (cmdb参与开发者--cmdb系统修复BUG)
 
