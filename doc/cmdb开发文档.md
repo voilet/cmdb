@@ -2,7 +2,7 @@ markdown语法
 # Cmdb开发文档
 ## 文档作者
 ```
-cmdb爱好者：祁成、宋绪双
+cmdb爱好者：祁成
 ```
 
 # 部署说明
@@ -86,11 +86,74 @@ Accounts：用户权限管理、项目管理
 ## Django的MTV模型
 ## 克隆并配置部署代码
 # 资产管理
+## assets_host表结构设计
+```
++-------------------+--------------+------+-----+---------+-------+
+| Field             | Type         | Null | Key | Default | Extra |
++-------------------+--------------+------+-----+---------+-------+
+| uuid              | char(32)     | NO   | PRI | NULL    |       |      #uuid
+| node_name         | varchar(100) | YES  |     | NULL    |       |      #主机名
+| eth1              | char(15)     | YES  |     | NULL    |       |      #eth1网卡ip
+| eth2              | char(15)     | YES  |     | NULL    |       |	     #eth2网卡ip
+| mac               | varchar(20)  | YES  |     | NULL    |       |      #MAC地址
+| internal_ip       | char(15)     | YES  |     | NULL    |       |      #远程控制卡IP
+| brand             | varchar(64)  | YES  |     | NULL    |       |      #服务器型号
+| cpu               | varchar(64)  | YES  |     | NULL    |       |      #cpu型号描述
+| hard_disk         | varchar(128) | YES  |     | NULL    |       |      #硬盘描述
+| memory            | varchar(128) | YES  |     | NULL    |       |      #内存描述
+| system            | varchar(32)  | YES  |     | NULL    |       |      #操作系统
+| system_cpuarch    | varchar(32)  | YES  |     | NULL    |       |      #操作系统基于平台
+| system_version    | varchar(8)   | YES  |     | NULL    |       |      #系统版本
+| create_time       | datetime     | NO   |     | NULL    |       |      #记录创建的时间
+| guarantee_date    | date         | YES  |     | NULL    |       |      #服务器过保到期时间
+| cabinet           | varchar(32)  | YES  |     | NULL    |       |      #所属机柜
+| server_cabinet_id | int(11)      | YES  |     | NULL    |       |      #机器所在机柜位置
+| number            | varchar(32)  | YES  |     | NULL    |       |      #序列号
+| editor            | longtext     | YES  |     | NULL    |       |   	 #机器备注
+| status            | int(11)      | NO   |     | NULL    |       |      #服务器当前状态
+| type              | int(11)      | NO   |     | NULL    |       |      #机器所属种类，实体机or虚拟机
+| Services_Code     | varchar(16)  | YES  |     | NULL    |       |	     #快速服务编号
+| env               | varchar(32)  | YES  |     | NULL    |       |	     #机器所属环境
+| room_number       | varchar(32)  | YES  |     | NULL    |       |      #机器所在机房楼层房间号
+| server_sn         | varchar(32)  | YES  |     | NULL    |       |      #服务器sn号
+| switch_port       | varchar(12)  | YES  |     | NULL    |       |	     #对应交换机端口
+| idle              | tinyint(1)   | NO   |     | NULL    |       |      #是否空闲—此字段无用
+| idc_id            | char(32)     | YES  | MUL | NULL    |       |      #所对应机房id
+| vm_id             | char(32)     | YES  | MUL | NULL    |       |      #所对应是否为虚拟机
+```
+
+
+
 # 自动化运维
 # 业务监控
 # 故障管理
 # 日志审计
 # 权限系统
+# 用户管理
+## 用户信息表
+```
++---------------+--------------+------+-----+---------+----------------+
+|字段名   |数据类型 |允许非空| Key值 | 默认值| 自动递增      说明   |
++---------------+--------------+------+-----+---------+----------------+
+| id            | int(11)      | NO   | PRI | NULL    | auto_increment |     表id（自增）
+| password      | varchar(128) | NO   |     | NULL    |                |     用户加密密码
+| last_login    | datetime     | NO   |     | NULL    |                |	最后登录时间
+| is_superuser  | tinyint(1)   | NO   |     | NULL    |                |     是否为超级管理员
+| email         | varchar(254) | NO   | UNI | NULL    |                |	邮箱
+| username      | varchar(30)  | NO   | UNI | NULL    |                |     用户名
+| first_name    | varchar(30)  | NO   |     | NULL    |                |     姓
+| last_name     | varchar(30)  | NO   |     | NULL    |                |     名
+| mobile        | varchar(30)  | NO   |     | NULL    |                |    手机号
+| session_key   | varchar(60)  | YES  |     | NULL    |                |   session-key
+| user_key      | longtext     | YES  |     | NULL    |                |    user-key
+| menu_status   | tinyint(1)   | NO   |     | NULL    |                |    菜单展开收缩权限
+| user_active   | tinyint(1)   | NO   |     | NULL    |                |    用户状态
+| uuid          | varchar(64)  | NO   | UNI | NULL    |                |    uuid
+| is_staff      | tinyint(1)   | NO   |     | NULL    |                |	是否在职
+| is_active     | tinyint(1)   | NO   |     | NULL    |                |    是否可登录
+| date_joined   | datetime     | NO   |     | NULL    |                |    加入时间
+| department_id | int(11)      | YES  | MUL | NULL    |                |    部门id
+```
 
 
 
