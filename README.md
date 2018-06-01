@@ -3,6 +3,9 @@
 * [Install guideline](#install-guideline)
 * [Project screenshots](#project-screenshots)
 
+## 开发文档
+路径：doc/cmdb开发文档.md
+
 ## Contributors
 * 王墉 (halcyon) jumpserver开发者之一
 * 田宁 (tianning2011@163.com) 精通各种python计学计算方法
