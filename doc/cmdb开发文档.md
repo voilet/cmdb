@@ -53,26 +53,26 @@ Accounts：用户权限管理、项目管理
 | cmdb_auth_auth_group              |	#django认证的组权限表
 | cmdb_auth_auth_group_group_user   |   #用户关联表
 | cmdb_auth_user_auth_cmdb          |	#权限表，为false就无权限
-| django_admin_log                  |	
+| django_admin_log                  |	#admin用户操作记录
 | django_content_type               |   #django模型
 | django_migrations                 |	#数据库变更操作记录
 | django_session                    |	#session信息记录(新增权限会写入session中)
 | gitCode                           |	#git代码记录
-| incident                          |
+| incident                          |   #故障管理数据表
 | monitor_monitorhttp               |	#监控http数据的表记录
 | monitor_monitorhttplog            |	#监控http数据的日志记录
 | monitor_monitormysql              |	#监控mysql数据的表记录
-| project_swan                      |
+| project_swan                      |   #
 | project_swan_node                 |	#
 | project_swan_push_user            |	#项目推送用户
 | push_system                       |	#代码推送相关
 | salt_ui_operationlog              |	#
 | salt_ui_salt_api_log              |	#salt的api日志记录
 | salt_ui_salt_conf                 |	#salt配置文件记录
-| salt_ui_salt_mode_name            |
+| salt_ui_salt_mode_name            |	#
 | salt_ui_setuplog                  |	#salt的安装记录
-| swan_apply                        |
-| swan_swanlog                      |	
+| swan_apply                        |	#
+| swan_swanlog                      |	#
 | users_customuser                  |	#cmdb用户信息表
 | users_customuser_groups           |	#cmdb用户组信息表
 | users_customuser_user_permissions |	#用户表与权限对应关系表
@@ -135,24 +135,24 @@ Accounts：用户权限管理、项目管理
 +---------------+--------------+------+-----+---------+----------------+
 |字段名   |数据类型 |允许非空| Key值 | 默认值| 自动递增      说明   |
 +---------------+--------------+------+-----+---------+----------------+
-| id            | int(11)      | NO   | PRI | NULL    | auto_increment |     表id（自增）
-| password      | varchar(128) | NO   |     | NULL    |                |     用户加密密码
-| last_login    | datetime     | NO   |     | NULL    |                |	最后登录时间
-| is_superuser  | tinyint(1)   | NO   |     | NULL    |                |     是否为超级管理员
-| email         | varchar(254) | NO   | UNI | NULL    |                |	邮箱
-| username      | varchar(30)  | NO   | UNI | NULL    |                |     用户名
-| first_name    | varchar(30)  | NO   |     | NULL    |                |     姓
-| last_name     | varchar(30)  | NO   |     | NULL    |                |     名
-| mobile        | varchar(30)  | NO   |     | NULL    |                |    手机号
-| session_key   | varchar(60)  | YES  |     | NULL    |                |   session-key
-| user_key      | longtext     | YES  |     | NULL    |                |    user-key
-| menu_status   | tinyint(1)   | NO   |     | NULL    |                |    菜单展开收缩权限
-| user_active   | tinyint(1)   | NO   |     | NULL    |                |    用户状态
-| uuid          | varchar(64)  | NO   | UNI | NULL    |                |    uuid
-| is_staff      | tinyint(1)   | NO   |     | NULL    |                |	是否在职
-| is_active     | tinyint(1)   | NO   |     | NULL    |                |    是否可登录
-| date_joined   | datetime     | NO   |     | NULL    |                |    加入时间
-| department_id | int(11)      | YES  | MUL | NULL    |                |    部门id
+| id            | int(11)      | NO   | PRI | NULL    | auto_increment |     #表id（自增）
+| password      | varchar(128) | NO   |     | NULL    |                |     #用户加密密码
+| last_login    | datetime     | NO   |     | NULL    |                |	 #最后登录时间
+| is_superuser  | tinyint(1)   | NO   |     | NULL    |                |     #是否为超级管理员
+| email         | varchar(254) | NO   | UNI | NULL    |                |	 #邮箱
+| username      | varchar(30)  | NO   | UNI | NULL    |                |     #用户名
+| first_name    | varchar(30)  | NO   |     | NULL    |                |     #姓
+| last_name     | varchar(30)  | NO   |     | NULL    |                |     #名
+| mobile        | varchar(30)  | NO   |     | NULL    |                |     #手机号
+| session_key   | varchar(60)  | YES  |     | NULL    |                |     #session-key
+| user_key      | longtext     | YES  |     | NULL    |                |     #user-key
+| menu_status   | tinyint(1)   | NO   |     | NULL    |                |     #菜单展开收缩权限
+| user_active   | tinyint(1)   | NO   |     | NULL    |                |     #用户状态
+| uuid          | varchar(64)  | NO   | UNI | NULL    |                |     #uuid
+| is_staff      | tinyint(1)   | NO   |     | NULL    |                |	 #是否在职
+| is_active     | tinyint(1)   | NO   |     | NULL    |                |     #是否可登录
+| date_joined   | datetime     | NO   |     | NULL    |                |     #加入时间
+| department_id | int(11)      | YES  | MUL | NULL    |                |     #部门id
 ```
 
 
