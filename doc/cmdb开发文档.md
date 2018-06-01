@@ -4,6 +4,8 @@ markdown语法
 ```
 cmdb爱好者：祁成
 ```
+## django访问流程
+![sec](http://i2.51cto.com/images/blog/201806/01/9a9cc50d25f2c76933b884ed096afa5b.jpg)
 
 # 部署说明
 ## cmdb系统模块功能简介
