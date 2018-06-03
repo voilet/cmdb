@@ -158,8 +158,38 @@ V：View视图：主要用于后端逻辑实现
 ## 自动化运维
 ## 业务监控
 ## 故障管理
+```
+完善中
+```
 ### 对接监控系统
+```
+完善中
+```
 #### 运维故障管理知识库
+```
++-------------------+--------------+------+-----+---------+-------+
+| Field             | Type         | Null | Key | Default | Extra |
++-------------------+--------------+------+-----+---------+-------+
+| uuid              | char(32)     | NO   | PRI | NULL    |       |
+| title             | varchar(256) | NO   |     | NULL    |       |
+| ip                | char(15)     | YES  |     | NULL    |       |
+| url               | longtext     | YES  |     | NULL    |       |
+| projectuser       | varchar(32)  | NO   |     | NULL    |       |
+| closeuser         | varchar(32)  | YES  |     | NULL    |       |
+| source            | int(11)      | NO   |     | NULL    |       |
+| starttime         | datetime     | NO   |     | NULL    |       |
+| scantime          | datetime     | YES  |     | NULL    |       |
+| stoptime          | datetime     | YES  |     | NULL    |       |
+| mailcomment       | longtext     | NO   |     | NULL    |       |
+| status            | int(11)      | NO   |     | NULL    |       |
+| classical         | tinyint(1)   | NO   |     | NULL    |       |
+| grade             | int(11)      | YES  |     | NULL    |       |
+| comment           | longtext     | NO   |     | NULL    |       |
+| project_principal | varchar(32)  | YES  |     | NULL    |       |
+| incident_user     | varchar(32)  | YES  |     | NULL    |       |
+| createtime        | datetime     | NO   |     | NULL    |       |
++-------------------+--------------+------+-----+---------+-------+
+```
 ## 日志审计
 ```
 1当用户ssh登录服务器---
