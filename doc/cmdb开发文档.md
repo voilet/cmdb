@@ -5,7 +5,21 @@ markdown语法
 cmdb爱好者：祁成
 ```
 ## django访问流程
-![sec](http://i2.51cto.com/images/blog/201806/01/dfa2851920c4c4e13f827814dc3a0237.jpg)
+![sec](http://i2.51cto.com/images/blog/201806/01/dfa2851920c4c4e13f827814dc3a0237.jpg)Cmdb
+
+## 开发文档
+```
+引言	2
+编写目的和范围	2
+术语表	2
+1部署说明	3
+1.1 环境说明	3
+1.2 Django的MTV模型	3
+1.3 克隆部署代码	3
+1.4 cmdb系统模块功能简介	6
+```
+
+
 
 # 部署说明
 ## cmdb系统模块功能简介
