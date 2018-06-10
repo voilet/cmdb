@@ -24,7 +24,7 @@ class MonitorHttp(models.Model):
     createtime = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return self.name
+        return self.title
 
     class Meta:
         verbose_name = u"http监控"
