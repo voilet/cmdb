@@ -118,7 +118,7 @@ class AuthSudo(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return self.user_name
+        return self.groupname
 
     class Meta:
         managed = True
