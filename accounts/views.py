@@ -166,7 +166,7 @@ def department_view(request):
         return HttpResponseRedirect("/accounts/list_department/")
     else:
         uf = department_from()
-    return render_to_response('user/add_usergroup.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('user/add_department.html', locals(), context_instance=RequestContext(request))
 
 
 @login_required
