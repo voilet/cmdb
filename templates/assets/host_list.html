@@ -136,10 +136,8 @@
                                             <td class="text-center"><input type="checkbox" name="selected" value="{{ i.uuid }}"></td>
                                             {% if i.eth1 %}
                                                 <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
-                                            {% elif i.eth2 %}
-                                                <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth2 }} </a></td>
                                             {% else %}
-                                                <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>
+                                                <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth2 }} </a></td>
                                             {% endif %}
 {#                                            <td class="text-center"> <a href="/assets/host_detail/?uuid={{ i.uuid }}" class="select_node" ><i class="fa fa-linux" style="color:#080506"></i> {{ i.eth1 }} </a></td>#}
                                             <td class="text-center"> {{ i.node_name }} </td>
