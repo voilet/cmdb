@@ -359,7 +359,12 @@ def host_del(request):
     host.env = ''
     host.number = ''
     host.switch_port = ''
-    host.idc = IDC.objects.get(name=u"报废库房")
+    idc_ = IDC.objects.filter(name=u"报废库房")
+    if idc_.exists():
+        idc_ = idc_.first()
+    else:
+        idc_ = None
+    host.idc = idc_
     host.business.clear()
     host.service.clear()
     host.save()
@@ -385,7 +390,12 @@ def host_del_batch(request):
         host.env = ''
         host.number = ''
         host.switch_port = ''
-        host.idc = IDC.objects.get(name=u'报废库房')
+        idc_ = IDC.objects.filter(name=u"报废库房")
+        if idc_.exists():
+            idc_ = idc_.first()
+        else:
+            idc_ = None
+        host.idc = idc_
         host.business.clear()
         host.service.clear()
         host.save()
