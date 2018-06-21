@@ -454,8 +454,5 @@ def auth_server_type_list(request):
 
     business_list = Project.objects.all()
 
-    server_type = Project.objects.all()
-
-    service_user = ProjectUser.objects.filter()
     swan_all = project_swan.objects.all()
     return render_to_response('assets/server_type_list.html', locals(), context_instance=RequestContext(request))
