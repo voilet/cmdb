@@ -448,13 +448,6 @@ class project_doc_form(forms.ModelForm):
 # 业务管理
 @login_required
 def auth_server_type_list(request):
-    business_list = Project.objects.all()
-    return render_to_response('assets/server_type_list.html', locals(), context_instance=RequestContext(request))
-
-
-# 业务管理
-@login_required
-def auth_server_type_list(request):
     status = check_auth(request, "project_auth")
     if not status:
         return render_to_response('default/error_auth.html', locals(), context_instance=RequestContext(request))
