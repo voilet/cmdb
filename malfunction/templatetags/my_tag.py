@@ -22,20 +22,20 @@ def myIncident(username):
     return data
 
 
-@register.filter(name='myClassical')
-def myClassical(username):
+@register.simple_tag
+def myClassical():
     data = Incident.objects.filter(classical=True).count()
     return data
 
 
-@register.filter(name='NoDone')
-def NoDone(username):
+@register.simple_tag
+def NoDone():
     data = Incident.objects.filter(status__lte=1).count()
     return data
 
 
-@register.filter(name='Done')
-def Done(username):
+@register.simple_tag
+def Done():
     data = Incident.objects.filter(status=2).count()
     return data
 
