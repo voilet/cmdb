@@ -49,8 +49,8 @@ def auth_index(request):
     group_user_count = {}
 
     for i in data:
-        data_id = auth_group.objects.get(uuid=i.uuid)
-        group_user_count[i.uuid] = data_id.group_user.all().count()
+        # data_id = auth_group.objects.get(uuid=i.uuid)
+        group_user_count[i.uuid] = i.group_user.all().count()
 
     return render_to_response('auth/index.html', locals(), context_instance=RequestContext(request))
 
