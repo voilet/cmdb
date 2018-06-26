@@ -7,10 +7,10 @@
                 <div class="space-25"></div>
                 <h5>Folders</h5>
                 <ul class="folder-list m-b-md" style="padding: 0">
-                    <li><a href="/incident/nodone/"> <i class="fa fa-inbox "></i> 待处理故障 <span class="label label-warning pull-right">{{ request.user.username|NoDone }}</span> </a></li>
+                    <li><a href="/incident/nodone/"> <i class="fa fa-inbox "></i> 待处理故障 <span class="label label-warning pull-right">{% NoDone %}</span> </a></li>
                     <li><a href="/incident/my/"> <i class="fa fa-envelope-o"></i> 我的故障<span class="label label-danger pull-right">{{  request.user.first_name|myIncident }}</span></a></li>
-                    <li><a href="/incident/classical/"> <i class="fa fa-certificate"></i> 精典案例<span class="label label-info pull-right">{{ request.user.first_name|myClassical }}</span></a></li>
-                    <li><a href="/incident/done/"> <i class="fa fa-file-text-o"></i> 已处理故障<span class="label label-info pull-right">{{ request.user.first_name|Done }}</span></a></li>
+                    <li><a href="/incident/classical/"> <i class="fa fa-certificate"></i> 精典案例<span class="label label-info pull-right">{% myClassical %}</span></a></li>
+                    <li><a href="/incident/done/"> <i class="fa fa-file-text-o"></i> 已处理故障<span class="label label-info pull-right">{% Done %}</span></a></li>
                 </ul>
                 <h5>分类</h5>
                 <ul class="category-list" style="padding: 0">
