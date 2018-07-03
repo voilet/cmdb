@@ -47,7 +47,6 @@ def salt_conf_index(request):
 
 @login_required()
 def add_conf_class(request):
-    conf_list = ConfTemplate.objects.filter()
     if request.method == 'POST':
         form = ConfForm(request.POST)   
         if form.is_valid(): 
