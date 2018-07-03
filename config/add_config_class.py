@@ -41,7 +41,7 @@ class ConfForm(forms.ModelForm):
 @login_required()
 def salt_conf_index(request):
     """添加配置文件"""
-    conf_list = ConfTemplate.objects.filter()
+    
     return render_to_response('config/conf_index.html', locals(), context_instance=RequestContext(request))
 
 
