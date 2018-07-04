@@ -18,7 +18,7 @@ urlpatterns = patterns('',
                        url(r'^$', "config.add_config_class.salt_conf_index"),
                        url(r'^add/$', "config.add_config_class.add_conf_class"),
                        url(r'^list/$', "config.add_config_class.list_conf_class"),
-                       url(r'^list/(?P<pk>\d+)/$', "config.add_config_class.item_conf_class"),
+                       url(r'^list/(?P<pk>\w+)/$', "config.add_config_class.item_conf_class"),
                        url(r'^edit/(?P<pk>\d+)/$', "config.add_config_class.edit_conf_class"),
 
                        url(r'^add_log/$', new_log),
