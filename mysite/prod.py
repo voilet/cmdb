@@ -74,7 +74,6 @@ swan_url = "http://127.0.0.1:8888/swan_api/"
 # swan_url = "http://192.168.115.205/swan_api/"
 
 websocket_url = "127.0.0.1:8888/websocket"
-# websocket_url = "ops.int.funshion.com/websocket"
 ops_mail = "voilet@qq.com"
 
 
