@@ -104,7 +104,7 @@ def xls_select(request):
     return HttpResponse(json.dumps({"retCode": 200, "retMsg": "ok"}, ensure_ascii=False, indent=4))
 
 
-def xls_cdn(request):
+,def xls_cdn(request):
     """ http监控列表 """
     data = xlrd.open_workbook('/Users/voilet/Documents/cdn.xls')
     cdn_data = data.sheet_by_name(u'cdn')
