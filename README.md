@@ -54,15 +54,12 @@ Users：用户详情模块
 Utils：公用模版-根据项目查询项目授权的用户
 ```
 ## Project screenshots
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb1.jpg)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb10.jpg)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb2.jpg)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb9.png)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb3.jpg)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb4.jpg)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb5.jpg)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb6.jpg)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb7.jpg)
-![sec](http://blog.kukafei520.net/wp-content/uploads/2016/01/cmdb8.jpg)
+![](doc/WechatIMG80.jpg)
+![](doc/WechatIMG81.jpg)
+![](doc/WechatIMG88.jpg)
+![](doc/WechatIMG100.jpg)
+![](doc/WechatIMG86.jpg)
+![](doc/WechatIMG84.jpg)
+
 
 
